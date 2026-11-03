@@ -121,10 +121,10 @@ export function Navbar() {
 
             <Link
               href="/contact"
-              className="inline-flex items-center gap-1.5 px-4.5 py-2 border border-charcoal/20 text-[13px] font-sans font-bold uppercase tracking-[0.16em] text-charcoal hover:border-copper hover:text-copper transition-all duration-200"
+              className="group inline-flex items-center gap-2.5 px-6 sm:px-7 py-2.5 bg-charcoal text-ivory text-[12px] sm:text-[13px] font-sans font-bold uppercase tracking-[0.18em] hover:bg-copper transition-all duration-200 shadow-sm"
             >
               <span>Initiate Brief</span>
-              <ArrowUpRight className="w-3.5 h-3.5 text-copper" />
+              <ArrowUpRight className="w-3.5 h-3.5 text-copper group-hover:text-ivory group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all duration-200" />
             </Link>
           </div>
 
