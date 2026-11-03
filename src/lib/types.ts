@@ -18,6 +18,12 @@ export interface ProjectMedia {
   sortOrder: number;
 }
 
+export interface ProjectCaseStudySection {
+  id: string;
+  heading: string;
+  body: string;
+}
+
 export interface Project {
   id: string;
   slug: string;
@@ -26,6 +32,7 @@ export interface Project {
   categorySlug: string;
   shortDescription: string;
   fullDescription: string;
+  sections?: ProjectCaseStudySection[];
   clientName: string;
   projectYear: string;
   role: string;

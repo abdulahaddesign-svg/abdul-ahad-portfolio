@@ -30,6 +30,16 @@ export function ProjectDetailClient({ project, nextProject }: ProjectDetailClien
     project.liveWebsiteUrl || project.appStoreUrl || project.playStoreUrl
   );
 
+  // Modular case study sections with custom editable headings + fallback
+  const displaySections = (project.sections && project.sections.length > 0)
+    ? project.sections.filter(s => s.heading?.trim() || s.body?.trim())
+    : ([
+        project.fullDescription ? { id: 'sec-overview', heading: 'Context & Purpose', body: project.fullDescription } : null,
+        project.challenge ? { id: 'sec-challenge', heading: 'Friction Points & Strategic Hurdles', body: project.challenge } : null,
+        approachText ? { id: 'sec-approach', heading: 'Design Thinking & Methodology', body: approachText } : null,
+        project.solution ? { id: 'sec-solution', heading: 'Executed Design Architecture', body: project.solution } : null,
+      ].filter(Boolean) as { id: string; heading: string; body: string }[]);
+
   return (
     <article className="pt-32 sm:pt-40 pb-28 bg-ivory text-charcoal min-h-screen select-none">
       <div className="max-w-[1820px] mx-auto px-4 sm:px-8 lg:px-12">
@@ -198,99 +208,32 @@ export function ProjectDetailClient({ project, nextProject }: ProjectDetailClien
         {/* ========================================================= */}
         {/* 4. BEHANCE-STYLE CASE STUDY SECTIONS                      */}
         {/* ========================================================= */}
-        <div className="max-w-4xl mx-auto space-y-24 sm:space-y-32 py-12">
-          {/* Section: Overview */}
-          {project.fullDescription && (
-            <motion.section
-              initial={prefersReduced ? {} : { opacity: 0, y: 25 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: '-60px' }}
-              transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
-              className="space-y-5"
-            >
-              <div className="flex items-center gap-3 text-xs font-mono uppercase tracking-widest text-copper">
-                <span>01</span>
-                <span className="w-6 h-px bg-copper/40" />
-                <span>Project Overview</span>
-              </div>
-              <h2 className="font-display font-black text-3xl sm:text-5xl text-charcoal tracking-tight">
-                Context &amp; Purpose
-              </h2>
-              <div className="text-lg sm:text-xl text-charcoal-700 font-sans font-light leading-relaxed whitespace-pre-line">
-                {project.fullDescription}
-              </div>
-            </motion.section>
-          )}
-
-          {/* Section: The Challenge */}
-          {project.challenge && (
-            <motion.section
-              initial={prefersReduced ? {} : { opacity: 0, y: 25 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: '-60px' }}
-              transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
-              className="space-y-5 pt-12 border-t border-charcoal/15"
-            >
-              <div className="flex items-center gap-3 text-xs font-mono uppercase tracking-widest text-copper">
-                <span>02</span>
-                <span className="w-6 h-px bg-copper/40" />
-                <span>The Challenge</span>
-              </div>
-              <h2 className="font-display font-black text-3xl sm:text-5xl text-charcoal tracking-tight">
-                Friction Points &amp; Strategic Hurdles
-              </h2>
-              <p className="text-lg sm:text-xl text-charcoal-700 font-sans font-light leading-relaxed">
-                {project.challenge}
-              </p>
-            </motion.section>
-          )}
-
-          {/* Section: The Approach */}
-          {approachText && (
-            <motion.section
-              initial={prefersReduced ? {} : { opacity: 0, y: 25 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: '-60px' }}
-              transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
-              className="space-y-5 pt-12 border-t border-charcoal/15"
-            >
-              <div className="flex items-center gap-3 text-xs font-mono uppercase tracking-widest text-copper">
-                <span>03</span>
-                <span className="w-6 h-px bg-copper/40" />
-                <span>The Approach</span>
-              </div>
-              <h2 className="font-display font-black text-3xl sm:text-5xl text-charcoal tracking-tight">
-                Design Thinking &amp; Methodology
-              </h2>
-              <div className="text-lg sm:text-xl text-charcoal-700 font-sans font-light leading-relaxed whitespace-pre-line">
-                {approachText}
-              </div>
-            </motion.section>
-          )}
-
-          {/* Section: The Solution */}
-          {project.solution && (
-            <motion.section
-              initial={prefersReduced ? {} : { opacity: 0, y: 25 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: '-60px' }}
-              transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
-              className="space-y-5 pt-12 border-t border-charcoal/15"
-            >
-              <div className="flex items-center gap-3 text-xs font-mono uppercase tracking-widest text-copper">
-                <span>04</span>
-                <span className="w-6 h-px bg-copper/40" />
-                <span>The Solution</span>
-              </div>
-              <h2 className="font-display font-black text-3xl sm:text-5xl text-charcoal tracking-tight">
-                Executed Design Architecture
-              </h2>
-              <div className="text-lg sm:text-xl text-charcoal-700 font-sans font-light leading-relaxed whitespace-pre-line">
-                {project.solution}
-              </div>
-            </motion.section>
-          )}
-        </div>
+        {displaySections.length > 0 && (
+          <div className="max-w-4xl mx-auto space-y-16 sm:space-y-24 py-12">
+            {displaySections.map((sec, idx) => (
+              <motion.section
+                key={sec.id || idx}
+                initial={prefersReduced ? {} : { opacity: 0, y: 25 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: '-60px' }}
+                transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
+                className="space-y-5 pt-12 first:pt-0 border-t border-charcoal/15 first:border-t-0"
+              >
+                <div className="flex items-center gap-3 text-xs font-mono uppercase tracking-widest text-copper">
+                  <span>{String(idx + 1).padStart(2, '0')}</span>
+                  <span className="w-6 h-px bg-copper/40" />
+                  <span>Case Study Section</span>
+                </div>
+                <h2 className="font-display font-black text-3xl sm:text-5xl text-charcoal tracking-tight">
+                  {sec.heading}
+                </h2>
+                <div className="text-lg sm:text-xl text-charcoal-700 font-sans font-light leading-relaxed whitespace-pre-line">
+                  {sec.body}
+                </div>
+              </motion.section>
+            ))}
+          </div>
+        )}
 
         {/* ========================================================= */}
         {/* 5. VISUAL SHOWCASE (FULL-WIDTH BEHANCE STYLE PLATES)      */}

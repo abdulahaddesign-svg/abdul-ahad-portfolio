@@ -179,6 +179,7 @@ export async function saveProject(project: Partial<Project> & { id?: string }): 
     categorySlug: project.categorySlug || 'graphic-design',
     shortDescription: project.shortDescription || '',
     fullDescription: project.fullDescription || '',
+    sections: project.sections || [],
     clientName: project.clientName || '',
     projectYear: project.projectYear || '2025',
     role: project.role || 'Graphic Designer',

@@ -14,7 +14,7 @@ import {
   Sparkles,
   AlertCircle
 } from 'lucide-react';
-import { Project, ProjectCategory } from '@/lib/types';
+import { Project, ProjectCategory, ProjectCaseStudySection } from '@/lib/types';
 import { saveProject } from '@/lib/data';
 import { slugify } from '@/lib/utils';
 import { Input, Textarea, Select } from '@/components/ui/Input';
@@ -31,12 +31,39 @@ const CATEGORIES = [
   { value: 'Packaging & Print', label: 'Packaging & Print' },
 ];
 
+function getInitialSections(data?: Project): ProjectCaseStudySection[] {
+  if (data?.sections && data.sections.length > 0) {
+    return [...data.sections];
+  }
+  const list: ProjectCaseStudySection[] = [];
+  if (data?.fullDescription) {
+    list.push({ id: 'sec-overview', heading: 'Project Overview', body: data.fullDescription });
+  }
+  if (data?.challenge) {
+    list.push({ id: 'sec-challenge', heading: 'The Challenge', body: data.challenge });
+  }
+  if (data?.approach || data?.creativeProcess) {
+    list.push({ id: 'sec-approach', heading: 'The Approach', body: data.approach || data.creativeProcess || '' });
+  }
+  if (data?.solution) {
+    list.push({ id: 'sec-solution', heading: 'The Solution', body: data.solution });
+  }
+  if (list.length === 0) {
+    list.push({ id: `sec-${Date.now()}-1`, heading: 'Project Overview', body: '' });
+  }
+  return list;
+}
+
 interface ProjectFormProps {
   initialData?: Project;
 }
 
 export function ProjectForm({ initialData }: ProjectFormProps) {
   const router = useRouter();
+
+  const [sections, setSections] = useState<ProjectCaseStudySection[]>(() =>
+    getInitialSections(initialData)
+  );
 
   const [formData, setFormData] = useState<Partial<Project>>({
     id: initialData?.id,
@@ -161,6 +188,44 @@ export function ProjectForm({ initialData }: ProjectFormProps) {
     setGalleryUrls(updated);
   };
 
+  const handleAddSection = () => {
+    setSections((prev) => [
+      ...prev,
+      {
+        id: `sec-${Date.now()}`,
+        heading: `Section ${prev.length + 1}`,
+        body: '',
+      },
+    ]);
+  };
+
+  const handleUpdateSection = (
+    index: number,
+    field: 'heading' | 'body',
+    value: string
+  ) => {
+    setSections((prev) => {
+      const next = [...prev];
+      next[index] = { ...next[index], [field]: value };
+      return next;
+    });
+  };
+
+  const handleRemoveSection = (index: number) => {
+    setSections((prev) => prev.filter((_, i) => i !== index));
+  };
+
+  const handleMoveSection = (index: number, direction: 'up' | 'down') => {
+    const targetIndex = direction === 'up' ? index - 1 : index + 1;
+    if (targetIndex < 0 || targetIndex >= sections.length) return;
+    setSections((prev) => {
+      const next = [...prev];
+      const [moved] = next.splice(index, 1);
+      next.splice(targetIndex, 0, moved);
+      return next;
+    });
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!formData.title || !formData.slug) {
@@ -183,6 +248,8 @@ export function ProjectForm({ initialData }: ProjectFormProps) {
           .split('\n')
           .map((r) => r.trim())
           .filter(Boolean),
+        sections,
+        fullDescription: sections[0]?.body || formData.fullDescription || '',
         gallery: galleryUrls,
       };
 
@@ -319,62 +386,140 @@ export function ProjectForm({ initialData }: ProjectFormProps) {
             </div>
           </div>
 
-          {/* Section: Written Case Study */}
+          {/* Section: Dynamic Case Study Narrative Sections */}
           <div className="p-6 bg-white border border-charcoal/15 space-y-6">
-            <h2 className="font-display font-bold text-lg text-charcoal pb-3 border-b border-charcoal/10">
-              2. Case Study Narrative
-            </h2>
+            <div className="pb-3 border-b border-charcoal/10 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+              <div>
+                <h2 className="font-display font-bold text-lg text-charcoal">
+                  2. Case Study Narrative Sections
+                </h2>
+                <p className="text-xs text-charcoal-500 font-sans mt-0.5">
+                  Customize headings, add custom body sections, reorder, or remove any section.
+                </p>
+              </div>
 
-            <div className="space-y-4">
-              <Textarea
-                label="Short Description (Card Summary)"
-                required
-                rows={2}
-                value={formData.shortDescription}
-                onChange={(e) => setFormData({ ...formData, shortDescription: e.target.value })}
-                placeholder="A concise 1-2 sentence overview for cards and meta descriptions."
-              />
+              <Button
+                type="button"
+                onClick={handleAddSection}
+                variant="outline"
+                size="sm"
+                className="inline-flex items-center gap-1.5 self-start sm:self-auto"
+              >
+                <Plus className="w-3.5 h-3.5" />
+                <span>Add Section</span>
+              </Button>
+            </div>
 
-              <Textarea
-                label="Full Project Overview"
-                required
-                rows={4}
-                value={formData.fullDescription}
-                onChange={(e) => setFormData({ ...formData, fullDescription: e.target.value })}
-                placeholder="Detailed context and objectives of the project."
-              />
+            {/* Short Description: Card summary for homepage and archive index */}
+            <Textarea
+              label="Short Description (Card Summary) *"
+              required
+              rows={2}
+              value={formData.shortDescription}
+              onChange={(e) => setFormData({ ...formData, shortDescription: e.target.value })}
+              placeholder="A concise 1-2 sentence overview for cards and meta descriptions."
+            />
 
+            {/* Dynamic Modular Sections */}
+            <div className="space-y-6 pt-2">
+              {sections.map((sec, idx) => (
+                <div
+                  key={sec.id || idx}
+                  className="p-5 bg-charcoal/5 border border-charcoal/15 space-y-4 relative group"
+                >
+                  <div className="flex items-center justify-between gap-3 pb-3 border-b border-charcoal/10">
+                    <span className="font-mono text-xs font-bold text-copper uppercase tracking-wider">
+                      Section 0{idx + 1}
+                    </span>
+
+                    <div className="flex items-center gap-1">
+                      <button
+                        type="button"
+                        disabled={idx === 0}
+                        onClick={() => handleMoveSection(idx, 'up')}
+                        className="px-2 py-1 border border-charcoal/20 bg-white text-charcoal hover:border-copper hover:text-copper disabled:opacity-30 text-xs font-bold"
+                        title="Move section up"
+                      >
+                        &uarr; Up
+                      </button>
+                      <button
+                        type="button"
+                        disabled={idx === sections.length - 1}
+                        onClick={() => handleMoveSection(idx, 'down')}
+                        className="px-2 py-1 border border-charcoal/20 bg-white text-charcoal hover:border-copper hover:text-copper disabled:opacity-30 text-xs font-bold"
+                        title="Move section down"
+                      >
+                        &darr; Down
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => handleRemoveSection(idx)}
+                        className="p-1.5 border border-red-300 bg-red-50 text-red-600 hover:bg-red-600 hover:text-white transition-colors text-xs ml-1"
+                        title="Remove section"
+                      >
+                        <Trash2 className="w-3.5 h-3.5" />
+                      </button>
+                    </div>
+                  </div>
+
+                  {/* Editable Heading */}
+                  <div>
+                    <label className="block text-xs font-sans font-bold uppercase tracking-wider text-charcoal-700 mb-1">
+                      Section Heading *
+                    </label>
+                    <input
+                      type="text"
+                      required
+                      value={sec.heading}
+                      onChange={(e) => handleUpdateSection(idx, 'heading', e.target.value)}
+                      placeholder="e.g. Context & Purpose, The Creative Challenge, User Research..."
+                      className="w-full px-3.5 py-2.5 bg-white border border-charcoal/20 text-sm font-sans font-semibold focus:border-copper outline-none"
+                    />
+                  </div>
+
+                  {/* Editable Body */}
+                  <div>
+                    <label className="block text-xs font-sans font-bold uppercase tracking-wider text-charcoal-700 mb-1">
+                      Section Narrative Content (Body)
+                    </label>
+                    <textarea
+                      rows={4}
+                      value={sec.body}
+                      onChange={(e) => handleUpdateSection(idx, 'body', e.target.value)}
+                      placeholder="Enter detailed narrative, process, design decisions, or insights for this section..."
+                      className="w-full px-3.5 py-2.5 bg-white border border-charcoal/20 text-sm font-sans font-light leading-relaxed focus:border-copper outline-none whitespace-pre-line"
+                    />
+                  </div>
+                </div>
+              ))}
+
+              {sections.length === 0 && (
+                <div className="p-8 text-center border border-dashed border-charcoal/30 bg-white space-y-3">
+                  <p className="text-xs text-charcoal-500 font-sans">
+                    No narrative sections added yet. Click below to add your first custom section.
+                  </p>
+                  <Button type="button" onClick={handleAddSection} variant="outline" size="sm">
+                    + Add First Section
+                  </Button>
+                </div>
+              )}
+
+              <Button
+                type="button"
+                onClick={handleAddSection}
+                variant="outline"
+                className="w-full py-3 border-dashed border-charcoal/30 hover:border-copper hover:text-copper flex items-center justify-center gap-2"
+              >
+                <Plus className="w-4 h-4" />
+                <span>Add Another Case Study Section</span>
+              </Button>
+            </div>
+
+            {/* Measurable Outcomes */}
+            <div className="pt-4 border-t border-charcoal/10">
               <Textarea
-                label="The Challenge / Problem Statement"
+                label="Measurable Results & Outcomes (Optional, one per line)"
                 rows={3}
-                value={formData.challenge}
-                onChange={(e) => setFormData({ ...formData, challenge: e.target.value })}
-                placeholder="What bottlenecks, friction points, or business hurdles were we solving?"
-              />
-
-              <Textarea
-                label="The Approach & Strategy (Design Thinking, Research, Direction)"
-                rows={3}
-                value={formData.approach || formData.creativeProcess}
-                onChange={(e) => setFormData({ 
-                  ...formData, 
-                  approach: e.target.value,
-                  creativeProcess: e.target.value 
-                })}
-                placeholder="Discovery, sketches, wireframing, typography, color iterations..."
-              />
-
-              <Textarea
-                label="The Solution & Delivered Artifacts"
-                rows={3}
-                value={formData.solution}
-                onChange={(e) => setFormData({ ...formData, solution: e.target.value })}
-                placeholder="The delivered brand system, UI components, packaging artwork..."
-              />
-
-              <Textarea
-                label="Measurable Results & Outcomes (One per line)"
-                rows={4}
                 value={resultsString}
                 onChange={(e) => setResultsString(e.target.value)}
                 placeholder="40% reduction in order processing delays&#10;92% first-session completion rate&#10;Standardized brand visual guidelines"
