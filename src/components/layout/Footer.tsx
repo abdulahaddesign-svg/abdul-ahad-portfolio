@@ -15,8 +15,8 @@ export function Footer() {
   }
 
   return (
-    <footer className="bg-charcoal text-ivory border-t border-charcoal-800 py-16 sm:py-20">
-      <div className="max-w-[1600px] mx-auto px-6 sm:px-12 space-y-12">
+    <footer className="bg-charcoal text-ivory border-t border-charcoal-800 py-16 sm:py-20 select-none">
+      <div className="max-w-[1400px] mx-auto px-6 sm:px-12 space-y-12">
         {/* Top Minimal Footer Row */}
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-8 pb-12 border-b border-charcoal-800">
           <div className="space-y-4 max-w-md">
@@ -28,13 +28,13 @@ export function Footer() {
                 className="object-contain"
               />
             </div>
-            <p className="text-xs text-charcoal-400 font-sans leading-relaxed">
+            <p className="text-sm text-charcoal-400 font-sans leading-relaxed">
               Designed with intent. Made to matter. Independent creative practice based in Coimbatore, Tamil Nadu, India.
             </p>
           </div>
 
           {/* Quick Links */}
-          <div className="flex flex-wrap items-center gap-8 text-xs font-sans font-semibold uppercase tracking-[0.18em]">
+          <div className="flex flex-wrap items-center gap-8 text-[13px] font-sans font-semibold uppercase tracking-[0.18em]">
             <Link href="/work" className="text-charcoal-300 hover:text-copper transition-colors">
               Work
             </Link>

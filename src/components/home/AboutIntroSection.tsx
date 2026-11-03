@@ -1,149 +1,199 @@
 'use client';
 
-import React from 'react';
+import React, { useRef } from 'react';
 import Link from 'next/link';
-import { motion } from 'framer-motion';
-import { ArrowUpRight, Award, GraduationCap, MapPin, CheckCircle } from 'lucide-react';
-import { SITE_SETTINGS, EXPERIENCE_DATA } from '@/lib/constants';
+import Image from 'next/image';
+import { motion, useScroll, useTransform, useInView } from 'framer-motion';
+import { ArrowDown, ArrowUpRight, FileText, CheckCircle2, Award } from 'lucide-react';
+import { SiteSettings } from '@/lib/types';
 
-export function AboutIntroSection() {
+interface AboutIntroSectionProps {
+  settings: SiteSettings;
+}
+
+export function AboutIntroSection({ settings }: AboutIntroSectionProps) {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const isInView = useInView(containerRef, { once: true, margin: '-10% 0px' });
+
+  // Subtle parallax on portrait image
+  const { scrollYProgress } = useScroll({
+    target: containerRef,
+    offset: ['start end', 'end start'],
+  });
+  const imageY = useTransform(scrollYProgress, [0, 1], [-20, 30]);
+
+  const headline = settings.aboutHeadline || 'I create visual experiences that make ideas matter.';
+  const intro =
+    settings.aboutIntro ||
+    'Abdul Ahad J is a creative designer based in Coimbatore, India, with 3+ years of experience in graphic design, visual branding and digital creative production.';
+  const description =
+    settings.aboutDescription ||
+    'He has worked across enterprise, SaaS and freelance projects, creating visual identities, marketing creatives, digital experiences and motion-led content. He has served 50+ freelance clients and received the Best Employee of the Year award at eClerx in 2025. He works independently and collaborates with teams when projects require broader creative capabilities.';
+  const photoUrl = settings.profilePhotoUrl || '/profile/abdul-ahad-portrait.svg';
+  const photoAlt = settings.profilePhotoAlt || 'Abdul Ahad J — Creative Designer';
+  const resumeUrl = settings.resumeUrl || '/resume/abdul-ahad-resume.pdf';
+  const resumeLabel = settings.resumeLabel || 'PDF · Updated Resume';
+  const resumeVisible = settings.resumeVisible !== false;
+
   return (
-    <section className="py-24 sm:py-36 bg-ivory text-charcoal border-b border-charcoal/15">
-      <div className="max-w-[1600px] mx-auto px-6 sm:px-12">
-        {/* Main Headline */}
-        <div className="max-w-5xl mb-20 sm:mb-28">
-          <span className="text-xs font-sans font-bold uppercase tracking-[0.25em] text-copper block mb-4">
-            Creative Philosophy
+    <section
+      ref={containerRef}
+      className="py-24 sm:py-36 bg-ivory text-charcoal border-b border-charcoal/15 select-none"
+    >
+      <div className="max-w-[1400px] mx-auto px-6 sm:px-12">
+        {/* Section Header Line */}
+        <div className="flex items-center justify-between pb-6 border-b border-charcoal/10 mb-14 sm:mb-20">
+          <span className="text-xs font-sans font-bold uppercase tracking-[0.25em] text-copper">
+            ABOUT &amp; DIRECTION
           </span>
-          <h2 className="font-display font-black text-4xl sm:text-6xl md:text-7xl lg:text-8xl tracking-tighter text-charcoal leading-[0.95]">
-            I DESIGN VISUAL EXPERIENCES THAT MAKE IDEAS MATTER.
-          </h2>
+          <span className="text-xs font-mono text-charcoal-400">
+            03 — PROFILE &amp; PRACTICE
+          </span>
         </div>
 
-        {/* Narrative & Profile Matrix */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-20 items-start pb-20 border-b border-charcoal/15">
-          <div className="lg:col-span-7 space-y-6 text-lg sm:text-xl md:text-2xl font-sans text-charcoal leading-relaxed font-light">
-            <p>
-              I am Abdul Ahad, a creative designer based in Coimbatore, India, with 3+ years of experience creating visual identities, digital experiences, and motion-led content.
-            </p>
-            <p className="text-charcoal-600 text-base sm:text-lg">
-              My work combines graphic design, visual storytelling, and digital technology to help businesses communicate with clarity and confidence. I work independently and collaborate with teams when a project requires broader creative capabilities.
-            </p>
-            <p className="text-charcoal-600 text-base sm:text-lg">
-              Holding a Bachelor of Science in Computer Science (80% aggregate) alongside specialized proficiency across Adobe Creative Suite, Figma, and generative AI production workflows, I operate with both visual imagination and systematic structural execution.
-            </p>
+        {/* Asymmetrical Editorial Composition */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-start">
+          {/* Left Column: Typography, Narrative & CTAs (7 Columns) */}
+          <div className="lg:col-span-7 space-y-8 sm:space-y-10">
+            {/* Large Typography Reveal Headline */}
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              animate={isInView ? { opacity: 1, y: 0 } : {}}
+              transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+            >
+              <h2 className="font-display font-extrabold text-3xl sm:text-5xl md:text-6xl text-charcoal tracking-tighter leading-[1.05]">
+                {headline}
+              </h2>
+            </motion.div>
 
-            <div className="pt-4 flex flex-wrap gap-6 items-center">
+            {/* Short Concise Professional Introduction */}
+            <motion.div
+              initial={{ opacity: 0, y: 24 }}
+              animate={isInView ? { opacity: 1, y: 0 } : {}}
+              transition={{ duration: 0.8, delay: 0.15, ease: [0.16, 1, 0.3, 1] }}
+              className="space-y-5"
+            >
+              <p className="text-lg sm:text-[20px] md:text-[22px] font-sans text-charcoal font-normal leading-relaxed">
+                {intro}
+              </p>
+              <p className="text-base sm:text-[17px] font-sans text-charcoal-600 font-light leading-relaxed">
+                {description}
+              </p>
+            </motion.div>
+
+            {/* Compact Experience & Accreditations (Editorial Divider Layout, Zero Cards) */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={isInView ? { opacity: 1, y: 0 } : {}}
+              transition={{ duration: 0.8, delay: 0.3, ease: [0.16, 1, 0.3, 1] }}
+              className="py-6 border-y border-charcoal/15 grid grid-cols-1 sm:grid-cols-3 gap-6 text-sm"
+            >
+              <div className="space-y-1">
+                <span className="text-[11px] font-sans font-bold uppercase tracking-wider text-charcoal-400 block">
+                  Experience
+                </span>
+                <span className="font-display font-bold text-xl text-charcoal">
+                  3+ Years
+                </span>
+                <span className="text-xs text-charcoal-500 block">
+                  Visual Branding &amp; Motion
+                </span>
+              </div>
+
+              <div className="space-y-1 sm:border-l sm:border-charcoal/10 sm:pl-6">
+                <span className="text-[11px] font-sans font-bold uppercase tracking-wider text-charcoal-400 block">
+                  Client Record
+                </span>
+                <span className="font-display font-bold text-xl text-copper">
+                  50+ Brands
+                </span>
+                <span className="text-xs text-charcoal-500 block">
+                  Global &amp; Independent
+                </span>
+              </div>
+
+              <div className="space-y-1 sm:border-l sm:border-charcoal/10 sm:pl-6">
+                <span className="text-[11px] font-sans font-bold uppercase tracking-wider text-charcoal-400 block">
+                  Recognition
+                </span>
+                <span className="font-display font-bold text-xl text-charcoal flex items-center gap-1">
+                  eClerx 2025
+                </span>
+                <span className="text-xs text-charcoal-500 block">
+                  Best Employee Honor
+                </span>
+              </div>
+            </motion.div>
+
+            {/* Resume Download CTA & Extended Biography Link */}
+            <motion.div
+              initial={{ opacity: 0, y: 16 }}
+              animate={isInView ? { opacity: 1, y: 0 } : {}}
+              transition={{ duration: 0.8, delay: 0.45, ease: [0.16, 1, 0.3, 1] }}
+              className="flex flex-wrap items-center gap-6 pt-2"
+            >
+              {resumeVisible && (
+                <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-3">
+                  <a
+                    href={resumeUrl}
+                    download="Abdul-Ahad-Resume.pdf"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-2.5 px-7 py-3.5 bg-charcoal text-ivory text-xs font-sans font-bold uppercase tracking-[0.16em] hover:bg-copper transition-colors duration-200"
+                  >
+                    <ArrowDown className="w-3.5 h-3.5" />
+                    <span>Download Resume</span>
+                  </a>
+                  <span className="text-[11px] font-mono text-charcoal-400 uppercase tracking-wider">
+                    {resumeLabel}
+                  </span>
+                </div>
+              )}
+
               <Link
                 href="/about"
-                className="inline-flex items-center gap-2 text-xs font-sans font-bold uppercase tracking-[0.18em] text-copper hover:text-charcoal transition-colors"
+                className="inline-flex items-center gap-2 text-xs font-sans font-bold uppercase tracking-[0.16em] text-copper hover:text-charcoal transition-colors py-3.5"
               >
-                <span>Read Full Biography &amp; Toolkit</span>
+                <span>Read Full Biography</span>
                 <ArrowUpRight className="w-4 h-4" />
               </Link>
-            </div>
+            </motion.div>
           </div>
 
-          {/* Right Highlights & Accreditations */}
-          <div className="lg:col-span-5 space-y-8 border-l border-charcoal/15 pl-6 sm:pl-10">
-            <div>
-              <span className="text-[10px] font-sans font-bold uppercase tracking-widest text-charcoal-400 block mb-2">
-                Annual Company Honor
+          {/* Right Column: Large Professional Portrait with Mask Reveal (5 Columns) */}
+          <div className="lg:col-span-5 flex flex-col items-center lg:items-end">
+            <motion.div
+              initial={{ opacity: 0, scale: 0.96 }}
+              animate={isInView ? { opacity: 1, scale: 1 } : {}}
+              transition={{ duration: 0.9, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
+              className="relative w-full max-w-[460px] aspect-[4/5] bg-charcoal-900 border border-charcoal/20 overflow-hidden"
+            >
+              <motion.div style={{ y: imageY }} className="relative w-full h-full">
+                <Image
+                  src={photoUrl}
+                  alt={photoAlt}
+                  fill
+                  sizes="(max-width: 768px) 100vw, 460px"
+                  priority
+                  className="object-cover object-center select-none"
+                />
+              </motion.div>
+
+              {/* Minimal Editorial Corner Badge */}
+              <div className="absolute top-4 left-4 bg-charcoal/80 backdrop-blur-md px-3 py-1 border border-charcoal/30">
+                <span className="text-[10px] font-mono uppercase tracking-widest text-ivory">
+                  COIMBATORE · IN
+                </span>
+              </div>
+            </motion.div>
+
+            {/* Understated Editorial Caption */}
+            <div className="w-full max-w-[460px] mt-4 flex items-baseline justify-between text-xs font-sans text-charcoal-500">
+              <span className="font-medium text-charcoal">Abdul Ahad J</span>
+              <span className="font-mono text-[11px] text-charcoal-400">
+                Portrait / Studio Spec
               </span>
-              <div className="flex items-start gap-3">
-                <Award className="w-5 h-5 text-copper shrink-0 mt-1" />
-                <div>
-                  <h4 className="font-display font-bold text-xl text-charcoal">
-                    Best Employee of the Year 2025
-                  </h4>
-                  <p className="text-xs font-sans text-charcoal-500 mt-1">
-                    Conferred at eClerx for exceptional visual design quality and a verified 25% lift in client campaign engagement.
-                  </p>
-                </div>
-              </div>
             </div>
-
-            <div>
-              <span className="text-[10px] font-sans font-bold uppercase tracking-widest text-charcoal-400 block mb-2">
-                Independent Track Record
-              </span>
-              <div className="font-display font-bold text-3xl text-copper">
-                50+ Clients
-              </div>
-              <p className="text-xs font-sans text-charcoal-500 mt-1">
-                Delivered logos, packaging, social kits, and responsive UI screens across global brands and startups.
-              </p>
-            </div>
-
-            <div>
-              <span className="text-[10px] font-sans font-bold uppercase tracking-widest text-charcoal-400 block mb-2">
-                Academic Background
-              </span>
-              <div className="flex items-start gap-3">
-                <GraduationCap className="w-5 h-5 text-copper shrink-0 mt-1" />
-                <div>
-                  <h4 className="font-display font-bold text-base text-charcoal">
-                    BSc Computer Science (80% Aggregate)
-                  </h4>
-                  <p className="text-xs font-sans text-charcoal-500 mt-0.5">
-                    Government Arts College (Autonomous), Coimbatore · 2020–2023
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Editorial Career Timeline (Thin Dividers, Zero Cards) */}
-        <div className="pt-20">
-          <div className="mb-12">
-            <span className="text-xs font-sans font-bold uppercase tracking-[0.25em] text-copper block mb-2">
-              Chronology
-            </span>
-            <h3 className="font-display font-bold text-3xl sm:text-4xl text-charcoal">
-              Career History
-            </h3>
-          </div>
-
-          <div className="divide-y divide-charcoal/15">
-            {EXPERIENCE_DATA.map((item) => (
-              <div
-                key={item.id}
-                className="py-10 grid grid-cols-1 md:grid-cols-12 gap-6 items-baseline"
-              >
-                <div className="md:col-span-3">
-                  <span className="font-mono text-xs text-copper tracking-widest">
-                    {item.period}
-                  </span>
-                  <div className="font-display font-bold text-xl sm:text-2xl text-charcoal mt-1">
-                    {item.company}
-                  </div>
-                  <span className="text-xs font-sans text-charcoal-400 block">
-                    {item.location}
-                  </span>
-                </div>
-
-                <div className="md:col-span-4">
-                  <span className="text-xs font-sans uppercase tracking-widest text-charcoal-400 block mb-1">
-                    Designation
-                  </span>
-                  <h4 className="font-display font-bold text-lg text-charcoal">
-                    {item.role}
-                  </h4>
-                </div>
-
-                <div className="md:col-span-5">
-                  <ul className="space-y-2 text-xs sm:text-sm font-sans text-charcoal-600 leading-relaxed">
-                    {item.responsibilities.slice(0, 3).map((resp, rIdx) => (
-                      <li key={rIdx} className="flex items-start gap-2">
-                        <span className="w-1.5 h-1.5 rounded-full bg-copper mt-1.5 shrink-0" />
-                        <span>{resp}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              </div>
-            ))}
           </div>
         </div>
       </div>

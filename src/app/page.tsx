@@ -1,23 +1,21 @@
 import React from 'react';
-import { getProjects, getClientLogos } from '@/lib/data';
+import { getProjects, getClientLogos, getSiteSettings } from '@/lib/data';
 import { Preloader } from '@/components/layout/Preloader';
 import { HeroSection } from '@/components/home/HeroSection';
 import { ClientShowcaseSection } from '@/components/home/ClientShowcaseSection';
-import { CapabilitiesTickerSection } from '@/components/home/CapabilitiesTickerSection';
 import { HorizontalPortfolioSection } from '@/components/home/HorizontalPortfolioSection';
-import { FeaturedEditorialStorySection } from '@/components/home/FeaturedEditorialStorySection';
+import { CapabilitiesSection } from '@/components/home/CapabilitiesSection';
 import { AboutIntroSection } from '@/components/home/AboutIntroSection';
-import { CreativeProcessSection } from '@/components/home/CreativeProcessSection';
-import { ServicesSection } from '@/components/home/ServicesSection';
 import { ContactCtaSection } from '@/components/home/ContactCtaSection';
 
 export const revalidate = 60;
 
 export default async function HomePage() {
-  // Dynamic projects & clients loaded from data layer (Supabase / local store)
-  const [projects, clients] = await Promise.all([
+  // Dynamic projects, clients & settings loaded from data layer (Supabase / local store)
+  const [projects, clients, settings] = await Promise.all([
     getProjects({ includeDrafts: false }),
     getClientLogos(false),
+    getSiteSettings(),
   ]);
 
   return (
@@ -25,31 +23,22 @@ export default async function HomePage() {
       {/* 1. Opening Brand Loading Experience */}
       <Preloader />
 
-      {/* 2. Homepage Hero — Who I Am & Statistics Highlight Bar */}
+      {/* 2. Homepage Hero — Who I Am & Highlights Bar */}
       <HeroSection />
 
-      {/* 3. New Client Showcase — Immediately Below Highlight Bar */}
+      {/* 3. Selected Client Brands Showcase (Larger Logos, Scroll-Linked) */}
       <ClientShowcaseSection clients={clients} />
 
-      {/* 4. Creative Capability Introduction (Editorial Title Sequence) */}
-      <CapabilitiesTickerSection />
-
-      {/* 5. Signature Portfolio Showcase — Exactly 2 Alternating Horizontal Motion Rows */}
+      {/* 4. Selected Work — 2 Alternating Horizontal Motion Rows & Large Editorial Image Grid */}
       <HorizontalPortfolioSection projects={projects} />
 
-      {/* 5. Featured Project Visual Storytelling */}
-      <FeaturedEditorialStorySection projects={projects} />
+      {/* 5. What I Deliver — Minimal Typography-Led Scope */}
+      <CapabilitiesSection />
 
-      {/* 6. About Section — Professional Introduction & Timeline */}
-      <AboutIntroSection />
+      {/* 6. About Direction — Asymmetrical Editorial Portrait, Narrative & Resume Download */}
+      <AboutIntroSection settings={settings} />
 
-      {/* 7. Creative Process (01 Understand, 02 Explore, 03 Create, 04 Deliver) */}
-      <CreativeProcessSection />
-
-      {/* 8. Typography-Led Services Section */}
-      <ServicesSection />
-
-      {/* 9. Contact Closing Statement */}
+      {/* 7. Contact Closing Statement */}
       <ContactCtaSection />
     </div>
   );

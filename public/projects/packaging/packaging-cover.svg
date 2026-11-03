@@ -1,0 +1,70 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800" width="100%" height="100%">
+  <defs>
+    <linearGradient id="packBg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1A1916" />
+      <stop offset="50%" stop-color="#25241F" />
+      <stop offset="100%" stop-color="#141310" />
+    </linearGradient>
+    <linearGradient id="boxFront" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#F4EFE6" />
+      <stop offset="100%" stop-color="#DFD4C2" />
+    </linearGradient>
+    <linearGradient id="boxSide" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#CBBCA5" />
+      <stop offset="100%" stop-color="#B3A38C" />
+    </linearGradient>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1200" height="800" fill="url(#packBg)" />
+
+  <!-- Dieline Construction Lines (Architectural Packaging Grid) -->
+  <line x1="200" y1="100" x2="1000" y2="100" stroke="#C4855A" stroke-opacity="0.15" stroke-width="1" stroke-dasharray="8,6" />
+  <line x1="200" y1="700" x2="1000" y2="700" stroke="#C4855A" stroke-opacity="0.15" stroke-width="1" stroke-dasharray="8,6" />
+
+  <!-- Isometric Packaging Box 1 (Warm Ivory Premium Box) -->
+  <g transform="translate(240, 140)">
+    <!-- Top Flap -->
+    <polygon points="180,60 380,20 480,100 280,140" fill="#FCF9F2" />
+    <!-- Front Face -->
+    <polygon points="280,140 480,100 480,440 280,480" fill="url(#boxFront)" />
+    <!-- Left Face -->
+    <polygon points="180,60 280,140 280,480 180,400" fill="url(#boxSide)" />
+
+    <!-- Typography on Front of Box -->
+    <g transform="translate(320, 220) rotate(-11)">
+      <text x="0" y="0" font-family="'Space Grotesk', sans-serif" font-size="28" font-weight="900" fill="#25241F" letter-spacing="4">VERVE</text>
+      <text x="0" y="24" font-family="'Manrope', sans-serif" font-size="11" font-weight="700" fill="#C4855A" letter-spacing="3">BOTANICAL CARE</text>
+      <line x1="0" y1="36" x2="110" y2="36" stroke="#C4855A" stroke-width="2" />
+      <text x="0" y="60" font-family="'Manrope', sans-serif" font-size="9" fill="#5D574B">100ml e / 3.4 FL. OZ.</text>
+      <text x="0" y="80" font-family="'Space Grotesk', sans-serif" font-size="16" font-weight="700" fill="#25241F">N° 07</text>
+    </g>
+
+    <!-- Embossed Minimal Stamp -->
+    <circle cx="230" cy="220" r="24" fill="none" stroke="#25241F" stroke-width="1.5" opacity="0.4" />
+    <text x="230" y="225" font-family="'Space Grotesk', sans-serif" font-size="10" font-weight="700" fill="#25241F" text-anchor="middle" opacity="0.6">AA</text>
+  </g>
+
+  <!-- Product Bottle / Jar (Sleek Cosmetic Vessel) -->
+  <g transform="translate(740, 260)">
+    <!-- Shadow -->
+    <ellipse cx="120" cy="380" rx="90" ry="22" fill="#000000" opacity="0.45" />
+    <!-- Glass Body -->
+    <rect x="50" y="140" width="140" height="230" rx="16" fill="#1E1D19" stroke="#C4855A" stroke-width="1.5" />
+    <!-- Glass Highlight -->
+    <rect x="62" y="150" width="12" height="210" rx="6" fill="#F4EFE6" opacity="0.15" />
+    <!-- Label -->
+    <rect x="50" y="200" width="140" height="110" fill="#F4EFE6" />
+    <text x="120" y="235" font-family="'Space Grotesk', sans-serif" font-size="16" font-weight="900" fill="#25241F" text-anchor="middle" letter-spacing="2">VERVE</text>
+    <text x="120" y="252" font-family="'Manrope', sans-serif" font-size="8" font-weight="700" fill="#C4855A" text-anchor="middle" letter-spacing="1.5">RESTORATIVE SERUM</text>
+    <line x1="85" y1="262" x2="155" y2="262" stroke="#25241F" stroke-width="0.8" opacity="0.3" />
+    <text x="120" y="280" font-family="'Manrope', sans-serif" font-size="7" fill="#5D574B" text-anchor="middle">ORGANIC ESSENCE</text>
+    <!-- Copper Cap -->
+    <rect x="75" y="80" width="90" height="60" rx="6" fill="#C4855A" stroke="#E29E73" stroke-width="1" />
+    <rect x="85" y="90" width="70" height="40" fill="#B17145" />
+  </g>
+
+  <!-- Spec Label Stamp -->
+  <text x="80" y="740" font-family="'Space Grotesk', sans-serif" font-size="14" font-weight="700" fill="#C4855A" letter-spacing="3">PACKAGING &amp; DIELINES</text>
+  <text x="80" y="760" font-family="'Manrope', sans-serif" font-size="11" font-weight="500" fill="#F4EFE6" fill-opacity="0.6">SUSTAINABLE COSMETIC CARTON ARCHITECTURE</text>
+</svg>

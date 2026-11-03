@@ -40,25 +40,25 @@ export function ClientShowcaseSection({ clients }: ClientShowcaseSectionProps) {
         </div>
       </div>
 
-      {/* Horizontal Moving Strip of Logos */}
-      <div className="w-full overflow-hidden">
+      {/* Horizontal Moving Strip of Large Logos */}
+      <div className="w-full overflow-hidden py-4">
         <motion.div
           style={shouldReduceMotion ? {} : { x }}
-          className="flex items-center gap-14 sm:gap-20 w-max will-change-transform px-6 sm:px-12"
+          className="flex items-center gap-16 sm:gap-24 md:gap-32 w-max will-change-transform px-6 sm:px-12"
         >
           {displayClients.map((client, idx) => (
             <div
               key={`${client.id}-${idx}`}
-              className="flex items-center justify-center shrink-0 grayscale opacity-60 hover:grayscale-0 hover:opacity-100 transition-all duration-300 py-2"
+              className="flex items-center justify-center shrink-0 grayscale opacity-70 hover:grayscale-0 hover:opacity-100 transition-all duration-300 py-3"
               title={client.name}
             >
-              <div className="relative h-7 sm:h-9 w-32 sm:w-40 flex items-center justify-center">
+              <div className="relative h-10 sm:h-14 md:h-16 w-40 sm:w-52 md:w-64 flex items-center justify-center">
                 <Image
                   src={client.logoUrl}
                   alt={client.name}
-                  width={160}
-                  height={48}
-                  className="max-h-8 sm:max-h-9 w-auto object-contain select-none"
+                  width={240}
+                  height={80}
+                  className="max-h-10 sm:max-h-14 md:max-h-16 w-auto object-contain select-none transition-transform duration-300 hover:scale-105"
                 />
               </div>
             </div>

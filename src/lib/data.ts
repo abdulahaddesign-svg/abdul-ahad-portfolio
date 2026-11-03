@@ -335,11 +335,36 @@ export async function getExperience(): Promise<ExperienceItem[]> {
 }
 
 export async function getSiteSettings(): Promise<SiteSettings> {
+  const supabase = createClient();
+  if (supabase) {
+    try {
+      const { data, error } = await supabase
+        .from('site_settings')
+        .select('data')
+        .eq('id', 'global')
+        .single();
+      if (!error && data?.data) {
+        return { ...localSettings, ...data.data };
+      }
+    } catch {
+      // Fallback
+    }
+  }
   return localSettings;
 }
 
 export async function updateSiteSettings(newSettings: Partial<SiteSettings>): Promise<SiteSettings> {
   localSettings = { ...localSettings, ...newSettings };
+  const supabase = createClient();
+  if (supabase) {
+    try {
+      await supabase
+        .from('site_settings')
+        .upsert({ id: 'global', data: localSettings, updated_at: new Date().toISOString() });
+    } catch {
+      // Fallback
+    }
+  }
   return localSettings;
 }
 

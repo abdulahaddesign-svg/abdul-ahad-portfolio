@@ -20,7 +20,7 @@ export function ContactCtaSection() {
         />
       </div>
 
-      <div className="max-w-[1600px] mx-auto px-6 sm:px-12 relative z-10">
+      <div className="max-w-[1400px] mx-auto px-6 sm:px-12 relative z-10">
         <div className="max-w-5xl space-y-8">
           <span className="text-xs font-sans font-bold uppercase tracking-[0.25em] text-copper block">
             Initiate Collaboration
@@ -33,14 +33,14 @@ export function ContactCtaSection() {
           </h2>
 
           <p className="text-xl sm:text-3xl text-charcoal-300 font-sans font-light max-w-2xl leading-snug">
-            Let's create something meaningful.
+            Let&apos;s create something that matters.
           </p>
 
           {/* Primary Action Button */}
           <div className="pt-6">
             <Link
               href="/contact"
-              className="inline-flex items-center gap-3 px-8 py-5 bg-copper text-ivory font-display font-bold text-sm sm:text-base uppercase tracking-[0.18em] hover:bg-copper-600 transition-colors duration-200"
+              className="inline-flex items-center gap-3 px-8 py-4.5 bg-copper text-ivory font-display font-bold text-sm sm:text-base uppercase tracking-[0.18em] hover:bg-copper-600 transition-colors duration-200"
             >
               <span>Start a Project</span>
               <ArrowUpRight className="w-5 h-5" />
@@ -48,7 +48,7 @@ export function ContactCtaSection() {
           </div>
 
           {/* Direct Communication Channels Row */}
-          <div className="pt-16 sm:pt-24 border-t border-charcoal-800 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8 text-xs font-sans">
+          <div className="pt-16 sm:pt-24 border-t border-charcoal-800 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8 text-xs sm:text-sm font-sans">
             <div>
               <span className="text-[10px] uppercase tracking-widest text-charcoal-400 block mb-1">
                 Direct Email

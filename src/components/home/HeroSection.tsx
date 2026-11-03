@@ -50,7 +50,7 @@ export function HeroSection() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
           >
-            <h1 className="font-display font-extrabold text-5xl sm:text-7xl md:text-8xl lg:text-[6.8rem] tracking-tighter leading-[0.95] text-charcoal uppercase">
+            <h1 className="font-display font-extrabold text-5xl sm:text-7xl md:text-8xl lg:text-[7.2rem] xl:text-[8rem] tracking-tighter leading-[0.92] text-charcoal uppercase">
               ABDUL AHAD
             </h1>
           </motion.div>
@@ -60,7 +60,7 @@ export function HeroSection() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
           >
-            <h2 className="font-display font-bold text-xl sm:text-2xl md:text-3xl text-copper tracking-tight uppercase leading-snug">
+            <h2 className="font-display font-bold text-xl sm:text-2xl md:text-3xl lg:text-4xl text-copper tracking-tight uppercase leading-snug">
               CREATIVE DESIGNER &amp; DIGITAL CREATIVE PARTNER
             </h2>
           </motion.div>
@@ -70,10 +70,10 @@ export function HeroSection() {
         <div className="pt-8 border-t border-charcoal/15 grid grid-cols-1 md:grid-cols-12 gap-8 lg:gap-14 items-start">
           {/* Left Column: Short Professional Introduction with Comfortable Line Length */}
           <div className="md:col-span-6 lg:col-span-7 space-y-4">
-            <p className="text-lg sm:text-xl md:text-2xl font-sans text-charcoal font-light leading-relaxed">
+            <p className="text-xl sm:text-2xl md:text-[26px] font-sans text-charcoal font-light leading-relaxed">
               I create thoughtful visual identities, digital experiences, and motion-led content for brands that want to stand out.
             </p>
-            <p className="text-sm sm:text-base font-sans text-charcoal-500 font-light leading-relaxed max-w-xl">
+            <p className="text-base sm:text-[18px] font-sans text-charcoal-600 font-light leading-relaxed max-w-xl">
               Combining visual design, typography, and human-centered design thinking to deliver precise creative solutions that command attention and build credibility.
             </p>
           </div>
@@ -81,10 +81,10 @@ export function HeroSection() {
           {/* Right Column: Service Capabilities & Primary Actions */}
           <div className="md:col-span-6 lg:col-span-5 space-y-6 md:border-l md:border-charcoal/15 md:pl-8 lg:pl-10">
             <div>
-              <span className="text-[10px] font-sans font-bold uppercase tracking-[0.2em] text-charcoal-400 block mb-2">
+              <span className="text-[11px] font-sans font-bold uppercase tracking-[0.2em] text-charcoal-400 block mb-2">
                 Core Capabilities
               </span>
-              <p className="text-xs sm:text-sm font-sans font-medium uppercase tracking-[0.16em] text-charcoal-700 leading-relaxed">
+              <p className="text-xs sm:text-sm md:text-base font-sans font-medium uppercase tracking-[0.16em] text-charcoal-700 leading-relaxed">
                 Graphic Design / UI/UX / Motion Graphics / Video Editing / Web &amp; App
               </p>
             </div>
@@ -93,7 +93,7 @@ export function HeroSection() {
             <div className="flex flex-wrap items-center gap-4 pt-2">
               <Link
                 href="#portfolio-strip"
-                className="inline-flex items-center gap-2 px-6 py-3.5 bg-charcoal text-ivory text-xs font-sans font-bold uppercase tracking-[0.16em] hover:bg-copper transition-colors duration-200"
+                className="inline-flex items-center gap-2 px-6 py-3.5 bg-charcoal text-ivory text-xs sm:text-[13px] font-sans font-bold uppercase tracking-[0.16em] hover:bg-copper transition-colors duration-200"
               >
                 <span>Explore My Work</span>
                 <ArrowDown className="w-3.5 h-3.5" />
@@ -101,7 +101,7 @@ export function HeroSection() {
 
               <Link
                 href="/contact"
-                className="inline-flex items-center gap-2 px-6 py-3.5 border border-charcoal/30 text-charcoal text-xs font-sans font-bold uppercase tracking-[0.16em] hover:border-charcoal hover:bg-charcoal/5 transition-colors duration-200"
+                className="inline-flex items-center gap-2 px-6 py-3.5 border border-charcoal/30 text-charcoal text-xs sm:text-[13px] font-sans font-bold uppercase tracking-[0.16em] hover:border-charcoal hover:bg-charcoal/5 transition-colors duration-200"
               >
                 <span>Start a Project</span>
                 <ArrowUpRight className="w-3.5 h-3.5 text-copper" />

@@ -1,0 +1,86 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 1000" width="100%" height="100%">
+  <defs>
+    <linearGradient id="editorialBg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#2D2B25" />
+      <stop offset="50%" stop-color="#25241F" />
+      <stop offset="100%" stop-color="#1B1A16" />
+    </linearGradient>
+    <linearGradient id="copperGlow" x1="0%" y1="100%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#C4855A" stop-opacity="0.4" />
+      <stop offset="100%" stop-color="#C4855A" stop-opacity="0" />
+    </linearGradient>
+    <linearGradient id="faceShade" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#F4EFE6" />
+      <stop offset="100%" stop-color="#D9CFBF" />
+    </linearGradient>
+    <pattern id="filmGrain" width="40" height="40" patternUnits="userSpaceOnUse">
+      <circle cx="10" cy="10" r="0.8" fill="#F4EFE6" opacity="0.04" />
+      <circle cx="30" cy="25" r="0.8" fill="#F4EFE6" opacity="0.04" />
+      <circle cx="20" cy="35" r="0.8" fill="#F4EFE6" opacity="0.04" />
+    </pattern>
+  </defs>
+
+  <!-- Dark Charcoal Textured Background -->
+  <rect width="800" height="1000" fill="url(#editorialBg)" />
+  <rect width="800" height="1000" fill="url(#filmGrain)" />
+  <rect width="800" height="1000" fill="url(#copperGlow)" />
+
+  <!-- Architectural Background Grid Accent -->
+  <line x1="80" y1="0" x2="80" y2="1000" stroke="#F4EFE6" stroke-opacity="0.05" stroke-width="1" />
+  <line x1="720" y1="0" x2="720" y2="1000" stroke="#F4EFE6" stroke-opacity="0.05" stroke-width="1" />
+  <line x1="0" y1="840" x2="800" y2="840" stroke="#F4EFE6" stroke-opacity="0.05" stroke-width="1" />
+
+  <!-- Subtle Large Monogram Watermark in Portrait -->
+  <text x="400" y="580" font-family="'Space Grotesk', sans-serif" font-size="340" font-weight="900" fill="#F4EFE6" fill-opacity="0.03" text-anchor="middle" letter-spacing="-15">AA</text>
+
+  <!-- Editorial Silhouette of Abdul Ahad -->
+  <!-- Shoulders & Coat -->
+  <path d="M 160 1000 C 180 820, 240 730, 310 680 L 350 780 L 450 780 L 490 680 C 560 730, 620 820, 640 1000 Z" fill="#1C1B17" />
+  <!-- Lapel / Collar Accents -->
+  <path d="M 310 680 L 370 820 L 400 900 L 430 820 L 490 680 L 440 680 L 400 750 L 360 680 Z" fill="#2A2822" stroke="#C4855A" stroke-opacity="0.3" stroke-width="1" />
+  <path d="M 370 780 L 400 860 L 430 780 Z" fill="#F4EFE6" fill-opacity="0.9" />
+
+  <!-- Neck -->
+  <rect x="365" y="550" width="70" height="140" rx="10" fill="#E8DEC9" />
+  <!-- Shadow on Neck -->
+  <path d="M 365 570 C 390 610, 410 610, 435 570 L 435 620 C 400 640, 380 630, 365 620 Z" fill="#CBBBA1" />
+
+  <!-- Head Base -->
+  <ellipse cx="400" cy="460" rx="110" ry="145" fill="url(#faceShade)" />
+  
+  <!-- Sleek Modern Hair & Beard Contour -->
+  <!-- Hair -->
+  <path d="M 285 440 C 275 330, 330 260, 400 260 C 470 260, 525 330, 515 440 C 500 370, 470 330, 400 330 C 330 330, 300 370, 285 440 Z" fill="#171613" />
+  <path d="M 300 380 C 330 280, 470 280, 500 380 C 480 320, 450 300, 400 300 C 350 300, 320 320, 300 380 Z" fill="#25241F" />
+
+  <!-- Ears -->
+  <ellipse cx="288" cy="470" rx="14" ry="24" fill="#DEC8B6" />
+  <ellipse cx="512" cy="470" rx="14" ry="24" fill="#D2BBA7" />
+
+  <!-- Minimalist Designer Eyeglasses (Copper / Charcoal Wireframes) -->
+  <rect x="320" y="420" width="65" height="45" rx="10" fill="none" stroke="#25241F" stroke-width="4.5" />
+  <rect x="415" y="420" width="65" height="45" rx="10" fill="none" stroke="#25241F" stroke-width="4.5" />
+  <line x1="385" y1="438" x2="415" y2="438" stroke="#C4855A" stroke-width="4" />
+  <line x1="300" y1="435" x2="320" y2="435" stroke="#C4855A" stroke-width="3" />
+  <line x1="480" y1="435" x2="500" y2="435" stroke="#C4855A" stroke-width="3" />
+  <!-- Glass Reflection -->
+  <line x1="335" y1="428" x2="365" y2="455" stroke="#F4EFE6" stroke-width="2.5" stroke-linecap="round" opacity="0.6" />
+  <line x1="430" y1="428" x2="460" y2="455" stroke="#F4EFE6" stroke-width="2.5" stroke-linecap="round" opacity="0.6" />
+
+  <!-- Eyes & Eyebrows -->
+  <path d="M 330 405 Q 355 398 375 408" fill="none" stroke="#25241F" stroke-width="3.5" stroke-linecap="round" />
+  <path d="M 425 408 Q 445 398 470 405" fill="none" stroke="#25241F" stroke-width="3.5" stroke-linecap="round" />
+
+  <!-- Nose -->
+  <path d="M 400 435 L 396 480 L 406 485" fill="none" stroke="#BAA58C" stroke-width="3" stroke-linecap="round" />
+
+  <!-- Neatly Groomed Beard & Mustache (Editorial Aesthetic) -->
+  <path d="M 345 500 Q 400 485 455 500 Q 400 520 345 500 Z" fill="#1C1B17" />
+  <path d="M 320 480 C 320 580, 360 620, 400 620 C 440 620, 480 580, 480 480 C 475 510, 460 550, 400 570 C 340 550, 325 510, 320 480 Z" fill="#1C1B17" />
+
+  <!-- Editorial Typographic Stamp in Corner -->
+  <g transform="translate(60, 920)">
+    <text x="0" y="0" font-family="'Space Grotesk', sans-serif" font-size="14" font-weight="700" fill="#C4855A" letter-spacing="3">PORTRAIT / 01</text>
+    <text x="0" y="20" font-family="'Manrope', sans-serif" font-size="11" font-weight="500" fill="#F4EFE6" fill-opacity="0.6" letter-spacing="1">ABDUL AHAD J · COIMBATORE</text>
+  </g>
+</svg>

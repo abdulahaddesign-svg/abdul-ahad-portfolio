@@ -116,8 +116,17 @@ export interface SiteSettings {
   linkedinUrl: string;
   heroHeadline: string;
   heroSupportingCopy: string;
+  aboutHeadline?: string;
   aboutIntro: string;
   aboutPhilosophy: string;
+  aboutDescription?: string;
+  profilePhotoUrl?: string;
+  profilePhotoAlt?: string;
+  experienceYears?: string;
+  achievementsSummary?: string;
+  resumeUrl?: string;
+  resumeLabel?: string;
+  resumeVisible?: boolean;
   educationDegree: string;
   educationInstitution: string;
   educationYear: string;

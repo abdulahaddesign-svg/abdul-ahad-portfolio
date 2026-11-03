@@ -32,8 +32,8 @@ export function WorkArchiveClient({ initialProjects }: WorkArchiveClientProps) {
   });
 
   return (
-    <div className="pt-36 sm:pt-44 pb-32 bg-ivory text-charcoal min-h-screen">
-      <div className="max-w-[1600px] mx-auto px-6 sm:px-12">
+    <div className="pt-32 sm:pt-40 pb-32 bg-ivory text-charcoal min-h-screen select-none">
+      <div className="max-w-[1400px] mx-auto px-6 sm:px-12">
         {/* Page Header */}
         <div className="pb-16 border-b border-charcoal/15">
           <span className="text-xs font-sans font-bold uppercase tracking-[0.25em] text-copper block mb-4">

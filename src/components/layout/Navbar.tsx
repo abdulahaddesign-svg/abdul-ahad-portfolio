@@ -103,7 +103,7 @@ export function Navbar() {
                   <Link
                     key={link.href}
                     href={link.href}
-                    className="group relative py-1 text-xs font-sans font-semibold uppercase tracking-[0.16em] text-charcoal hover:text-copper transition-colors duration-200"
+                    className="group relative py-1 text-[13.5px] font-sans font-semibold uppercase tracking-[0.16em] text-charcoal hover:text-copper transition-colors duration-200"
                   >
                     <span className="inline-block transition-transform duration-200 group-hover:-translate-y-0.5">
                       {link.label}
@@ -111,7 +111,7 @@ export function Navbar() {
                     {isActive && (
                       <motion.span
                         layoutId="nav-dot"
-                        className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-1 h-1 rounded-full bg-copper"
+                        className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-1.5 h-1.5 rounded-full bg-copper"
                       />
                     )}
                   </Link>
@@ -121,7 +121,7 @@ export function Navbar() {
 
             <Link
               href="/contact"
-              className="inline-flex items-center gap-1.5 px-4 py-2 border border-charcoal/20 text-xs font-sans font-bold uppercase tracking-[0.16em] text-charcoal hover:border-copper hover:text-copper transition-all duration-200"
+              className="inline-flex items-center gap-1.5 px-4.5 py-2 border border-charcoal/20 text-[13px] font-sans font-bold uppercase tracking-[0.16em] text-charcoal hover:border-copper hover:text-copper transition-all duration-200"
             >
               <span>Initiate Brief</span>
               <ArrowUpRight className="w-3.5 h-3.5 text-copper" />
