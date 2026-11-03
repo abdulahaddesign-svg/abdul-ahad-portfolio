@@ -56,22 +56,32 @@ export default function AdminSecurityPage() {
 
     try {
       const supabase = createClient();
-      if (supabase) {
-        const { error } = await supabase.auth.updateUser({
-          password: newPassword,
-        });
+      let updatedViaSupabase = false;
 
-        if (error) {
-          setMessage({ type: 'error', text: error.message });
-        } else {
-          setMessage({ type: 'success', text: 'Password updated successfully in Supabase Auth.' });
-          setNewPassword('');
-          setConfirmPassword('');
+      if (supabase) {
+        const { data: sessionData } = await supabase.auth.getSession();
+        if (sessionData?.session) {
+          const { error } = await supabase.auth.updateUser({
+            password: newPassword,
+          });
+
+          if (error) {
+            setMessage({ type: 'error', text: error.message });
+            return;
+          } else {
+            updatedViaSupabase = true;
+          }
         }
+      }
+
+      if (updatedViaSupabase) {
+        setMessage({ type: 'success', text: 'Password updated successfully in Supabase Auth.' });
+        setNewPassword('');
+        setConfirmPassword('');
       } else {
         setMessage({
           type: 'success',
-          text: 'Demo mode: Password updated locally. To update live credentials, configure NEXT_PUBLIC_SUPABASE_URL.',
+          text: 'To apply this new password to production, update ADMIN_PASSWORD in your Vercel Project Settings → Environment Variables.',
         });
         setNewPassword('');
         setConfirmPassword('');
@@ -147,7 +157,7 @@ export default function AdminSecurityPage() {
               Auth Mechanism
             </span>
             <span className="font-display font-bold text-sm text-charcoal">
-              Supabase Auth / JWT
+              Master Session · HTTP-Only
             </span>
           </div>
         </div>
