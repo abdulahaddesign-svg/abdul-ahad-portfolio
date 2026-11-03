@@ -23,7 +23,7 @@ export function ContactCtaSection({ settings }: ContactCtaSectionProps) {
       ref={containerRef}
       className="relative py-28 sm:py-36 bg-ivory text-charcoal border-b border-charcoal/15 overflow-hidden select-none"
     >
-      <div className="max-w-[1400px] mx-auto px-6 sm:px-12">
+      <div className="max-w-[1820px] mx-auto px-4 sm:px-8 lg:px-12">
         {/* Top Header Label & Availability Indicator */}
         <div className="flex flex-wrap items-center justify-between gap-4 pb-6 border-b border-charcoal/10 mb-12 sm:mb-16">
           <span className="text-xs font-sans font-bold uppercase tracking-[0.25em] text-copper">

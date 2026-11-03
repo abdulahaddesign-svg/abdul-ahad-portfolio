@@ -40,7 +40,7 @@ export function AboutIntroSection({ settings }: AboutIntroSectionProps) {
       ref={containerRef}
       className="py-24 sm:py-36 bg-ivory text-charcoal border-b border-charcoal/15 select-none"
     >
-      <div className="max-w-[1400px] mx-auto px-6 sm:px-12">
+      <div className="max-w-[1820px] mx-auto px-4 sm:px-8 lg:px-12">
         {/* Section Header Line */}
         <div className="flex items-center justify-between pb-6 border-b border-charcoal/10 mb-14 sm:mb-20">
           <span className="text-xs font-sans font-bold uppercase tracking-[0.25em] text-copper">

@@ -53,7 +53,7 @@ export function HorizontalPortfolioSection({ projects }: HorizontalPortfolioSect
         className="relative bg-charcoal text-ivory pt-20 sm:pt-28 pb-20 sm:pb-28 overflow-hidden select-none border-b border-charcoal-800"
       >
         {/* Ticker Header */}
-        <div className="max-w-[1400px] mx-auto px-6 sm:px-12 mb-12 sm:mb-16 flex flex-col md:flex-row md:items-end justify-between gap-6">
+        <div className="max-w-[1820px] mx-auto px-4 sm:px-8 lg:px-12 mb-12 sm:mb-16 flex flex-col md:flex-row md:items-end justify-between gap-6">
           <div>
             <span className="text-xs font-sans font-bold uppercase tracking-[0.25em] text-copper block mb-3">
               Kinetic Horizon
@@ -139,7 +139,7 @@ export function HorizontalPortfolioSection({ projects }: HorizontalPortfolioSect
           - Duo Fankaar inspired presentation with clean typography
           ========================================================================= */}
       <section className="py-24 sm:py-36 bg-ivory text-charcoal border-b border-charcoal/15 select-none">
-        <div className="max-w-[1400px] mx-auto px-6 sm:px-12">
+        <div className="max-w-[1820px] mx-auto px-4 sm:px-8 lg:px-12">
           {/* Section Header */}
           <div className="pb-8 mb-14 sm:mb-16 border-b border-charcoal/15 flex flex-col md:flex-row md:items-end justify-between gap-6">
             <div>

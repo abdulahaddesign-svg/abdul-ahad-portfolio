@@ -37,7 +37,7 @@ export default async function AboutPage() {
 
   return (
     <div className="pt-32 sm:pt-40 pb-32 bg-ivory text-charcoal min-h-screen select-none">
-      <div className="max-w-[1400px] mx-auto px-6 sm:px-12">
+      <div className="max-w-[1820px] mx-auto px-4 sm:px-8 lg:px-12">
         {/* Section Top Label */}
         <div className="flex items-center justify-between pb-6 border-b border-charcoal/10 text-xs font-sans uppercase tracking-[0.2em] text-charcoal-500 mb-12 sm:mb-16">
           <span className="text-copper font-bold">BIOGRAPHY &amp; CAPABILITIES</span>

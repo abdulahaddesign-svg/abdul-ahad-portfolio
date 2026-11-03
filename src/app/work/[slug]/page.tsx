@@ -52,7 +52,7 @@ export default async function ProjectDetailPage({ params }: ProjectDetailPagePro
 
   return (
     <article className="pt-36 sm:pt-44 pb-32 bg-ivory text-charcoal min-h-screen">
-      <div className="max-w-[1600px] mx-auto px-6 sm:px-12">
+      <div className="max-w-[1820px] mx-auto px-4 sm:px-8 lg:px-12">
         {/* Breadcrumb Navigation */}
         <div className="pb-8">
           <Link

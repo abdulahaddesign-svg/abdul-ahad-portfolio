@@ -43,7 +43,7 @@ export function Footer({ settings = SITE_SETTINGS }: FooterProps) {
           : 'bg-ivory text-charcoal border-t border-charcoal/15'
       }`}
     >
-      <div className="max-w-[1400px] mx-auto px-6 sm:px-12">
+      <div className="max-w-[1820px] mx-auto px-4 sm:px-8 lg:px-12">
         {/* =========================================================================
             1. FOOTER TOP: Compact Info & Direct Channels (Inspired by Endcap)
             ========================================================================= */}
@@ -202,7 +202,7 @@ export function Footer({ settings = SITE_SETTINGS }: FooterProps) {
           - Controlled with overflow-hidden
           ========================================================================= */}
       <div className="w-full overflow-hidden select-none pointer-events-none mt-4 sm:mt-8 -mb-2 sm:-mb-4">
-        <div className="max-w-[1400px] mx-auto px-4 sm:px-8">
+        <div className="max-w-[1820px] mx-auto px-4 sm:px-8 lg:px-12">
           <div className="relative w-full aspect-[1024/167] opacity-85 transition-opacity duration-300">
             <Image
               src={logoUrl}

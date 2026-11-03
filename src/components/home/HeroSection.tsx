@@ -28,7 +28,7 @@ export function HeroSection() {
         />
       </motion.div>
 
-      <div className="max-w-[1400px] mx-auto px-6 sm:px-12 relative z-10 w-full space-y-12 sm:space-y-16">
+      <div className="max-w-[1820px] mx-auto px-4 sm:px-8 lg:px-12 relative z-10 w-full space-y-12 sm:space-y-16">
         {/* Top Alignment Edge: Location and Professional Label */}
         <div className="flex flex-wrap items-center justify-between gap-4 pb-6 border-b border-charcoal/10 text-xs font-sans uppercase tracking-[0.2em] text-charcoal-500">
           <div className="flex items-center gap-3">

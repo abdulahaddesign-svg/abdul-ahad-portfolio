@@ -77,7 +77,7 @@ export function Navbar() {
             : 'bg-ivory/80 backdrop-blur-sm py-5'
         }`}
       >
-        <div className="max-w-[1400px] mx-auto px-6 sm:px-12 flex items-center justify-between">
+        <div className="max-w-[1820px] mx-auto px-4 sm:px-8 lg:px-12 flex items-center justify-between">
           {/* Primary Light Mode Brand Logo */}
           <div className="flex items-center">
             <Logo variant="light" height={34} />

@@ -29,7 +29,7 @@ export function ClientShowcaseSection({ clients }: ClientShowcaseSectionProps) {
       ref={containerRef}
       className="py-16 sm:py-24 bg-ivory text-charcoal border-b border-charcoal/15 overflow-hidden select-none"
     >
-      <div className="max-w-[1400px] mx-auto px-6 sm:px-12 mb-10 sm:mb-14">
+      <div className="max-w-[1820px] mx-auto px-4 sm:px-8 lg:px-12 mb-10 sm:mb-14">
         <div className="flex flex-col sm:flex-row sm:items-baseline justify-between gap-3 pb-6 border-b border-charcoal/10">
           <span className="text-xs font-sans font-bold uppercase tracking-[0.25em] text-copper">
             SELECTED CLIENTS
