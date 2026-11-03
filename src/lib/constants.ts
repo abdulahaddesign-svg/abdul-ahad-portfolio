@@ -488,6 +488,11 @@ export const INITIAL_PROJECTS: Project[] = [
       "/projects/reztro/reztro-admin.svg"
     ],
     videoUrl: "",
+    liveWebsiteUrl: "https://reztro.app",
+    appStoreUrl: "https://apps.apple.com/app/reztro",
+    playStoreUrl: "https://play.google.com/store/apps/details?id=com.reztro",
+    externalLinkLabel: "Launch Live App",
+    approach: "Employing human-centered design thinking, we mapped the guest ordering journey from table seated to bill payment. We conducted comparative audits of existing QR-code menu experiences, identified cognitive friction in category browsing, and created rapid wireframes for both customer-facing mobile web screens and tablet-based kitchen displays.",
     isFeatured: true,
     isPublished: true,
     sortOrder: 1,
@@ -661,6 +666,9 @@ export const INITIAL_PROJECTS: Project[] = [
       "/projects/web/hero-collection-grid.svg"
     ],
     videoUrl: "",
+    liveWebsiteUrl: "https://www.figma.com/@abdulahad",
+    externalLinkLabel: "View Figma Prototype",
+    approach: "Established strict grid constraints and experimented with micro-interactions, asymmetrical layouts, and high-contrast color systems.",
     isFeatured: false,
     isPublished: true,
     sortOrder: 6,

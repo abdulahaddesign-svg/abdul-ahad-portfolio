@@ -51,12 +51,17 @@ export function ProjectForm({ initialData }: ProjectFormProps) {
     role: initialData?.role || 'Graphic Designer',
     toolsUsed: initialData?.toolsUsed || ['Adobe Illustrator', 'Photoshop'],
     challenge: initialData?.challenge || '',
-    creativeProcess: initialData?.creativeProcess || '',
+    approach: initialData?.approach || initialData?.creativeProcess || '',
+    creativeProcess: initialData?.creativeProcess || initialData?.approach || '',
     solution: initialData?.solution || '',
     results: initialData?.results || [],
     coverImage: initialData?.coverImage || '/projects/reztro/reztro-cover.svg',
     gallery: initialData?.gallery || ['/projects/reztro/reztro-cover.svg'],
     videoUrl: initialData?.videoUrl || '',
+    liveWebsiteUrl: initialData?.liveWebsiteUrl || '',
+    appStoreUrl: initialData?.appStoreUrl || '',
+    playStoreUrl: initialData?.playStoreUrl || '',
+    externalLinkLabel: initialData?.externalLinkLabel || '',
     isFeatured: initialData?.isFeatured ?? false,
     isPublished: initialData?.isPublished ?? true,
     sortOrder: initialData?.sortOrder ?? 1,
@@ -116,6 +121,39 @@ export function ProjectForm({ initialData }: ProjectFormProps) {
     const updated = [...galleryUrls, newGalleryUrl.trim()];
     setGalleryUrls(updated);
     setNewGalleryUrl('');
+  };
+
+  const handleGalleryUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    setIsUploading(true);
+    const fd = new FormData();
+    fd.append('file', file);
+
+    try {
+      const res = await fetch('/api/upload', {
+        method: 'POST',
+        body: fd,
+      });
+      const data = await res.json();
+      if (data.url) {
+        setGalleryUrls((prev) => [...prev, data.url]);
+      }
+    } catch {
+      alert('Gallery image upload failed.');
+    } finally {
+      setIsUploading(false);
+    }
+  };
+
+  const moveGalleryImage = (idx: number, direction: 'left' | 'right') => {
+    const targetIdx = direction === 'left' ? idx - 1 : idx + 1;
+    if (targetIdx < 0 || targetIdx >= galleryUrls.length) return;
+    const updated = [...galleryUrls];
+    const [moved] = updated.splice(idx, 1);
+    updated.splice(targetIdx, 0, moved);
+    setGalleryUrls(updated);
   };
 
   const removeGalleryImage = (idx: number) => {
@@ -315,15 +353,19 @@ export function ProjectForm({ initialData }: ProjectFormProps) {
               />
 
               <Textarea
-                label="Creative Process & Strategy"
+                label="The Approach & Strategy (Design Thinking, Research, Direction)"
                 rows={3}
-                value={formData.creativeProcess}
-                onChange={(e) => setFormData({ ...formData, creativeProcess: e.target.value })}
+                value={formData.approach || formData.creativeProcess}
+                onChange={(e) => setFormData({ 
+                  ...formData, 
+                  approach: e.target.value,
+                  creativeProcess: e.target.value 
+                })}
                 placeholder="Discovery, sketches, wireframing, typography, color iterations..."
               />
 
               <Textarea
-                label="Execution & Final Solution"
+                label="The Solution & Delivered Artifacts"
                 rows={3}
                 value={formData.solution}
                 onChange={(e) => setFormData({ ...formData, solution: e.target.value })}
@@ -391,16 +433,30 @@ export function ProjectForm({ initialData }: ProjectFormProps) {
                 </div>
               </div>
 
-              {/* Gallery URLs */}
-              <div className="pt-4 border-t border-charcoal/10 space-y-3">
-                <label className="block text-xs font-sans font-bold uppercase tracking-wider text-charcoal-700">
-                  Project Gallery Images
-                </label>
+              {/* Gallery URLs & Upload */}
+              <div className="pt-4 border-t border-charcoal/10 space-y-4">
+                <div className="flex items-center justify-between">
+                  <label className="block text-xs font-sans font-bold uppercase tracking-wider text-charcoal-700">
+                    Project Gallery Images (Visual Showcase Plates)
+                  </label>
+                  <label className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-charcoal text-ivory text-xs font-sans font-semibold cursor-pointer hover:bg-copper transition-colors">
+                    <Upload className="w-3.5 h-3.5" />
+                    <span>Upload Image File</span>
+                    <input
+                      type="file"
+                      accept="image/*,.svg"
+                      className="hidden"
+                      onChange={handleGalleryUpload}
+                      disabled={isUploading}
+                    />
+                  </label>
+                </div>
+
                 <div className="flex gap-2">
                   <input
                     type="text"
                     className="flex-1 px-3 py-2 bg-ivory-50 border border-charcoal/20 text-xs font-sans"
-                    placeholder="Enter image URL to add to gallery..."
+                    placeholder="Or enter image URL to add..."
                     value={newGalleryUrl}
                     onChange={(e) => setNewGalleryUrl(e.target.value)}
                   />
@@ -413,24 +469,54 @@ export function ProjectForm({ initialData }: ProjectFormProps) {
                   </button>
                 </div>
 
-                <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 pt-2">
-                  {galleryUrls.map((url, idx) => (
-                    <div
-                      key={idx}
-                      className="relative aspect-[16/10] bg-charcoal border border-charcoal/20 group overflow-hidden"
-                    >
-                      <Image src={url} alt={`Gallery ${idx + 1}`} fill className="object-cover" />
-                      <button
-                        type="button"
-                        onClick={() => removeGalleryImage(idx)}
-                        className="absolute top-1 right-1 p-1 bg-red-600 text-white opacity-0 group-hover:opacity-100 transition-opacity"
-                        title="Remove image"
+                {galleryUrls.length > 0 && (
+                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 pt-2">
+                    {galleryUrls.map((url, idx) => (
+                      <div
+                        key={idx}
+                        className="relative aspect-[16/10] bg-charcoal border border-charcoal/20 group overflow-hidden"
                       >
-                        <Trash2 className="w-3.5 h-3.5" />
-                      </button>
-                    </div>
-                  ))}
-                </div>
+                        <Image src={url} alt={`Gallery ${idx + 1}`} fill className="object-cover" />
+                        
+                        {/* Quick Action Overlay: Reorder & Delete */}
+                        <div className="absolute inset-0 bg-charcoal/70 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-between p-2">
+                          <button
+                            type="button"
+                            disabled={idx === 0}
+                            onClick={() => moveGalleryImage(idx, 'left')}
+                            className="p-1.5 bg-charcoal text-ivory hover:text-copper disabled:opacity-30 text-xs font-bold"
+                            title="Move left"
+                          >
+                            &larr;
+                          </button>
+
+                          <span className="text-[10px] font-mono text-copper font-bold">
+                            0{idx + 1}
+                          </span>
+
+                          <button
+                            type="button"
+                            disabled={idx === galleryUrls.length - 1}
+                            onClick={() => moveGalleryImage(idx, 'right')}
+                            className="p-1.5 bg-charcoal text-ivory hover:text-copper disabled:opacity-30 text-xs font-bold"
+                            title="Move right"
+                          >
+                            &rarr;
+                          </button>
+
+                          <button
+                            type="button"
+                            onClick={() => removeGalleryImage(idx)}
+                            className="p-1.5 bg-red-600 text-white hover:bg-red-700"
+                            title="Remove image"
+                          >
+                            <Trash2 className="w-3.5 h-3.5" />
+                          </button>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
               </div>
 
               {/* Video URL */}
@@ -442,6 +528,54 @@ export function ProjectForm({ initialData }: ProjectFormProps) {
                   onChange={(e) => setFormData({ ...formData, videoUrl: e.target.value })}
                 />
               </div>
+            </div>
+          </div>
+
+          {/* Section: External Project Links */}
+          <div className="p-6 bg-white border border-charcoal/15 space-y-6">
+            <div className="pb-3 border-b border-charcoal/10 flex items-center justify-between">
+              <div>
+                <h2 className="font-display font-bold text-lg text-charcoal">
+                  4. Live Destinations &amp; App Store Links
+                </h2>
+                <p className="text-xs text-charcoal-500 font-sans mt-0.5">
+                  Configure external URLs for website deployments and mobile app listings.
+                </p>
+              </div>
+              <ExternalLink className="w-4 h-4 text-copper" />
+            </div>
+
+            <div className="space-y-4">
+              <Input
+                label="Live Website / Production URL"
+                placeholder="https://example.com"
+                value={formData.liveWebsiteUrl || ''}
+                onChange={(e) => setFormData({ ...formData, liveWebsiteUrl: e.target.value })}
+                helperText="If provided, an external link arrow will appear on project cards."
+              />
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <Input
+                  label="Apple App Store URL"
+                  placeholder="https://apps.apple.com/app/..."
+                  value={formData.appStoreUrl || ''}
+                  onChange={(e) => setFormData({ ...formData, appStoreUrl: e.target.value })}
+                />
+
+                <Input
+                  label="Google Play Store URL"
+                  placeholder="https://play.google.com/store/apps/details?id=..."
+                  value={formData.playStoreUrl || ''}
+                  onChange={(e) => setFormData({ ...formData, playStoreUrl: e.target.value })}
+                />
+              </div>
+
+              <Input
+                label="Custom External Button Label"
+                placeholder="e.g. Launch Live App, Visit Storefront, View Prototype"
+                value={formData.externalLinkLabel || ''}
+                onChange={(e) => setFormData({ ...formData, externalLinkLabel: e.target.value })}
+              />
             </div>
           </div>
         </div>

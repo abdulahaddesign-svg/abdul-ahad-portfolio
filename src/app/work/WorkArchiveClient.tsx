@@ -104,24 +104,44 @@ export function WorkArchiveClient({ initialProjects }: WorkArchiveClientProps) {
                 </div>
 
                 <div className="flex items-start justify-between gap-4">
-                  <div>
+                  <div className="space-y-1">
                     <h2 className="font-display font-bold text-2xl sm:text-3xl text-charcoal group-hover:text-copper transition-colors">
                       <Link href={`/work/${project.slug}`}>
                         {project.title}
                       </Link>
                     </h2>
-                    <p className="mt-2 text-sm text-charcoal-600 font-sans line-clamp-2 font-light">
+                    <p className="text-sm text-charcoal-600 font-sans line-clamp-2 font-light">
                       {project.shortDescription}
                     </p>
+
+                    <div className="pt-2">
+                      <Link
+                        href={`/work/${project.slug}`}
+                        className="text-xs font-sans font-bold uppercase tracking-[0.16em] text-charcoal-500 hover:text-copper transition-colors"
+                      >
+                        Read Case Study &rarr;
+                      </Link>
+                    </div>
                   </div>
 
-                  <Link
-                    href={`/work/${project.slug}`}
-                    className="w-10 h-10 border border-charcoal/20 flex items-center justify-center shrink-0 group-hover:border-copper group-hover:bg-copper group-hover:text-ivory transition-all duration-300"
-                    aria-label={`View ${project.title}`}
-                  >
-                    <ArrowUpRight className="w-4 h-4" />
-                  </Link>
+                  {/* External Project Link Arrow (only displayed when an external destination exists) */}
+                  {(project.liveWebsiteUrl || project.appStoreUrl || project.playStoreUrl) && (
+                    <div className="flex flex-col items-end gap-1.5 shrink-0">
+                      <a
+                        href={project.liveWebsiteUrl || project.appStoreUrl || project.playStoreUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="w-10 h-10 border border-charcoal/20 flex items-center justify-center hover:border-copper hover:bg-copper hover:text-ivory text-copper transition-all duration-300"
+                        title={project.externalLinkLabel || 'Launch External Project'}
+                        aria-label={`Launch ${project.externalLinkLabel || 'external project'} for ${project.title}`}
+                      >
+                        <ArrowUpRight className="w-4 h-4" />
+                      </a>
+                      <span className="text-[10px] font-mono uppercase tracking-wider text-charcoal-400">
+                        {project.liveWebsiteUrl ? 'Live Web' : project.appStoreUrl ? 'App Store' : 'Play Store'}
+                      </span>
+                    </div>
+                  )}
                 </div>
               </motion.article>
             ))}

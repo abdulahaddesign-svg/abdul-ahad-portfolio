@@ -76,10 +76,9 @@ export function ProjectCard({ project, featured = false }: ProjectCardProps) {
           <h3 className="font-display font-bold text-xl md:text-2xl text-ivory tracking-tight group-hover:text-copper transition-colors duration-200">
             <Link
               href={`/work/${project.slug}`}
-              className="focus:outline-none focus-visible:underline inline-flex items-center gap-2"
+              className="focus:outline-none focus-visible:underline"
             >
-              <span>{project.title}</span>
-              <ArrowUpRight className="w-5 h-5 text-copper transition-transform duration-300 group-hover:translate-x-1 group-hover:-translate-y-1 shrink-0" />
+              {project.title}
             </Link>
           </h3>
 
@@ -88,30 +87,28 @@ export function ProjectCard({ project, featured = false }: ProjectCardProps) {
           </p>
         </div>
 
-        {/* Tools and Details link */}
-        <div className="mt-6 pt-4 border-t border-charcoal-800 flex items-center justify-between">
-          <div className="flex flex-wrap gap-1.5 max-w-[70%]">
-            {project.toolsUsed.slice(0, 3).map((tool) => (
-              <span
-                key={tool}
-                className="text-[10px] uppercase tracking-wider font-sans text-charcoal-400 bg-charcoal-800 px-2 py-0.5"
-              >
-                {tool}
-              </span>
-            ))}
-            {project.toolsUsed.length > 3 && (
-              <span className="text-[10px] text-charcoal-400 self-center">
-                +{project.toolsUsed.length - 3}
-              </span>
-            )}
-          </div>
-
+        {/* Tools and Dual Actions */}
+        <div className="mt-6 pt-4 border-t border-charcoal-800 flex items-center justify-between gap-3">
           <Link
             href={`/work/${project.slug}`}
-            className="text-xs font-sans font-semibold uppercase tracking-wider text-ivory hover:text-copper transition-colors duration-150 inline-flex items-center gap-1"
+            className="text-xs font-sans font-bold uppercase tracking-[0.16em] text-ivory hover:text-copper transition-colors duration-150 inline-flex items-center gap-1.5"
           >
-            Case Study
+            <span>Case Study</span>
+            <span>&rarr;</span>
           </Link>
+
+          {(project.liveWebsiteUrl || project.appStoreUrl || project.playStoreUrl) && (
+            <a
+              href={project.liveWebsiteUrl || project.appStoreUrl || project.playStoreUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-1.5 px-3 py-1 bg-charcoal-800 border border-charcoal-700 text-[11px] font-sans font-semibold uppercase tracking-wider text-copper hover:bg-copper hover:text-ivory transition-colors"
+              title={project.externalLinkLabel || 'Live External Destination'}
+            >
+              <span>{project.liveWebsiteUrl ? 'Live Web' : project.appStoreUrl ? 'App Store' : 'Play Store'}</span>
+              <ArrowUpRight className="w-3.5 h-3.5" />
+            </a>
+          )}
         </div>
       </div>
     </motion.article>

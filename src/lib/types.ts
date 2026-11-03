@@ -31,12 +31,17 @@ export interface Project {
   role: string;
   toolsUsed: string[];
   challenge?: string;
+  approach?: string;
   creativeProcess?: string;
   solution?: string;
   results?: string[];
   coverImage: string;
   gallery: string[];
   videoUrl?: string;
+  liveWebsiteUrl?: string;
+  appStoreUrl?: string;
+  playStoreUrl?: string;
+  externalLinkLabel?: string;
   isFeatured: boolean;
   isPublished: boolean;
   sortOrder: number;
