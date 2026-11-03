@@ -48,12 +48,12 @@ export function WorkArchiveClient({ initialProjects }: WorkArchiveClientProps) {
         </div>
 
         {/* Category Filter Bar */}
-        <div className="py-8 sm:py-10 border-b border-charcoal/15 flex flex-wrap items-center gap-x-8 sm:gap-x-10 md:gap-x-12 gap-y-4 text-base sm:text-lg md:text-xl font-sans font-medium">
+        <div className="py-6 sm:py-7 border-b border-charcoal/15 flex flex-wrap items-center gap-x-6 sm:gap-x-8 md:gap-x-9 gap-y-3 text-[13px] sm:text-[14px] md:text-[15px] font-sans font-semibold uppercase tracking-[0.14em]">
           {CATEGORIES.map((category) => (
             <button
               key={category}
               onClick={() => setSelectedCategory(category)}
-              className={`transition-all duration-200 relative pb-2 pt-1 uppercase tracking-wider ${
+              className={`transition-all duration-200 relative pb-1.5 pt-0.5 ${
                 selectedCategory === category
                   ? 'text-copper font-bold'
                   : 'text-charcoal-600 hover:text-charcoal'
@@ -63,7 +63,7 @@ export function WorkArchiveClient({ initialProjects }: WorkArchiveClientProps) {
               {selectedCategory === category && (
                 <motion.span
                   layoutId="work-filter-underline"
-                  className="absolute bottom-0 left-0 right-0 h-[2.5px] bg-copper"
+                  className="absolute bottom-0 left-0 right-0 h-0.5 bg-copper"
                 />
               )}
             </button>
