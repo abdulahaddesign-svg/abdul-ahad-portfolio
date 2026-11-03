@@ -29,7 +29,7 @@ export default async function AboutPage() {
   const description =
     settings.aboutDescription ||
     'He has worked across enterprise, SaaS and freelance projects, creating visual identities, marketing creatives, digital experiences and motion-led content. He has served 50+ freelance clients and received the Best Employee of the Year award at eClerx in 2025. He works independently and collaborates with teams when projects require broader creative capabilities.';
-  const photoUrl = settings.profilePhotoUrl || '/profile/abdul-ahad-portrait.svg';
+  const photoUrl = settings.profilePhotoUrl || '/profile/abdul-ahad.jpg';
   const photoAlt = settings.profilePhotoAlt || 'Abdul Ahad J — Creative Designer';
   const resumeUrl = settings.resumeUrl || '/resume/abdul-ahad-resume.pdf';
   const resumeLabel = settings.resumeLabel || 'PDF · Updated Resume';
@@ -62,7 +62,7 @@ export default async function AboutPage() {
                 fill
                 priority
                 sizes="(max-width: 1024px) 100vw, 480px"
-                className="object-cover object-center"
+                className="object-cover object-top"
               />
               <div className="absolute bottom-4 left-4 bg-charcoal/85 backdrop-blur-sm px-3.5 py-1.5 text-[11px] font-mono text-ivory tracking-widest uppercase">
                 Abdul Ahad J · 2026

@@ -29,7 +29,7 @@ export function AboutIntroSection({ settings }: AboutIntroSectionProps) {
   const description =
     settings.aboutDescription ||
     'He has worked across enterprise, SaaS and freelance projects, creating visual identities, marketing creatives, digital experiences and motion-led content. He has served 50+ freelance clients and received the Best Employee of the Year award at eClerx in 2025. He works independently and collaborates with teams when projects require broader creative capabilities.';
-  const photoUrl = settings.profilePhotoUrl || '/profile/abdul-ahad-portrait.svg';
+  const photoUrl = settings.profilePhotoUrl || '/profile/abdul-ahad.jpg';
   const photoAlt = settings.profilePhotoAlt || 'Abdul Ahad J — Creative Designer';
   const resumeUrl = settings.resumeUrl || '/resume/abdul-ahad-resume.pdf';
   const resumeLabel = settings.resumeLabel || 'PDF · Updated Resume';
@@ -175,7 +175,7 @@ export function AboutIntroSection({ settings }: AboutIntroSectionProps) {
                   fill
                   sizes="(max-width: 768px) 100vw, 460px"
                   priority
-                  className="object-cover object-center select-none"
+                  className="object-cover object-top select-none"
                 />
               </motion.div>
 

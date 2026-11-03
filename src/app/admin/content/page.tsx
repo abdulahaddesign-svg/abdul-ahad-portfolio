@@ -187,7 +187,7 @@ export default function AdminContentPage() {
                   type="text"
                   value={settings.profilePhotoUrl || ''}
                   onChange={(e) => setSettings({ ...settings, profilePhotoUrl: e.target.value })}
-                  placeholder="/profile/abdul-ahad-portrait.svg or https://..."
+                  placeholder="/profile/abdul-ahad.jpg or https://..."
                   className="flex-1 px-3 py-2 border border-charcoal/20 bg-ivory text-xs font-mono focus:outline-none focus:border-copper"
                 />
                 <label className="px-4 py-2 bg-charcoal text-ivory text-xs font-bold uppercase tracking-wider cursor-pointer hover:bg-copper transition-colors flex items-center gap-1 shrink-0">
