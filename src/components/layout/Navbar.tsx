@@ -6,6 +6,7 @@ import Image from 'next/image';
 import { usePathname } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ArrowUpRight } from 'lucide-react';
+import { Logo } from '@/components/brand/Logo';
 
 const NAV_LINKS = [
   { label: 'Work', href: '/work', index: '01' },
@@ -79,30 +80,8 @@ export function Navbar() {
         }`}
       >
         <div className="max-w-[1600px] mx-auto px-6 sm:px-12 flex items-center justify-between">
-          {/* Brand Wordmark / Monogram */}
-          <Link
-            href="/"
-            className="group flex items-center gap-3 select-none focus:outline-none"
-            aria-label="Abdul Ahad — Homepage"
-          >
-            <div className="relative w-8 h-8 shrink-0">
-              <Image
-                src="/brand/logo-monogram-light.png"
-                alt="Aa Monogram"
-                fill
-                priority
-                className="object-contain transition-transform duration-300 group-hover:scale-105"
-              />
-            </div>
-            <div className="flex flex-col">
-              <span className="font-display font-bold text-sm tracking-tight text-charcoal group-hover:text-copper transition-colors">
-                ABDUL AHAD
-              </span>
-              <span className="text-[9px] font-sans uppercase tracking-[0.2em] text-charcoal-500 hidden sm:block">
-                Visual Branding & Creative
-              </span>
-            </div>
-          </Link>
+          {/* Primary Light Mode Brand Logo */}
+          <Logo variant="light" height={36} />
 
           {/* Center Coordinates & Time (Desktop Editorial) */}
           <div className="hidden lg:flex items-center gap-6 text-[11px] font-sans text-charcoal-500 uppercase tracking-widest border-x border-charcoal/10 px-8">
@@ -171,7 +150,7 @@ export function Navbar() {
           >
             {/* Top brand reminder */}
             <div className="pt-20 pb-8 border-b border-charcoal-800 flex items-center justify-between text-xs font-sans uppercase tracking-widest text-charcoal-400">
-              <span>Navigation Directory</span>
+              <Logo variant="dark" height={28} />
               <span>Coimbatore, India</span>
             </div>
 

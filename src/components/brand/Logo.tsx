@@ -62,7 +62,7 @@ export function Logo({
           width={width}
           height={height}
           priority
-          className="h-auto w-auto max-h-[44px] sm:max-h-[48px] object-contain"
+          className="h-7 sm:h-8 md:h-9 w-auto object-contain select-none"
         />
       </div>
     </Link>
