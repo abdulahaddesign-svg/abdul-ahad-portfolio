@@ -153,6 +153,17 @@ create table if not exists public.inquiries (
 create index if not exists idx_inquiries_status on public.inquiries(status);
 create index if not exists idx_inquiries_created_at on public.inquiries(created_at desc);
 
+-- 12. Clients Table (Client Logos & Partners Showcase)
+create table if not exists public.clients (
+  id uuid default gen_random_uuid() primary key,
+  name text not null,
+  logo_url text not null,
+  website_url text default '',
+  sort_order integer default 0,
+  is_visible boolean default true,
+  created_at timestamp with time zone default timezone('utc'::text, now()) not null
+);
+
 -- ==============================================================================
 -- ROW LEVEL SECURITY (RLS) POLICIES
 -- ==============================================================================
@@ -248,6 +259,13 @@ create policy "Admins can update inquiries" on public.inquiries
 
 create policy "Admins can delete inquiries" on public.inquiries
   for delete using (auth.role() = 'authenticated');
+
+-- Clients: Public can view visible; Admin can manage
+alter table public.clients enable row level security;
+create policy "Public can view visible clients" on public.clients
+  for select using (is_visible = true or auth.role() = 'authenticated');
+create policy "Admins can manage clients" on public.clients
+  for all using (auth.role() = 'authenticated');
 
 -- ==============================================================================
 -- STORAGE BUCKET SETUP

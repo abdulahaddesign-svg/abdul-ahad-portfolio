@@ -1,0 +1,6 @@
+<svg width="200" height="60" viewBox="0 0 200 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <path d="M18 42L34 16L50 42" stroke="#25241F" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+  <line x1="26" y1="34" x2="42" y2="34" stroke="#C4855A" stroke-width="3"/>
+  <text x="62" y="38" font-family="'Space Grotesk', sans-serif" font-weight="700" font-size="20" fill="#25241F" letter-spacing="-0.03em">APEX</text>
+  <text x="63" y="48" font-family="'Manrope', sans-serif" font-weight="600" font-size="7" fill="#8B8474" letter-spacing="0.25em">STUDIOS</text>
+</svg>

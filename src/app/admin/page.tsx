@@ -11,10 +11,11 @@ import {
   ArrowUpRight, 
   ExternalLink,
   Clock,
-  Sparkles 
+  Sparkles,
+  Building2
 } from 'lucide-react';
-import { getProjects, getInquiries } from '@/lib/data';
-import { Project, Inquiry } from '@/lib/types';
+import { getProjects, getInquiries, getClientLogos } from '@/lib/data';
+import { Project, Inquiry, ClientLogo } from '@/lib/types';
 import { Button } from '@/components/ui/Button';
 import { Badge } from '@/components/ui/Badge';
 import { formatDate } from '@/lib/utils';
@@ -22,16 +23,19 @@ import { formatDate } from '@/lib/utils';
 export default function AdminOverviewPage() {
   const [projects, setProjects] = useState<Project[]>([]);
   const [inquiries, setInquiries] = useState<Inquiry[]>([]);
+  const [clients, setClients] = useState<ClientLogo[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     async function loadData() {
-      const [projs, inqs] = await Promise.all([
+      const [projs, inqs, clis] = await Promise.all([
         getProjects({ includeDrafts: true }),
         getInquiries(),
+        getClientLogos(true),
       ]);
       setProjects(projs);
       setInquiries(inqs);
+      setClients(clis);
       setLoading(false);
     }
     loadData();
@@ -73,7 +77,7 @@ export default function AdminOverviewPage() {
       </div>
 
       {/* Metric Cards Row */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6">
         <div className="p-6 bg-white border border-charcoal/15 space-y-2">
           <div className="flex items-center justify-between text-charcoal-400">
             <span className="text-xs font-sans font-bold uppercase tracking-wider">Total Projects</span>
@@ -100,6 +104,17 @@ export default function AdminOverviewPage() {
           <div className="font-display font-bold text-4xl text-charcoal">{draftCount}</div>
           <span className="text-[11px] font-sans text-charcoal-500">Hidden from public</span>
         </div>
+
+        <Link href="/admin/clients" className="p-6 bg-white border border-charcoal/15 space-y-2 hover:border-copper transition-colors block group">
+          <div className="flex items-center justify-between text-charcoal-400">
+            <span className="text-xs font-sans font-bold uppercase tracking-wider group-hover:text-copper transition-colors">Client Brands</span>
+            <Building2 className="w-4 h-4 text-copper" />
+          </div>
+          <div className="font-display font-bold text-4xl text-charcoal">{clients.length}</div>
+          <span className="text-[11px] font-sans text-charcoal-500 flex items-center gap-1">
+            {clients.filter(c => c.isVisible).length} active on showcase &rarr;
+          </span>
+        </Link>
 
         <div className="p-6 bg-white border border-charcoal/15 space-y-2">
           <div className="flex items-center justify-between text-charcoal-400">

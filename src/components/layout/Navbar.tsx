@@ -2,7 +2,6 @@
 
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
-import Image from 'next/image';
 import { usePathname } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ArrowUpRight } from 'lucide-react';
@@ -23,7 +22,7 @@ export function Navbar() {
 
   useEffect(() => {
     const handleScroll = () => {
-      setScrolled(window.scrollY > 40);
+      setScrolled(window.scrollY > 30);
     };
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
@@ -41,7 +40,7 @@ export function Navbar() {
         });
         setTime(ist);
       } catch {
-        setTime('13:30');
+        setTime('14:00');
       }
     };
     updateTime();
@@ -61,7 +60,6 @@ export function Navbar() {
     };
   }, [isOpen]);
 
-  // Close on route navigation
   useEffect(() => {
     setIsOpen(false);
   }, [pathname]);
@@ -73,64 +71,68 @@ export function Navbar() {
   return (
     <>
       <header
-        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
+        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
           scrolled
-            ? 'bg-ivory/90 backdrop-blur-md border-b border-charcoal/10 py-4'
-            : 'bg-transparent py-7'
+            ? 'bg-ivory/95 backdrop-blur-md border-b border-charcoal/10 py-3.5 shadow-sm'
+            : 'bg-ivory/80 backdrop-blur-sm py-5'
         }`}
       >
-        <div className="max-w-[1600px] mx-auto px-6 sm:px-12 flex items-center justify-between">
+        <div className="max-w-[1400px] mx-auto px-6 sm:px-12 flex items-center justify-between">
           {/* Primary Light Mode Brand Logo */}
-          <Logo variant="light" height={36} />
+          <div className="flex items-center">
+            <Logo variant="light" height={34} />
+          </div>
 
-          {/* Center Coordinates & Time (Desktop Editorial) */}
-          <div className="hidden lg:flex items-center gap-6 text-[11px] font-sans text-charcoal-500 uppercase tracking-widest border-x border-charcoal/10 px-8">
+          {/* Center Coordinates & Availability Indicator */}
+          <div className="hidden lg:flex items-center gap-6 text-[11px] font-sans text-charcoal-500 uppercase tracking-widest border-x border-charcoal/10 px-8 h-8">
             <span className="flex items-center gap-2">
               <span className="w-1.5 h-1.5 rounded-full bg-sage animate-pulse" />
-              <span>Available for 2026 Projects</span>
+              <span>Available for New Projects</span>
             </span>
             <span className="text-charcoal-300">/</span>
             <span>Coimbatore, IN · {time || 'IST'}</span>
           </div>
 
-          {/* Desktop Navigation Links */}
-          <nav className="hidden md:flex items-center gap-10" aria-label="Main Navigation">
-            {NAV_LINKS.map((link) => {
-              const isActive =
-                pathname === link.href || (link.href !== '/' && pathname.startsWith(link.href));
-              return (
-                <Link
-                  key={link.href}
-                  href={link.href}
-                  className="group relative py-1 text-xs font-sans font-semibold uppercase tracking-[0.16em] text-charcoal hover:text-copper transition-colors duration-200"
-                >
-                  <span className="inline-block transition-transform duration-200 group-hover:-translate-y-0.5">
-                    {link.label}
-                  </span>
-                  {isActive && (
-                    <motion.span
-                      layoutId="nav-dot"
-                      className="absolute -bottom-1.5 left-1/2 -translate-x-1/2 w-1 h-1 rounded-full bg-copper"
-                    />
-                  )}
-                </Link>
-              );
-            })}
+          {/* Desktop Navigation Links & Action */}
+          <div className="hidden md:flex items-center gap-8">
+            <nav className="flex items-center gap-8" aria-label="Main Navigation">
+              {NAV_LINKS.map((link) => {
+                const isActive =
+                  pathname === link.href || (link.href !== '/' && pathname.startsWith(link.href));
+                return (
+                  <Link
+                    key={link.href}
+                    href={link.href}
+                    className="group relative py-1 text-xs font-sans font-semibold uppercase tracking-[0.16em] text-charcoal hover:text-copper transition-colors duration-200"
+                  >
+                    <span className="inline-block transition-transform duration-200 group-hover:-translate-y-0.5">
+                      {link.label}
+                    </span>
+                    {isActive && (
+                      <motion.span
+                        layoutId="nav-dot"
+                        className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-1 h-1 rounded-full bg-copper"
+                      />
+                    )}
+                  </Link>
+                );
+              })}
+            </nav>
 
             <Link
               href="/contact"
-              className="inline-flex items-center gap-1.5 text-xs font-sans font-bold uppercase tracking-[0.16em] text-copper hover:text-charcoal transition-colors ml-2"
+              className="inline-flex items-center gap-1.5 px-4 py-2 border border-charcoal/20 text-xs font-sans font-bold uppercase tracking-[0.16em] text-charcoal hover:border-copper hover:text-copper transition-all duration-200"
             >
               <span>Initiate Brief</span>
-              <ArrowUpRight className="w-3.5 h-3.5" />
+              <ArrowUpRight className="w-3.5 h-3.5 text-copper" />
             </Link>
-          </nav>
+          </div>
 
           {/* Mobile Menu Trigger */}
           <button
             type="button"
             onClick={() => setIsOpen(!isOpen)}
-            className="md:hidden relative z-50 p-2 text-xs font-sans font-bold uppercase tracking-widest text-charcoal focus:outline-none"
+            className="md:hidden p-2 text-xs font-sans font-bold uppercase tracking-widest text-charcoal focus:outline-none"
             aria-label={isOpen ? 'Close menu' : 'Open menu'}
           >
             {isOpen ? 'Close [X]' : 'Menu [—]'}
@@ -145,23 +147,21 @@ export function Navbar() {
             initial={{ opacity: 0, y: '-100%' }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: '-100%' }}
-            transition={{ duration: 0.6, ease: [0.76, 0, 0.24, 1] }}
+            transition={{ duration: 0.5, ease: [0.76, 0, 0.24, 1] }}
             className="fixed inset-0 z-40 bg-charcoal text-ivory flex flex-col justify-between p-8 sm:p-14 overflow-y-auto"
           >
-            {/* Top brand reminder */}
             <div className="pt-20 pb-8 border-b border-charcoal-800 flex items-center justify-between text-xs font-sans uppercase tracking-widest text-charcoal-400">
               <Logo variant="dark" height={28} />
               <span>Coimbatore, India</span>
             </div>
 
-            {/* Huge Menu Links */}
             <div className="py-12 space-y-6">
               {NAV_LINKS.map((link, idx) => (
                 <motion.div
                   key={link.href}
                   initial={{ opacity: 0, x: -30 }}
                   animate={{ opacity: 1, x: 0 }}
-                  transition={{ duration: 0.5, delay: 0.1 * idx, ease: [0.16, 1, 0.3, 1] }}
+                  transition={{ duration: 0.4, delay: 0.08 * idx, ease: [0.16, 1, 0.3, 1] }}
                 >
                   <Link
                     href={link.href}
@@ -179,7 +179,6 @@ export function Navbar() {
               ))}
             </div>
 
-            {/* Mobile Footer Coordinates */}
             <div className="pt-8 border-t border-charcoal-800 space-y-4 text-xs font-sans">
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 text-charcoal-400">
                 <div>

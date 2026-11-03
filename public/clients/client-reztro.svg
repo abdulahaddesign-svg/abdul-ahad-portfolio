@@ -1,0 +1,6 @@
+<svg width="200" height="60" viewBox="0 0 200 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <path d="M24 16H36C42.6274 16 48 21.3726 48 28C48 34.6274 42.6274 40 36 40H24V16Z" stroke="#25241F" stroke-width="4"/>
+  <path d="M34 38L46 48" stroke="#C4855A" stroke-width="4" stroke-linecap="round"/>
+  <text x="60" y="38" font-family="'Space Grotesk', sans-serif" font-weight="700" font-size="20" fill="#25241F" letter-spacing="-0.02em">REZTRO</text>
+  <text x="61" y="48" font-family="'Manrope', sans-serif" font-weight="600" font-size="7" fill="#7C5C3E" letter-spacing="0.2em">HOSPITALITY</text>
+</svg>

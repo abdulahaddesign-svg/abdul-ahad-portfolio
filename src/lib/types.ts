@@ -123,3 +123,14 @@ export interface SiteSettings {
   educationYear: string;
   educationAggregate: string;
 }
+
+export interface ClientLogo {
+  id: string;
+  name: string;
+  logoUrl: string;
+  websiteUrl?: string;
+  sortOrder: number;
+  isVisible: boolean;
+  createdAt: string;
+}
+

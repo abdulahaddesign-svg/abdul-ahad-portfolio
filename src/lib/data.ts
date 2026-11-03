@@ -5,17 +5,20 @@ import {
   SiteSettings, 
   ServiceItem, 
   ExperienceItem, 
-  ProjectCategory 
+  ProjectCategory,
+  ClientLogo
 } from './types';
 import { 
   SITE_SETTINGS, 
   INITIAL_PROJECTS, 
   SERVICES_DATA, 
-  EXPERIENCE_DATA 
+  EXPERIENCE_DATA,
+  INITIAL_CLIENTS
 } from './constants';
 
 // In-memory runtime store for development/fallback when Supabase credentials are not yet entered
 let localProjects: Project[] = [...INITIAL_PROJECTS];
+let localClients: ClientLogo[] = [...INITIAL_CLIENTS];
 let localInquiries: Inquiry[] = [
   {
     id: "inq-sample-1",
@@ -339,3 +342,136 @@ export async function updateSiteSettings(newSettings: Partial<SiteSettings>): Pr
   localSettings = { ...localSettings, ...newSettings };
   return localSettings;
 }
+
+export async function getClientLogos(includeHidden = false): Promise<ClientLogo[]> {
+  const supabase = createClient();
+  if (supabase) {
+    try {
+      let query = supabase.from('clients').select('*').order('sort_order', { ascending: true });
+      if (!includeHidden) {
+        query = query.eq('is_visible', true);
+      }
+      const { data, error } = await query;
+      if (!error && data && data.length > 0) {
+        return data.map((d: any) => ({
+          id: d.id,
+          name: d.name,
+          logoUrl: d.logo_url || d.logoUrl,
+          websiteUrl: d.website_url || d.websiteUrl,
+          sortOrder: d.sort_order || d.sortOrder,
+          isVisible: d.is_visible ?? d.isVisible,
+          createdAt: d.created_at || d.createdAt,
+        })) as ClientLogo[];
+      }
+    } catch {
+      // Fallback
+    }
+  }
+
+  let list = [...localClients];
+  if (!includeHidden) {
+    list = list.filter((c) => c.isVisible);
+  }
+  return list.sort((a, b) => a.sortOrder - b.sortOrder);
+}
+
+export async function saveClientLogo(client: Partial<ClientLogo> & { id?: string }): Promise<ClientLogo> {
+  const supabase = createClient();
+  const now = new Date().toISOString();
+
+  if (supabase) {
+    try {
+      if (client.id && !client.id.startsWith('cli-temp-')) {
+        const { data, error } = await supabase
+          .from('clients')
+          .update({
+            name: client.name,
+            logo_url: client.logoUrl,
+            website_url: client.websiteUrl || '',
+            sort_order: client.sortOrder ?? 1,
+            is_visible: client.isVisible ?? true,
+          })
+          .eq('id', client.id)
+          .select()
+          .single();
+        if (!error && data) {
+          return {
+            id: data.id,
+            name: data.name,
+            logoUrl: data.logo_url,
+            websiteUrl: data.website_url,
+            sortOrder: data.sort_order,
+            isVisible: data.is_visible,
+            createdAt: data.created_at,
+          };
+        }
+      } else {
+        const { id, ...newClientData } = client;
+        const { data, error } = await supabase
+          .from('clients')
+          .insert({
+            name: newClientData.name,
+            logo_url: newClientData.logoUrl,
+            website_url: newClientData.websiteUrl || '',
+            sort_order: newClientData.sortOrder ?? 1,
+            is_visible: newClientData.isVisible ?? true,
+            created_at: now,
+          })
+          .select()
+          .single();
+        if (!error && data) {
+          return {
+            id: data.id,
+            name: data.name,
+            logoUrl: data.logo_url,
+            websiteUrl: data.website_url,
+            sortOrder: data.sort_order,
+            isVisible: data.is_visible,
+            createdAt: data.created_at,
+          };
+        }
+      }
+    } catch {
+      // Fallback
+    }
+  }
+
+  if (client.id) {
+    const idx = localClients.findIndex((c) => c.id === client.id);
+    if (idx !== -1) {
+      localClients[idx] = {
+        ...localClients[idx],
+        ...client,
+      } as ClientLogo;
+      return localClients[idx];
+    }
+  }
+
+  const created: ClientLogo = {
+    id: client.id || `cli-${Date.now()}`,
+    name: client.name || 'Untitled Client',
+    logoUrl: client.logoUrl || '/clients/client-reztro.svg',
+    websiteUrl: client.websiteUrl || '',
+    sortOrder: client.sortOrder ?? (localClients.length + 1),
+    isVisible: client.isVisible ?? true,
+    createdAt: now,
+  };
+  localClients.push(created);
+  return created;
+}
+
+export async function deleteClientLogo(id: string): Promise<boolean> {
+  const supabase = createClient();
+  if (supabase) {
+    try {
+      const { error } = await supabase.from('clients').delete().eq('id', id);
+      if (!error) return true;
+    } catch {
+      // Fallback
+    }
+  }
+
+  localClients = localClients.filter((c) => c.id !== id);
+  return true;
+}
+

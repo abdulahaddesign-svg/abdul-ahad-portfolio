@@ -1,4 +1,79 @@
-import { ExperienceItem, ServiceItem, SkillCategory, Award, SiteSettings, Project } from './types';
+import { ExperienceItem, ServiceItem, SkillCategory, Award, SiteSettings, Project, ClientLogo } from './types';
+
+export const INITIAL_CLIENTS: ClientLogo[] = [
+  {
+    id: 'cli-reztro',
+    name: 'Reztro Dining Tech',
+    logoUrl: '/clients/client-reztro.svg',
+    websiteUrl: 'https://reztro.tech',
+    sortOrder: 1,
+    isVisible: true,
+    createdAt: '2025-06-01T00:00:00Z',
+  },
+  {
+    id: 'cli-falcon',
+    name: 'Falcon Square',
+    logoUrl: '/clients/client-falcon.svg',
+    websiteUrl: '',
+    sortOrder: 2,
+    isVisible: true,
+    createdAt: '2025-05-01T00:00:00Z',
+  },
+  {
+    id: 'cli-apex',
+    name: 'Apex Studios',
+    logoUrl: '/clients/client-apex.svg',
+    websiteUrl: '',
+    sortOrder: 3,
+    isVisible: true,
+    createdAt: '2024-10-01T00:00:00Z',
+  },
+  {
+    id: 'cli-lumina',
+    name: 'Lumina Creative Lab',
+    logoUrl: '/clients/client-lumina.svg',
+    websiteUrl: '',
+    sortOrder: 4,
+    isVisible: true,
+    createdAt: '2024-08-01T00:00:00Z',
+  },
+  {
+    id: 'cli-strata',
+    name: 'Strata Architects',
+    logoUrl: '/clients/client-strata.svg',
+    websiteUrl: '',
+    sortOrder: 5,
+    isVisible: true,
+    createdAt: '2024-04-01T00:00:00Z',
+  },
+  {
+    id: 'cli-verve',
+    name: 'Verve Botanicals',
+    logoUrl: '/clients/client-verve.svg',
+    websiteUrl: '',
+    sortOrder: 6,
+    isVisible: true,
+    createdAt: '2023-11-01T00:00:00Z',
+  },
+  {
+    id: 'cli-kuro',
+    name: 'Kuro Roasters',
+    logoUrl: '/clients/client-kuro.svg',
+    websiteUrl: '',
+    sortOrder: 7,
+    isVisible: true,
+    createdAt: '2023-09-01T00:00:00Z',
+  },
+  {
+    id: 'cli-novacrest',
+    name: 'NovaCrest Ventures',
+    logoUrl: '/clients/client-novacrest.svg',
+    websiteUrl: '',
+    sortOrder: 8,
+    isVisible: true,
+    createdAt: '2023-05-01T00:00:00Z',
+  },
+];
 
 export const SITE_SETTINGS: SiteSettings = {
   name: "Abdul Ahad J",
