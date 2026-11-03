@@ -41,7 +41,7 @@ export default async function AboutPage() {
         {/* Section Top Label */}
         <div className="flex items-center justify-between pb-6 border-b border-charcoal/10 text-xs font-sans uppercase tracking-[0.2em] text-charcoal-500 mb-12 sm:mb-16">
           <span className="text-copper font-bold">BIOGRAPHY &amp; CAPABILITIES</span>
-          <span className="font-mono">COIMBATORE, INDIA · 11.0168° N, 76.9558° E</span>
+          <span className="font-mono">COIMBATORE, INDIA</span>
         </div>
 
         {/* Large Typography Headline */}
