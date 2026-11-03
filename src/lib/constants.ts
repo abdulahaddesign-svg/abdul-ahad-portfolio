@@ -101,7 +101,7 @@ export const SITE_SETTINGS: SiteSettings = {
   educationInstitution: "Government Arts College (Autonomous), Coimbatore",
   educationYear: "2020 – 2023",
   educationAggregate: "80% Aggregate",
-  footerAppearance: "light",
+  footerAppearance: "dark",
   footerLogoLightUrl: "/brand/logo-wordmark-clean-light.png",
   footerLogoDarkUrl: "/brand/logo-wordmark-clean-dark.png",
   footerDescription: "Independent creative designer specializing in visual branding, digital experiences, motion and creative systems. Based in Coimbatore, India.",

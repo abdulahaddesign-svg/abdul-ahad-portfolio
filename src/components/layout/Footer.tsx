@@ -19,12 +19,12 @@ export function Footer({ settings = SITE_SETTINGS }: FooterProps) {
     return null;
   }
 
-  const isDarkMode = settings.footerAppearance === 'dark';
+  // Default to dark mode as requested by user
+  const isDarkMode = settings.footerAppearance ? settings.footerAppearance === 'dark' : true;
   const logoUrl = isDarkMode
     ? settings.footerLogoDarkUrl || '/brand/logo-wordmark-clean-dark.png'
     : settings.footerLogoLightUrl || '/brand/logo-wordmark-clean-light.png';
 
-  const brandStatement = settings.footerBrandStatement || 'Abdul Ahad';
   const description =
     settings.footerDescription ||
     'Independent creative designer specializing in visual branding, digital experiences, motion and creative systems. Based in Coimbatore, India.';
@@ -37,7 +37,7 @@ export function Footer({ settings = SITE_SETTINGS }: FooterProps) {
 
   return (
     <footer
-      className={`relative pt-16 sm:pt-24 pb-8 sm:pb-12 overflow-hidden select-none transition-colors duration-300 ${
+      className={`relative pt-16 sm:pt-24 pb-6 sm:pb-10 overflow-hidden select-none transition-colors duration-300 ${
         isDarkMode
           ? 'bg-charcoal text-ivory border-t border-charcoal-800'
           : 'bg-ivory text-charcoal border-t border-charcoal/15'
@@ -45,7 +45,7 @@ export function Footer({ settings = SITE_SETTINGS }: FooterProps) {
     >
       <div className="max-w-[1400px] mx-auto px-6 sm:px-12">
         {/* =========================================================================
-            1. FOOTER TOP: Compact Info & Channels (Inspired by Endcap)
+            1. FOOTER TOP: Compact Info & Direct Channels (Inspired by Endcap)
             ========================================================================= */}
         <div className="grid grid-cols-1 md:grid-cols-12 gap-8 lg:gap-16 items-start pb-12 sm:pb-16">
           {/* Left Side: Clean Logo + Short Description */}
@@ -55,8 +55,8 @@ export function Footer({ settings = SITE_SETTINGS }: FooterProps) {
                 <Image
                   src={logoUrl}
                   alt={settings.name}
-                  width={220}
-                  height={44}
+                  width={240}
+                  height={48}
                   className="max-h-8 sm:max-h-9 w-auto object-contain select-none"
                   priority
                 />
@@ -186,7 +186,7 @@ export function Footer({ settings = SITE_SETTINGS }: FooterProps) {
             3. FOOTER BOTTOM: Small Copyright & Location Spec
             ========================================================================= */}
         <div
-          className={`pt-6 pb-8 flex flex-col sm:flex-row items-baseline justify-between gap-4 text-xs font-sans uppercase tracking-widest ${
+          className={`pt-6 pb-6 sm:pb-8 flex flex-col sm:flex-row items-baseline justify-between gap-4 text-xs font-sans uppercase tracking-widest ${
             isDarkMode ? 'text-charcoal-500' : 'text-charcoal-400'
           }`}
         >
@@ -196,22 +196,23 @@ export function Footer({ settings = SITE_SETTINGS }: FooterProps) {
       </div>
 
       {/* =========================================================================
-          4. OVERSIZED TYPOGRAPHIC BRAND STATEMENT (Endcap Reference)
+          4. OVERSIZED BRAND LOGO STATEMENT (Replaces Typo with Uploaded Logo Asset)
           - Bleeds intentionally to the edges
-          - Space Grotesk Bold, Live responsive text
+          - Displays uploaded logo wordmark (Dark or Light variant)
           - Controlled with overflow-hidden
           ========================================================================= */}
-      <div className="w-full overflow-hidden select-none pointer-events-none mt-2 sm:mt-6 -mb-4 sm:-mb-8">
-        <div className="max-w-[1400px] mx-auto px-6 sm:px-12">
-          <h2
-            className={`font-display font-black text-[13.5vw] sm:text-[14.5vw] md:text-[15.5vw] lg:text-[15.8vw] tracking-tighter leading-[0.82] uppercase whitespace-nowrap transition-colors duration-300 ${
-              isDarkMode
-                ? 'text-charcoal-800/80 hover:text-ivory'
-                : 'text-charcoal/[0.12] sm:text-charcoal/[0.10]'
-            }`}
-          >
-            {brandStatement}
-          </h2>
+      <div className="w-full overflow-hidden select-none pointer-events-none mt-4 sm:mt-8 -mb-2 sm:-mb-4">
+        <div className="max-w-[1400px] mx-auto px-4 sm:px-8">
+          <div className="relative w-full aspect-[1024/167] opacity-85 transition-opacity duration-300">
+            <Image
+              src={logoUrl}
+              alt={settings.name}
+              fill
+              sizes="(max-width: 1400px) 100vw, 1400px"
+              className="object-contain object-bottom select-none"
+              priority
+            />
+          </div>
         </div>
       </div>
     </footer>
