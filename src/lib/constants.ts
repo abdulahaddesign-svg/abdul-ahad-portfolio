@@ -182,21 +182,22 @@ export const SERVICES_DATA: ServiceItem[] = [
     title: "Graphic Design & Visual Branding",
     slug: "graphic-design-visual-branding",
     isPrimary: true,
+    tagline: "Posters, Advertising Creatives, Social Media & Tangible Packaging Dielines",
     shortSummary: "Comprehensive visual branding, brand identity systems, and high-impact graphic design that position your business with authority.",
-    description: "The core foundation of Abdul Ahad's creative practice. We develop cohesive visual languages that communicate your unique market positioning, instill trust, and maintain unmistakable consistency across digital and print mediums.",
+    description: "The core foundation of Abdul Ahad's creative practice. Developing cohesive visual languages that communicate your unique market positioning, command attention in crowded feeds, and maintain unmistakable consistency across digital and print mediums.",
     deliverables: [
-      "Logo suite & custom wordmarks",
-      "Comprehensive brand guidelines",
-      "Typography & color systems",
-      "Marketing collateral & sales decks",
-      "Editorial & publication layouts",
+      "Custom posters & campaign collaterals",
+      "High-engagement social media creative sets",
+      "Conversion-focused ad banners & flyers",
+      "Packaging boxes, labels & dielines",
+      "Editorial publications & sales pitch decks",
       "Vector iconography & brand assets"
     ],
     typicalProjects: [
-      "Complete brand identity overhauls",
-      "Corporate rebranding & guideline manuals",
-      "Product launch visual systems",
-      "Investor pitch decks & whitepapers"
+      "Retail product box & label packaging",
+      "Multi-channel paid acquisition ad suites",
+      "Monthly social media creative retainers",
+      "Corporate event & conference promotional assets"
     ],
     creativeProcess: [
       { step: "01", title: "Brand Discovery & Audit", description: "Analyzing competitive landscape, target audience, and strategic objectives." },
@@ -204,239 +205,192 @@ export const SERVICES_DATA: ServiceItem[] = [
       { step: "03", title: "Design Execution & Refinement", description: "Crafting identity marks, grid systems, and functional applications." },
       { step: "04", title: "Guidelines & Production Handoff", description: "Packaging master vector files, typography rules, and usage specifications." }
     ],
+    primaryImage: "/projects/packaging/packaging-cover.svg",
+    supportingImages: [
+      "/projects/social/social-cover.svg",
+      "/projects/apparel/apparel-cover.svg"
+    ],
+    ctaText: "Initiate Branding Brief",
+    ctaHref: "/contact?service=graphic-design",
     sortOrder: 1,
+    isPublished: true,
   },
   {
     id: "srv-2",
     title: "Brand Identity Design",
     slug: "brand-identity-design",
     isPrimary: false,
+    tagline: "Distinctive Logos, Typography Standards & Cohesive Visual Systems",
     shortSummary: "Memorable logos, monograms, symbol marks, and complete brand identity design systems.",
-    description: "Creating distinctive visual identities built on conceptual rigor. Each mark is engineered to scale seamlessly from a tiny 16px favicon to giant outdoor billboards.",
+    description: "Creating distinctive visual identities built on conceptual rigor and typographic distinction. Each mark is engineered to scale seamlessly from a 16px favicon to giant outdoor billboards with mathematical precision.",
     deliverables: [
-      "Primary & secondary logo variations",
-      "Monograms, crests & emblem marks",
+      "Primary, secondary & responsive logo suite",
+      "Monograms, emblem marks & crests",
       "Brand color formulas (RGB, CMYK, Pantone)",
-      "Typography pairings & typographic scale",
-      "Brand application mockups"
+      "Typographic hierarchy & pairing guidelines",
+      "Comprehensive brand guidelines book (PDF)",
+      "Real-world application mockups & stationery"
     ],
     typicalProjects: [
-      "Early-stage startup identities",
-      "Luxury & boutique studio identities",
-      "Product-line visual identities"
+      "Early-stage venture & startup brand launches",
+      "Boutique studio & luxury hospitality marks",
+      "Brand refresh & modernization overhauls"
     ],
     creativeProcess: [
       { step: "01", title: "Conceptual Sketching", description: "Iterative exploration of geometric and organic concepts." },
       { step: "02", title: "Vector Precision", description: "Refining geometry, curve continuity, and optical balance." },
       { step: "03", title: "Contextual Testing", description: "Validating across light, dark, color, and monochrome substrates." }
     ],
+    primaryImage: "/projects/freelance/branding-cover.svg",
+    supportingImages: [
+      "/projects/falcon/falcon-cover.svg",
+      "/projects/reztro/reztro-brand.svg"
+    ],
+    ctaText: "Design Brand Identity",
+    ctaHref: "/contact?service=brand-identity",
     sortOrder: 2,
+    isPublished: true,
   },
   {
     id: "srv-3",
-    title: "Social Media Design",
-    slug: "social-media-design",
-    isPrimary: false,
-    shortSummary: "Scroll-stopping social graphics, carousel templates, and structured content calendars.",
-    description: "High-engagement social media visuals engineered to halt the feed, deliver value instantly, and preserve strong brand recall across Instagram, LinkedIn, and X.",
-    deliverables: [
-      "Modular Instagram feed templates",
-      "Multi-slide educational carousels",
-      "LinkedIn banner & thought-leadership graphics",
-      "Story templates & interactive stickers",
-      "Custom highlights and cover graphics"
-    ],
-    typicalProjects: [
-      "Monthly social media retainers",
-      "Product launch campaign suites",
-      "Executive personal brand visual packages"
-    ],
-    creativeProcess: [
-      { step: "01", title: "Content Strategy Alignment", description: "Aligning visual format with informational hierarchy." },
-      { step: "02", title: "Modular Template Design", description: "Crafting easily editable, structured Figma templates." },
-      { step: "03", title: "Production Batching", description: "Outputting pixel-perfect exports tailored for platform algorithms." }
-    ],
-    sortOrder: 3,
-  },
-  {
-    id: "srv-4",
-    title: "Marketing & Advertising Creatives",
-    slug: "marketing-advertising-creatives",
-    isPrimary: false,
-    shortSummary: "Performance-focused digital ad banners, promotional posters, and display campaigns.",
-    description: "Ad creatives designed with conversion psychology. Clear call-to-actions, high contrast, and crisp visual storytelling maximize click-through rates.",
-    deliverables: [
-      "Google Display Network ad banner sets",
-      "Meta (Facebook & Instagram) performance ad creatives",
-      "Event & promotional print posters",
-      "Direct mailers, coupons & promotional flyers",
-      "Digital billboard & display ads"
-    ],
-    typicalProjects: [
-      "Paid acquisition ad testing suites",
-      "Trade show & event promotional graphics",
-      "Seasonal sales and festive promotional campaigns"
-    ],
-    creativeProcess: [
-      { step: "01", title: "Offer & Hook Clarity", description: "Defining the primary visual trigger and proposition." },
-      { step: "02", title: "Multi-Format Adaptation", description: "Adapting across 1:1, 9:16, 16:9, and responsive ad dimensions." },
-      { step: "03", title: "A/B Testing Variants", description: "Delivering color, headline, and imagery variations." }
-    ],
-    sortOrder: 4,
-  },
-  {
-    id: "srv-5",
-    title: "Packaging & Print Design",
-    slug: "packaging-print-design",
-    isPrimary: false,
-    shortSummary: "Tangible packaging boxes, labels, editorial magazines, brochures, and retail collateral.",
-    description: "Print-ready, precision-engineered artwork with deep understanding of paper stocks, die-lines, CMYK ink separation, spot UV, and foil finishes.",
-    deliverables: [
-      "Dieline-accurate product packaging",
-      "Bottles, jars & pouch label designs",
-      "Multi-page corporate brochures & magazines",
-      "Stationery suites & business cards",
-      "Print-ready preflight PDF packages"
-    ],
-    typicalProjects: [
-      "FMCG and retail product box packaging",
-      "Corporate annual reports and capabilities brochures",
-      "Merchandise and luxury unboxing collateral"
-    ],
-    creativeProcess: [
-      { step: "01", title: "Dieline & Substrate Review", description: "Verifying printer specifications, bleed, and safe zones." },
-      { step: "02", title: "3D Mockup Visualizations", description: "Visualizing packaging in realistic 3D space." },
-      { step: "03", title: "Preflight Production", description: "Color-separating, outlining, and verifying high-res assets." }
-    ],
-    sortOrder: 5,
-  },
-  {
-    id: "srv-6",
     title: "UI/UX Design",
     slug: "ui-ux-design",
     isPrimary: false,
+    tagline: "Human-Centered Mobile & Desktop Digital Product Interfaces",
     shortSummary: "Mobile-first digital products, design systems, and intuitive customer-facing interfaces.",
-    description: "User interfaces rooted in human-centered design thinking. From user flows and wireframes to interactive Figma prototypes and scalable component libraries.",
+    description: "Digital product interfaces rooted in cognitive psychology and human-centered design principles. From wireframing frictionless user flows to architecting multi-state component design systems in Figma.",
     deliverables: [
       "Mobile app UX/UI design (iOS & Android)",
-      "Design systems & component libraries",
-      "Wireframing & user journey mapping",
-      "Interactive Figma click-through prototypes",
-      "Developer handoff specifications"
+      "Scalable Figma design systems & component libraries",
+      "Wireframing, user persona & journey mapping",
+      "High-fidelity interactive click-through prototypes",
+      "Micro-interaction states & responsive grid constraints",
+      "Developer handoff documentation & tokens"
     ],
     typicalProjects: [
-      "Reztro Table Ordering Platform (Case Study)",
-      "SaaS dashboards & web portals",
-      "Consumer mobile applications"
+      "Reztro Table Ordering Platform (-40% wait times)",
+      "SaaS analytics dashboards & administrative portals",
+      "Consumer mobile iOS & Android applications"
     ],
     creativeProcess: [
       { step: "01", title: "Research & Journey Mapping", description: "Identifying user friction points and key milestones." },
       { step: "02", title: "Wireframes & Prototyping", description: "Iterative low-fidelity layouts validated with stakeholders." },
       { step: "03", title: "High-Fidelity Interface", description: "Crafting the visual layer with responsive constraints." }
     ],
-    sortOrder: 6,
+    primaryImage: "/projects/reztro/reztro-cover.svg",
+    supportingImages: [
+      "/projects/reztro/reztro-mobile-flow.svg",
+      "/projects/reztro/reztro-admin.svg"
+    ],
+    ctaText: "Discuss UI/UX Project",
+    ctaHref: "/contact?service=ui-ux",
+    sortOrder: 3,
+    isPublished: true,
   },
   {
-    id: "srv-7",
+    id: "srv-4",
     title: "Motion Graphics",
     slug: "motion-graphics",
     isPrimary: false,
+    tagline: "Kinetic Typography, 2D Animation, Logo Stings & Micro-Interactions",
     shortSummary: "Dynamic 2D animation, logo stings, UI micro-interactions, and kinetic typography.",
-    description: "Bringing static graphics to life with purposeful motion design. Smooth easings, rhythmic timing, and brand-consistent movement that captivates audiences.",
+    description: "Bringing static brand elements to life with purposeful motion design. Smooth easings, rhythmic timing, and brand-consistent choreography engineered to capture viewer attention within the first 1.5 seconds.",
     deliverables: [
-      "Animated logo reveals & brand stings",
-      "Kinetic typography reels & teasers",
-      "UI micro-interactions & Lottie animations",
-      "Social media animated title cards",
-      "Explainer graphic motion sequences"
+      "Animated brand logo reveals & stings",
+      "Kinetic typography sequences & campaign teasers",
+      "UI micro-interactions & Lottie vector animations",
+      "Broadcast lower-thirds & title motion graphics",
+      "Product feature explainer motion walkthroughs"
     ],
     typicalProjects: [
-      "Brand identity launch stings",
-      "SaaS product feature motion clips",
-      "Social video motion graphics packages"
+      "Brand identity launch animated stings",
+      "Product feature social announcement teasers",
+      "High-converting video advertising graphics"
     ],
     creativeProcess: [
       { step: "01", title: "Storyboard & Timing", description: "Pacing key frames and motion rhythm." },
       { step: "02", title: "Asset Preparation & Rigging", description: "Layering vectors for After Effects." },
       { step: "03", title: "Animation & Polishing", description: "Fine-tuning graph-editor curves and export optimization." }
     ],
-    sortOrder: 7,
+    primaryImage: "/projects/motion/motion-cover.svg",
+    supportingImages: [
+      "/projects/social/social-cover.svg",
+      "/projects/eclerx/eclerx-cover.svg"
+    ],
+    ctaText: "Commission Motion Work",
+    ctaHref: "/contact?service=motion-graphics",
+    sortOrder: 4,
+    isPublished: true,
   },
   {
-    id: "srv-8",
+    id: "srv-5",
     title: "Video Editing",
     slug: "video-editing",
     isPrimary: false,
+    tagline: "Paced Short-Form Social Edits, Reels & Cinematic Commercial Cuts",
     shortSummary: "Paced video storytelling, promotional social edits, Reels, and product showcase videos.",
-    description: "End-to-end post-production editing combining tight narrative cuts, color correction, sound design, and custom graphic overlays.",
+    description: "End-to-end post-production editing combining tight narrative cuts, cinematic pacing, color grading, audio sweetening, and custom graphic overlays tailored for high retention.",
     deliverables: [
-      "Instagram Reels & YouTube Shorts formatting",
-      "Product showcase & demonstration edits",
+      "Instagram Reels & YouTube Shorts high-retention cuts",
+      "Product showcase & dynamic demo edits",
       "Corporate event & interview highlight reels",
-      "Color grading & audio sweetening",
-      "Subtitle animations & lower thirds"
+      "Color grading & LUT application",
+      "Dynamic animated subtitles & sound design"
     ],
     typicalProjects: [
-      "Campaign video teasers",
+      "Viral promotional social video campaigns",
       "Brand commercial short-form edits",
-      "Social video series editing"
+      "Founder interview & thought-leadership sequences"
     ],
     creativeProcess: [
       { step: "01", title: "Rough Cut & Story Assembly", description: "Establishing pacing, narrative arc, and music beat." },
       { step: "02", title: "Visual Polish & Graphics", description: "Integrating lower-thirds, callouts, and motion assets." },
       { step: "03", title: "Color & Audio Mastering", description: "Balancing dialogue, ambient audio, and color tones." }
     ],
-    sortOrder: 8,
+    primaryImage: "/projects/eclerx/eclerx-cover.svg",
+    supportingImages: [
+      "/projects/motion/motion-cover.svg",
+      "/projects/falcon/falcon-cover.svg"
+    ],
+    ctaText: "Book Video Production",
+    ctaHref: "/contact?service=video-editing",
+    sortOrder: 5,
+    isPublished: true,
   },
   {
-    id: "srv-9",
+    id: "srv-6",
     title: "Web & App Design",
     slug: "web-app-design",
     isPrimary: false,
+    tagline: "Responsive Modern Websites, Landing Pages & Accessible Systems",
     shortSummary: "Modern responsive website designs, landing page concepts, and digital product layouts.",
-    description: "Editorial-grade web design balancing bold visual direction with accessible information architecture and conversion-centric layout principles.",
+    description: "Editorial-grade web design balancing bold typography, asymmetric layouts, and conversion-centric UX. Crafted in Figma and architected with modern frontend paradigms in mind.",
     deliverables: [
       "Responsive web page designs (Desktop, Tablet, Mobile)",
-      "High-converting landing page concepts",
-      "Figma design tokens & style guides",
-      "Asset export packages for engineers"
+      "High-converting promotional landing pages",
+      "Interactive Figma prototypes & tokens",
+      "Web accessibility & WCAG-compliant design",
+      "Design systems & developer handoff specs"
     ],
     typicalProjects: [
-      "Creative studio & agency websites",
-      "Product landing pages (over 20+ hero section concepts)",
-      "E-commerce storefront UI designs"
+      "Independent studio & agency portfolio websites",
+      "SaaS and startup conversion landing pages",
+      "Modern e-commerce boutique storefronts"
     ],
     creativeProcess: [
       { step: "01", title: "Content Architecture", description: "Structuring page sections for logical reading hierarchy." },
       { step: "02", title: "Visual Concepting", description: "Deploying typography, spacing, and brand elements." },
       { step: "03", title: "Breakpoint Responsive Scaling", description: "Refining mobile, tablet, and widescreen layouts." }
     ],
-    sortOrder: 9,
-  },
-  {
-    id: "srv-10",
-    title: "AI-Assisted Creative Production",
-    slug: "ai-assisted-creative-production",
-    isPrimary: false,
-    shortSummary: "AI-powered ideation, generative visual concepting, and accelerated asset workflows.",
-    description: "Leveraging state-of-the-art generative AI tooling to rapidly prototype visual directions, generate bespoke textural backdrops, and enhance production speed without sacrificing human creative judgment.",
-    deliverables: [
-      "Generative concept exploration decks",
-      "Bespoke background textures & abstract assets",
-      "AI-accelerated image upscaling & retouching",
-      "Prompt-engineered visual iterations"
+    primaryImage: "/projects/web/hero-collection-cover.svg",
+    supportingImages: [
+      "/projects/reztro/reztro-cover.svg",
+      "/projects/reztro/reztro-mobile-flow.svg"
     ],
-    typicalProjects: [
-      "Rapid creative ideation sessions",
-      "Conceptual campaign moodboards",
-      "Hybrid AI-human production graphics"
-    ],
-    creativeProcess: [
-      { step: "01", title: "Creative Brief & Parameterization", description: "Structuring prompt prompts and stylistic constraints." },
-      { step: "02", title: "Generative Iteration", description: "Generating candidate visual concepts." },
-      { step: "03", title: "Manual Compositing & Polish", description: "Refining in Photoshop and Illustrator for production fidelity." }
-    ],
-    sortOrder: 10,
+    ctaText: "Start Web Collaboration",
+    ctaHref: "/contact?service=web-app",
+    sortOrder: 6,
+    isPublished: true,
   },
 ];
 

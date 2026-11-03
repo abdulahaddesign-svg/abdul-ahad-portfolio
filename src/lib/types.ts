@@ -64,12 +64,20 @@ export interface ServiceItem {
   title: string;
   slug: string;
   isPrimary: boolean;
+  tagline?: string;
   shortSummary: string;
   description: string;
   deliverables: string[];
-  typicalProjects: string[];
-  creativeProcess: { step: string; title: string; description: string }[];
+  typicalProjects?: string[];
+  creativeProcess?: { step: string; title: string; description: string }[];
+  primaryImage: string;
+  supportingImages: string[];
+  ctaText?: string;
+  ctaHref?: string;
   sortOrder: number;
+  isPublished?: boolean;
+  createdAt?: string;
+  updatedAt?: string;
 }
 
 export interface SkillCategory {

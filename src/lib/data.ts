@@ -326,8 +326,156 @@ export async function deleteInquiry(id: string): Promise<boolean> {
   return true;
 }
 
-export async function getServices(): Promise<ServiceItem[]> {
-  return SERVICES_DATA;
+let localServices: ServiceItem[] = [...SERVICES_DATA];
+
+export async function getServices(includeUnpublished = false): Promise<ServiceItem[]> {
+  const supabase = createClient();
+  if (supabase) {
+    try {
+      let query = supabase
+        .from('services')
+        .select('*')
+        .order('sort_order', { ascending: true });
+
+      const { data, error } = await query;
+      if (!error && data && data.length > 0) {
+        return data.map((row: any) => ({
+          id: row.id,
+          title: row.title,
+          slug: row.slug,
+          isPrimary: row.is_primary ?? false,
+          tagline: row.tagline,
+          shortSummary: row.short_summary,
+          description: row.description,
+          deliverables: row.deliverables ?? [],
+          typicalProjects: row.typical_projects ?? [],
+          creativeProcess: row.creative_process ?? [],
+          primaryImage: row.primary_image || '/projects/freelance/branding-cover.svg',
+          supportingImages: row.supporting_images ?? [],
+          ctaText: row.cta_text || 'Initiate Brief',
+          ctaHref: row.cta_href || '/contact',
+          sortOrder: row.sort_order ?? 0,
+          isPublished: row.is_published ?? true,
+          createdAt: row.created_at,
+          updatedAt: row.updated_at,
+        })).filter((s: ServiceItem) => includeUnpublished || s.isPublished !== false);
+      }
+    } catch {
+      // Fallback to local
+    }
+  }
+
+  return [...localServices]
+    .filter(s => includeUnpublished || s.isPublished !== false)
+    .sort((a, b) => a.sortOrder - b.sortOrder);
+}
+
+export async function getServiceById(id: string): Promise<ServiceItem | null> {
+  const services = await getServices(true);
+  return services.find(s => s.id === id) || null;
+}
+
+export async function getServiceBySlug(slug: string): Promise<ServiceItem | null> {
+  const services = await getServices(false);
+  return services.find(s => s.slug === slug) || null;
+}
+
+export async function createService(service: Omit<ServiceItem, 'id'>): Promise<ServiceItem> {
+  const newId = `srv-${Date.now()}`;
+  const newService: ServiceItem = {
+    ...service,
+    id: newId,
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
+  };
+
+  const supabase = createClient();
+  if (supabase) {
+    try {
+      await supabase.from('services').insert({
+        title: newService.title,
+        slug: newService.slug,
+        is_primary: newService.isPrimary,
+        tagline: newService.tagline,
+        short_summary: newService.shortSummary,
+        description: newService.description,
+        deliverables: newService.deliverables,
+        typical_projects: newService.typicalProjects,
+        creative_process: newService.creativeProcess,
+        primary_image: newService.primaryImage,
+        supporting_images: newService.supportingImages,
+        cta_text: newService.ctaText,
+        cta_href: newService.ctaHref,
+        sort_order: newService.sortOrder,
+        is_published: newService.isPublished,
+      });
+    } catch {
+      // Fallback
+    }
+  }
+
+  localServices.push(newService);
+  return newService;
+}
+
+export async function updateService(
+  service: Partial<ServiceItem> & { id: string }
+): Promise<ServiceItem | null> {
+  const idx = localServices.findIndex(s => s.id === service.id);
+  if (idx !== -1) {
+    localServices[idx] = {
+      ...localServices[idx],
+      ...service,
+      updatedAt: new Date().toISOString(),
+    };
+  }
+
+  const supabase = createClient();
+  if (supabase) {
+    try {
+      await supabase
+        .from('services')
+        .update({
+          title: service.title,
+          slug: service.slug,
+          is_primary: service.isPrimary,
+          tagline: service.tagline,
+          short_summary: service.shortSummary,
+          description: service.description,
+          deliverables: service.deliverables,
+          typical_projects: service.typicalProjects,
+          creative_process: service.creativeProcess,
+          primary_image: service.primaryImage,
+          supporting_images: service.supportingImages,
+          cta_text: service.ctaText,
+          cta_href: service.ctaHref,
+          sort_order: service.sortOrder,
+          is_published: service.isPublished,
+          updated_at: new Date().toISOString(),
+        })
+        .eq('id', service.id);
+    } catch {
+      // Fallback
+    }
+  }
+
+  return localServices.find(s => s.id === service.id) || null;
+}
+
+export async function deleteService(id: string): Promise<boolean> {
+  const initialLen = localServices.length;
+  localServices = localServices.filter(s => s.id !== id);
+
+  const supabase = createClient();
+  if (supabase) {
+    try {
+      await supabase.from('services').delete().eq('id', id);
+    } catch {
+      // Fallback
+    }
+  }
+
+  return localServices.length < initialLen;
 }
 
 export async function getExperience(): Promise<ExperienceItem[]> {
