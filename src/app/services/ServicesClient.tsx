@@ -6,6 +6,7 @@ import Link from 'next/link';
 import { motion, useScroll, useTransform, useReducedMotion } from 'framer-motion';
 import { ArrowUpRight, ArrowDown, Sparkles, CheckCircle2 } from 'lucide-react';
 import { ServiceItem } from '@/lib/types';
+import { Service3DCarousel } from './Service3DCarousel';
 
 interface ServicesClientProps {
   services: ServiceItem[];
@@ -52,76 +53,84 @@ export function ServicesClient({ services }: ServicesClientProps) {
       {/* ========================================================= */}
       <section className="pt-32 sm:pt-40 pb-20 sm:pb-28 border-b border-charcoal/15 relative overflow-hidden">
         <div className="max-w-[1820px] mx-auto px-4 sm:px-8 lg:px-12">
-          {/* Subtle Background Monogram Accent */}
-          <div
-            className="absolute right-0 top-1/2 -translate-y-1/2 pointer-events-none select-none opacity-[0.035] text-charcoal font-display font-black text-[28vw] leading-none"
-            aria-hidden="true"
-          >
-            AA
-          </div>
-
-          <div className="max-w-5xl space-y-8 relative z-10">
-            {/* Introductory Label */}
-            <motion.div
-              initial={prefersReduced ? {} : { opacity: 0, y: 15 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-              className="flex items-center gap-3"
-            >
-              <span className="w-2 h-2 rounded-full bg-copper animate-pulse" />
-              <span className="text-xs sm:text-sm font-sans font-bold uppercase tracking-[0.25em] text-copper">
-                Creative Services
-              </span>
-            </motion.div>
-
-            {/* Main Headline */}
-            <motion.h1
-              initial={prefersReduced ? {} : { opacity: 0, y: 25 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
-              className="font-display font-black text-5xl sm:text-7xl md:text-8xl lg:text-[6.5rem] tracking-tighter text-charcoal leading-[0.95]"
-            >
-              DESIGN THAT<br />
-              <span className="text-copper">MAKES IDEAS</span><br />
-              MATTER.
-            </motion.h1>
-
-            {/* Supporting Copy */}
-            <motion.p
-              initial={prefersReduced ? {} : { opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.7, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
-              className="text-lg sm:text-2xl text-charcoal-700 font-sans font-light leading-relaxed max-w-3xl"
-            >
-              From visual identities to digital experiences, I create thoughtful design solutions that help brands communicate with clarity and stand out.
-            </motion.p>
-
-            {/* Dual Action CTAs */}
-            <motion.div
-              initial={prefersReduced ? {} : { opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.7, delay: 0.3, ease: [0.16, 1, 0.3, 1] }}
-              className="flex flex-wrap items-center gap-4 pt-4"
-            >
-              <button
-                type="button"
-                onClick={() => {
-                  const el = document.getElementById('services-catalog');
-                  if (el) el.scrollIntoView({ behavior: 'smooth' });
-                }}
-                className="group inline-flex items-center gap-2.5 px-7 py-4 bg-charcoal text-ivory text-xs sm:text-[13px] font-sans font-bold uppercase tracking-[0.18em] hover:bg-copper transition-all duration-200 shadow-sm"
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 xl:gap-14 items-center">
+            {/* Left Column: Headline & Action CTAs */}
+            <div className="lg:col-span-6 space-y-8 relative z-10">
+              {/* Introductory Label */}
+              <motion.div
+                initial={prefersReduced ? {} : { opacity: 0, y: 15 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+                className="flex items-center gap-3"
               >
-                <span>Explore Services</span>
-                <ArrowDown className="w-3.5 h-3.5 group-hover:translate-y-1 transition-transform" />
-              </button>
+                <span className="w-2 h-2 rounded-full bg-copper animate-pulse" />
+                <span className="text-xs sm:text-sm font-sans font-bold uppercase tracking-[0.25em] text-copper">
+                  Creative Services
+                </span>
+              </motion.div>
 
-              <Link
-                href="/contact"
-                className="group inline-flex items-center gap-2.5 px-7 py-4 border border-charcoal/30 text-charcoal text-xs sm:text-[13px] font-sans font-bold uppercase tracking-[0.18em] hover:border-charcoal hover:bg-charcoal/5 transition-all duration-200"
+              {/* Main Headline */}
+              <motion.h1
+                initial={prefersReduced ? {} : { opacity: 0, y: 25 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.8, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
+                className="font-display font-black text-5xl sm:text-7xl md:text-8xl lg:text-[5.5rem] xl:text-[6.2rem] tracking-tighter text-charcoal leading-[0.95]"
               >
-                <span>Start a Project</span>
-                <ArrowUpRight className="w-3.5 h-3.5 text-copper group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
-              </Link>
+                DESIGN THAT<br />
+                <span className="text-copper">MAKES IDEAS</span><br />
+                MATTER.
+              </motion.h1>
+
+              {/* Supporting Copy */}
+              <motion.p
+                initial={prefersReduced ? {} : { opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.7, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
+                className="text-lg sm:text-xl md:text-2xl text-charcoal-700 font-sans font-light leading-relaxed max-w-2xl"
+              >
+                From visual identities to digital experiences, I create thoughtful design solutions that help brands communicate with clarity and stand out.
+              </motion.p>
+
+              {/* Dual Action CTAs */}
+              <motion.div
+                initial={prefersReduced ? {} : { opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.7, delay: 0.3, ease: [0.16, 1, 0.3, 1] }}
+                className="flex flex-wrap items-center gap-4 pt-2"
+              >
+                <button
+                  type="button"
+                  onClick={() => {
+                    const el = document.getElementById('services-catalog');
+                    if (el) el.scrollIntoView({ behavior: 'smooth' });
+                  }}
+                  className="group inline-flex items-center gap-2.5 px-7 py-4 bg-charcoal text-ivory text-xs sm:text-[13px] font-sans font-bold uppercase tracking-[0.18em] hover:bg-copper transition-all duration-200 shadow-sm"
+                >
+                  <span>Explore Services</span>
+                  <ArrowDown className="w-3.5 h-3.5 group-hover:translate-y-1 transition-transform" />
+                </button>
+
+                <Link
+                  href="/contact"
+                  className="group inline-flex items-center gap-2.5 px-7 py-4 border border-charcoal/30 text-charcoal text-xs sm:text-[13px] font-sans font-bold uppercase tracking-[0.18em] hover:border-charcoal hover:bg-charcoal/5 transition-all duration-200"
+                >
+                  <span>Start a Project</span>
+                  <ArrowUpRight className="w-3.5 h-3.5 text-copper group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
+                </Link>
+              </motion.div>
+            </div>
+
+            {/* Right Column: Dedicated Interactive 360° 3D Carousel Showcase */}
+            <motion.div
+              initial={prefersReduced ? {} : { opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.9, delay: 0.25, ease: [0.16, 1, 0.3, 1] }}
+              className="lg:col-span-6 w-full flex items-center justify-center overflow-visible"
+            >
+              <Service3DCarousel
+                services={services}
+                onSelectService={scrollToService}
+              />
             </motion.div>
           </div>
         </div>
