@@ -12,12 +12,12 @@ interface HorizontalPortfolioSectionProps {
 }
 
 export function HorizontalPortfolioSection({ projects }: HorizontalPortfolioSectionProps) {
-  const containerRef = useRef<HTMLDivElement>(null);
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
   const shouldReduceMotion = useReducedMotion();
 
   // Scroll progress for the 2-row horizontal motion
   const { scrollYProgress } = useScroll({
-    target: containerRef,
+    target: scrollContainerRef,
     offset: ['start end', 'end start'],
   });
 
@@ -39,193 +39,185 @@ export function HorizontalPortfolioSection({ projects }: HorizontalPortfolioSect
   const row1Items = getRowItems(0);
   const row2Items = getRowItems(3);
 
-  // Diverse projects for the large editorial image grid
-  const gridProjects = pool.slice(0, 8);
+  // Exactly 9 projects for the 3 x 3 grid
+  const gridProjects = pool.slice(0, 9);
 
   return (
-    <section
-      id="portfolio-strip"
-      ref={containerRef}
-      className="relative bg-charcoal text-ivory py-24 sm:py-36 overflow-hidden border-b border-charcoal-800 select-none"
-    >
-      {/* 1. Section Header */}
-      <div className="max-w-[1400px] mx-auto px-6 sm:px-12 mb-16 sm:mb-20 flex flex-col md:flex-row md:items-end justify-between gap-6">
-        <div>
-          <span className="text-xs font-sans font-bold uppercase tracking-[0.25em] text-copper block mb-3">
-            Selected Work
-          </span>
-          <h2 className="font-display font-black text-4xl sm:text-6xl md:text-7xl text-ivory tracking-tighter">
-            Curated Archive
-          </h2>
-        </div>
-        <div className="flex items-center gap-4 text-xs font-sans uppercase tracking-[0.18em] text-charcoal-400">
-          <span>Kinetic Showcase &amp; Editorial Grid</span>
-          <span className="text-copper">/</span>
-          <Link href="/work" className="text-copper hover:text-ivory transition-colors underline">
-            View Complete Index &rarr;
-          </Link>
-        </div>
-      </div>
-
-      {/* 2. Exactly Two Alternating Horizontal Motion Rows */}
-      <div className="space-y-8 sm:space-y-12 mb-28 sm:mb-36">
-        {/* ROW 1: Left to Right */}
-        <div className="w-full overflow-hidden">
-          <motion.div
-            style={shouldReduceMotion ? {} : { x: xRow1 }}
-            className="flex gap-8 sm:gap-12 w-max will-change-transform"
-          >
-            {row1Items.map((project, idx) => (
-              <ProjectStripCard
-                key={`r1-${project.id}-${idx}`}
-                project={project}
-                widthClass={
-                  idx % 3 === 0
-                    ? 'w-[420px] sm:w-[560px]'
-                    : idx % 3 === 1
-                    ? 'w-[360px] sm:w-[480px]'
-                    : 'w-[480px] sm:w-[620px]'
-                }
-                aspectRatio={
-                  idx % 3 === 0
-                    ? 'aspect-[16/10]'
-                    : idx % 3 === 1
-                    ? 'aspect-[4/3]'
-                    : 'aspect-[21/9]'
-                }
-              />
-            ))}
-          </motion.div>
+    <>
+      {/* =========================================================================
+          PART 1: TWO SCROLLING HORIZONTAL ROWS (Continuous kinetic motion)
+          ========================================================================= */}
+      <section
+        id="portfolio-strip"
+        ref={scrollContainerRef}
+        className="relative bg-charcoal text-ivory pt-20 sm:pt-28 pb-20 sm:pb-28 overflow-hidden select-none border-b border-charcoal-800"
+      >
+        {/* Ticker Header */}
+        <div className="max-w-[1400px] mx-auto px-6 sm:px-12 mb-12 sm:mb-16 flex flex-col md:flex-row md:items-end justify-between gap-6">
+          <div>
+            <span className="text-xs font-sans font-bold uppercase tracking-[0.25em] text-copper block mb-3">
+              Kinetic Horizon
+            </span>
+            <h2 className="font-display font-black text-3xl sm:text-5xl md:text-6xl text-ivory tracking-tighter">
+              Featured Works in Motion
+            </h2>
+          </div>
+          <div className="flex items-center gap-4 text-xs font-sans uppercase tracking-[0.18em] text-charcoal-400">
+            <span>Scroll to Shift Perspectives</span>
+            <span className="text-copper">/</span>
+            <span className="text-ivory font-mono">02 HORIZONTAL ROWS</span>
+          </div>
         </div>
 
-        {/* ROW 2: Right to Left */}
-        <div className="w-full overflow-hidden">
-          <motion.div
-            style={shouldReduceMotion ? {} : { x: xRow2 }}
-            className="flex gap-8 sm:gap-12 w-max will-change-transform"
-          >
-            {row2Items.map((project, idx) => (
-              <ProjectStripCard
-                key={`r2-${project.id}-${idx}`}
-                project={project}
-                widthClass={
-                  idx % 3 === 0
-                    ? 'w-[460px] sm:w-[600px]'
-                    : idx % 3 === 1
-                    ? 'w-[400px] sm:w-[520px]'
-                    : 'w-[360px] sm:w-[460px]'
-                }
-                aspectRatio={
-                  idx % 3 === 0
-                    ? 'aspect-[4/3]'
-                    : idx % 3 === 1
-                    ? 'aspect-[16/10]'
-                    : 'aspect-[3/2]'
-                }
-              />
-            ))}
-          </motion.div>
+        {/* 2 Horizontal Motion Rows */}
+        <div className="space-y-6 sm:space-y-10">
+          {/* ROW 1: Left to Right */}
+          <div className="w-full overflow-hidden">
+            <motion.div
+              style={shouldReduceMotion ? {} : { x: xRow1 }}
+              className="flex gap-6 sm:gap-10 w-max will-change-transform"
+            >
+              {row1Items.map((project, idx) => (
+                <ProjectStripCard
+                  key={`r1-${project.id}-${idx}`}
+                  project={project}
+                  widthClass={
+                    idx % 3 === 0
+                      ? 'w-[420px] sm:w-[540px]'
+                      : idx % 3 === 1
+                      ? 'w-[360px] sm:w-[460px]'
+                      : 'w-[480px] sm:w-[600px]'
+                  }
+                  aspectRatio={
+                    idx % 3 === 0
+                      ? 'aspect-[16/10]'
+                      : idx % 3 === 1
+                      ? 'aspect-[4/3]'
+                      : 'aspect-[21/9]'
+                  }
+                />
+              ))}
+            </motion.div>
+          </div>
+
+          {/* ROW 2: Right to Left */}
+          <div className="w-full overflow-hidden">
+            <motion.div
+              style={shouldReduceMotion ? {} : { x: xRow2 }}
+              className="flex gap-6 sm:gap-10 w-max will-change-transform"
+            >
+              {row2Items.map((project, idx) => (
+                <ProjectStripCard
+                  key={`r2-${project.id}-${idx}`}
+                  project={project}
+                  widthClass={
+                    idx % 3 === 0
+                      ? 'w-[460px] sm:w-[580px]'
+                      : idx % 3 === 1
+                      ? 'w-[400px] sm:w-[500px]'
+                      : 'w-[360px] sm:w-[440px]'
+                  }
+                  aspectRatio={
+                    idx % 3 === 0
+                      ? 'aspect-[4/3]'
+                      : idx % 3 === 1
+                      ? 'aspect-[16/10]'
+                      : 'aspect-[3/2]'
+                  }
+                />
+              ))}
+            </motion.div>
+          </div>
         </div>
-      </div>
+      </section>
 
-      {/* 3. Large Editorial Image Grid (More Images, Less Text) */}
-      <div className="max-w-[1400px] mx-auto px-6 sm:px-12">
-        <div className="pb-8 mb-14 border-b border-charcoal-800 flex flex-col sm:flex-row sm:items-baseline justify-between gap-4">
-          <span className="text-xs font-sans font-bold uppercase tracking-[0.25em] text-copper">
-            DISCIPLINE SPECTRUM
-          </span>
-          <p className="text-xs sm:text-sm font-sans text-charcoal-400">
-            Brand Identity / UI/UX / Motion / Packaging / Social / Video / Web
-          </p>
-        </div>
+      {/* =========================================================================
+          PART 2: 3 x 3 GRID UNDER THE 2 SCROLLING ROWS
+          - Background: Warm Ivory (#F4EFE6) — NOT charcoal black
+          - Sharp Edges (rounded-none)
+          - Exactly 3 columns x 3 rows (9 projects)
+          - Duo Fankaar inspired presentation with clean typography
+          ========================================================================= */}
+      <section className="py-24 sm:py-36 bg-ivory text-charcoal border-b border-charcoal/15 select-none">
+        <div className="max-w-[1400px] mx-auto px-6 sm:px-12">
+          {/* Section Header */}
+          <div className="pb-8 mb-14 sm:mb-16 border-b border-charcoal/15 flex flex-col md:flex-row md:items-end justify-between gap-6">
+            <div>
+              <span className="text-xs font-sans font-bold uppercase tracking-[0.25em] text-copper block mb-3">
+                Selected Portfolio
+              </span>
+              <h2 className="font-display font-black text-4xl sm:text-6xl md:text-7xl text-charcoal tracking-tighter">
+                Curated Work
+              </h2>
+            </div>
+            <div className="flex items-center gap-4 text-xs font-sans uppercase tracking-[0.18em] text-charcoal-500">
+              <span>9 Selected Projects</span>
+              <span className="text-copper">/</span>
+              <Link href="/work" className="text-copper font-bold hover:text-charcoal transition-colors underline">
+                View Full Archive &rarr;
+              </Link>
+            </div>
+          </div>
 
-        {/* Asymmetrical Masonry Editorial Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-12 gap-8 sm:gap-14 items-start">
-          {gridProjects.map((project, idx) => {
-            // Asymmetrical grid column spans & aspect ratios
-            let colSpan = 'md:col-span-6';
-            let aspect = 'aspect-[16/10]';
-
-            if (idx === 0) {
-              colSpan = 'md:col-span-8';
-              aspect = 'aspect-[16/10]';
-            } else if (idx === 1) {
-              colSpan = 'md:col-span-4';
-              aspect = 'aspect-[4/5]';
-            } else if (idx === 2) {
-              colSpan = 'md:col-span-5';
-              aspect = 'aspect-[4/3]';
-            } else if (idx === 3) {
-              colSpan = 'md:col-span-7';
-              aspect = 'aspect-[16/10]';
-            } else if (idx === 4) {
-              colSpan = 'md:col-span-12';
-              aspect = 'aspect-[21/9] sm:aspect-[24/9]';
-            } else if (idx === 5) {
-              colSpan = 'md:col-span-7';
-              aspect = 'aspect-[16/10]';
-            } else if (idx === 6) {
-              colSpan = 'md:col-span-5';
-              aspect = 'aspect-[4/3]';
-            }
-
-            return (
-              <motion.div
-                key={`grid-${project.id}`}
-                initial={{ opacity: 0, y: 30 }}
+          {/* 3 x 3 Project Grid with Sharp Edges */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 lg:gap-10">
+            {gridProjects.map((project, idx) => (
+              <motion.article
+                key={`grid-3x3-${project.id}-${idx}`}
+                initial={{ opacity: 0, y: 24 }}
                 whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: '-60px' }}
-                transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
-                className={`${colSpan} group`}
+                viewport={{ once: true, margin: '-50px' }}
+                transition={{ duration: 0.6, delay: (idx % 3) * 0.1, ease: [0.16, 1, 0.3, 1] }}
+                className="group"
               >
                 <Link href={`/work/${project.slug}`} className="block">
-                  <div
-                    className={`relative ${aspect} w-full bg-charcoal-900 border border-charcoal-800 overflow-hidden`}
-                  >
+                  {/* Sharp Edged Image Box (rounded-none) */}
+                  <div className="relative aspect-[16/11] w-full bg-white border border-charcoal/15 overflow-hidden rounded-none shadow-sm transition-shadow duration-300 group-hover:shadow-md">
                     <Image
                       src={project.coverImage}
                       alt={project.title}
                       fill
-                      sizes="(max-width: 768px) 100vw, (max-width: 1200px) 70vw, 1200px"
-                      className="object-cover transition-transform duration-700 ease-out group-hover:scale-105"
+                      sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                      className="object-cover rounded-none transition-transform duration-700 ease-out group-hover:scale-105"
                     />
 
-                    {/* Subtle Corner Arrow Reveal on Hover */}
-                    <div className="absolute top-5 right-5 w-9 h-9 rounded-full bg-copper text-ivory flex items-center justify-center opacity-0 group-hover:opacity-100 transform translate-y-2 group-hover:translate-y-0 transition-all duration-300">
-                      <ArrowUpRight className="w-4 h-4" />
+                    {/* Minimal Sharp Hover Reveal Tag */}
+                    <div className="absolute top-4 right-4 bg-charcoal text-ivory px-3 py-1.5 text-[11px] font-mono uppercase tracking-widest rounded-none opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center gap-1.5">
+                      <span>Explore</span>
+                      <ArrowUpRight className="w-3.5 h-3.5 text-copper" />
                     </div>
                   </div>
 
-                  {/* Understated Title & Category Only (Minimal Editorial Caption) */}
-                  <div className="mt-4 flex items-baseline justify-between text-sm sm:text-base font-sans">
-                    <h3 className="font-display font-bold text-ivory group-hover:text-copper transition-colors truncate max-w-[75%]">
+                  {/* Clean Understated Caption Under Each Card (Sharp styling) */}
+                  <div className="mt-4 flex items-baseline justify-between gap-4">
+                    <h3 className="font-display font-bold text-lg sm:text-xl text-charcoal group-hover:text-copper transition-colors truncate">
                       {project.title}
                     </h3>
-                    <span className="text-xs font-mono uppercase tracking-wider text-charcoal-400 shrink-0">
+                    <span className="text-xs font-mono uppercase tracking-wider text-charcoal-500 shrink-0">
                       {project.category}
                     </span>
                   </div>
                 </Link>
-              </motion.div>
-            );
-          })}
-        </div>
+              </motion.article>
+            ))}
+          </div>
 
-        {/* View All Work Link */}
-        <div className="mt-20 pt-10 border-t border-charcoal-800 flex items-center justify-between">
-          <span className="text-xs font-mono text-charcoal-500">
-            TOTAL ARCHIVE: {pool.length} PROJECTS
-          </span>
-          <Link
-            href="/work"
-            className="inline-flex items-center gap-2 text-xs font-sans font-bold uppercase tracking-[0.2em] text-copper hover:text-ivory transition-colors"
-          >
-            <span>Explore All Projects &amp; Categories</span>
-            <ArrowUpRight className="w-4 h-4" />
-          </Link>
+          {/* Bottom Fast Action */}
+          <div className="mt-16 sm:mt-20 pt-10 border-t border-charcoal/15 flex flex-col sm:flex-row items-center justify-between gap-6">
+            <span className="text-xs font-mono text-charcoal-500 uppercase tracking-wider">
+              Explore 50+ Client Projects across Branding, UI/UX &amp; Motion
+            </span>
+            <Link
+              href="/work"
+              className="inline-flex items-center gap-2 px-7 py-4 bg-charcoal text-ivory text-xs font-sans font-bold uppercase tracking-[0.18em] hover:bg-copper transition-colors rounded-none"
+            >
+              <span>Explore All Projects &amp; Disciplines</span>
+              <ArrowUpRight className="w-4 h-4" />
+            </Link>
+          </div>
         </div>
-      </div>
-    </section>
+      </section>
+    </>
   );
 }
 
@@ -239,23 +231,23 @@ function ProjectStripCard({ project, widthClass, aspectRatio }: ProjectStripCard
   return (
     <Link
       href={`/work/${project.slug}`}
-      className={`group relative flex-shrink-0 ${widthClass} block cursor-pointer`}
+      className={`group relative flex-shrink-0 ${widthClass} block cursor-pointer rounded-none`}
     >
       <div
-        className={`relative ${aspectRatio} w-full bg-charcoal-900 border border-charcoal-800 overflow-hidden`}
+        className={`relative ${aspectRatio} w-full bg-charcoal-900 border border-charcoal-800 overflow-hidden rounded-none`}
       >
         <Image
           src={project.coverImage}
           alt={project.title}
           fill
           sizes="(max-width: 768px) 380px, 600px"
-          className="object-cover transition-transform duration-700 ease-out group-hover:scale-105"
+          className="object-cover rounded-none transition-transform duration-700 ease-out group-hover:scale-105"
         />
 
         {/* Minimal Editorial Hover Overlay */}
-        <div className="absolute inset-0 bg-gradient-to-t from-charcoal-950/90 via-charcoal-950/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 p-6 flex flex-col justify-between">
+        <div className="absolute inset-0 bg-gradient-to-t from-charcoal-950/90 via-charcoal-950/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 p-6 flex flex-col justify-between rounded-none">
           <div className="flex justify-end">
-            <div className="w-8 h-8 rounded-full bg-copper text-ivory flex items-center justify-center transform translate-y-2 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-300">
+            <div className="w-8 h-8 rounded-none bg-copper text-ivory flex items-center justify-center transform translate-y-2 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-300">
               <ArrowUpRight className="w-4 h-4" />
             </div>
           </div>
@@ -271,7 +263,7 @@ function ProjectStripCard({ project, widthClass, aspectRatio }: ProjectStripCard
         </div>
       </div>
 
-      {/* Understated Minimal Caption: Title & Category Only */}
+      {/* Understated Minimal Caption */}
       <div className="mt-3 flex items-baseline justify-between text-xs sm:text-sm font-sans">
         <span className="font-medium text-ivory truncate max-w-[70%] group-hover:text-copper transition-colors">
           {project.title}

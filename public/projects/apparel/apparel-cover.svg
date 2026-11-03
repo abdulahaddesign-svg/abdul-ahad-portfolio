@@ -1,0 +1,78 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800" width="100%" height="100%">
+  <defs>
+    <linearGradient id="apparelBg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#EAE5DC" />
+      <stop offset="50%" stop-color="#F4EFE6" />
+      <stop offset="100%" stop-color="#DDD6C8" />
+    </linearGradient>
+    <linearGradient id="shirtShadeFront" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FFFFFF" />
+      <stop offset="70%" stop-color="#F7F5F0" />
+      <stop offset="100%" stop-color="#E5DECf" />
+    </linearGradient>
+    <linearGradient id="shirtShadeBack" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FFFFFF" />
+      <stop offset="70%" stop-color="#F2EDE4" />
+      <stop offset="100%" stop-color="#DCD4C4" />
+    </linearGradient>
+  </defs>
+
+  <!-- Background Warm Neutral Studio -->
+  <rect width="1200" height="800" fill="url(#apparelBg)" />
+
+  <!-- Technical Spec Lines -->
+  <line x1="80" y1="80" x2="1120" y2="80" stroke="#25241F" stroke-opacity="0.08" stroke-width="1" />
+  <line x1="80" y1="720" x2="1120" y2="720" stroke="#25241F" stroke-opacity="0.08" stroke-width="1" />
+  <line x1="600" y1="80" x2="600" y2="720" stroke="#25241F" stroke-opacity="0.06" stroke-width="1" stroke-dasharray="6,4" />
+
+  <!-- Left Model: Front View Polo Shirt -->
+  <g transform="translate(140, 100)">
+    <!-- Shadow -->
+    <ellipse cx="230" cy="620" rx="160" ry="24" fill="#25241F" opacity="0.12" />
+
+    <!-- Torso Silhouette & Shirt Front -->
+    <path d="M 120 180 C 80 240, 50 320, 30 380 L 100 410 C 110 360, 120 320, 130 300 L 120 590 L 340 590 L 330 300 C 340 320, 350 360, 360 410 L 430 380 C 410 320, 380 240, 340 180 C 300 150, 260 145, 230 145 C 200 145, 160 150, 120 180 Z" fill="url(#shirtShadeFront)" stroke="#25241F" stroke-opacity="0.1" stroke-width="1" />
+
+    <!-- Collar & Placket -->
+    <path d="M 180 160 L 230 200 L 280 160 L 255 140 L 230 150 L 205 140 Z" fill="#25241F" />
+    <path d="M 215 200 L 245 200 L 245 280 L 215 280 Z" fill="#ECE6DB" stroke="#25241F" stroke-opacity="0.15" stroke-width="1" />
+    <circle cx="230" cy="225" r="3.5" fill="#25241F" />
+    <circle cx="230" cy="255" r="3.5" fill="#25241F" />
+
+    <!-- Left Chest Embroidered Wordmark -->
+    <g transform="translate(260, 240)">
+      <circle cx="10" cy="10" r="8" fill="#C4855A" />
+      <text x="24" y="14" font-family="'Space Grotesk', sans-serif" font-size="12" font-weight="900" fill="#25241F" letter-spacing="1">KURO</text>
+    </g>
+
+    <!-- Sleeve Technical Print -->
+    <text x="55" y="380" font-family="'Manrope', sans-serif" font-size="8" font-weight="700" fill="#25241F" opacity="0.4" transform="rotate(-35 55 380)">STUDIO SPEC // 09</text>
+  </g>
+
+  <!-- Right Model: Back View Polo Shirt -->
+  <g transform="translate(620, 100)">
+    <!-- Shadow -->
+    <ellipse cx="230" cy="620" rx="160" ry="24" fill="#25241F" opacity="0.12" />
+
+    <!-- Shirt Back -->
+    <path d="M 120 180 C 80 240, 50 320, 30 380 L 100 410 C 110 360, 120 320, 130 300 L 120 590 L 340 590 L 330 300 C 340 320, 350 360, 360 410 L 430 380 C 410 320, 380 240, 340 180 C 300 150, 260 145, 230 145 C 200 145, 160 150, 120 180 Z" fill="url(#shirtShadeBack)" stroke="#25241F" stroke-opacity="0.1" stroke-width="1" />
+
+    <!-- Back Collar Ribbing -->
+    <path d="M 185 160 C 205 175, 255 175, 275 160 L 260 145 C 240 155, 220 155, 200 145 Z" fill="#25241F" />
+
+    <!-- Center Back Large Brand Print -->
+    <g transform="translate(230, 270)">
+      <circle cx="0" cy="0" r="18" fill="#C4855A" />
+      <text x="0" y="6" font-family="'Space Grotesk', sans-serif" font-size="14" font-weight="900" fill="#FFFFFF" text-anchor="middle">K</text>
+      <text x="0" y="45" font-family="'Space Grotesk', sans-serif" font-size="22" font-weight="900" fill="#25241F" text-anchor="middle" letter-spacing="4">KURO TECH</text>
+      <line x1="-50" y1="60" x2="50" y2="60" stroke="#C4855A" stroke-width="1.5" />
+      <text x="0" y="78" font-family="'Manrope', sans-serif" font-size="9" font-weight="700" fill="#7C5C3E" text-anchor="middle" letter-spacing="2">ENGINEERED CREATIVE APPAREL</text>
+    </g>
+  </g>
+
+  <!-- Spec Footer Badge -->
+  <g transform="translate(80, 745)">
+    <text x="0" y="0" font-family="'Space Grotesk', sans-serif" font-size="13" font-weight="700" fill="#25241F" letter-spacing="3">APPAREL &amp; MERCHANDISE BRANDING</text>
+    <text x="0" y="18" font-family="'Manrope', sans-serif" font-size="11" font-weight="500" fill="#7C5C3E">CORPORATE UNIFORM &amp; CAPSULE COLLECTION</text>
+  </g>
+</svg>

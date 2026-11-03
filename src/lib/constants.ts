@@ -766,5 +766,36 @@ export const INITIAL_PROJECTS: Project[] = [
     seoDescription: "Sustainable cosmetic packaging architecture, dielines, and labels by Abdul Ahad J.",
     createdAt: "2024-06-15T10:00:00Z",
     updatedAt: "2024-09-01T14:00:00Z"
+  },
+  {
+    id: "proj-apparel-merchandise",
+    slug: "kuro-apparel-corporate-merchandise",
+    title: "Kuro — Apparel & Merchandise Identity",
+    category: "Branding",
+    categorySlug: "branding",
+    shortDescription: "Corporate apparel design, bespoke polo uniforms, embroidered chest wordmarks, back technical prints, and merchandise identity guidelines.",
+    fullDescription: "Designed premium corporate apparel, staff uniform programs, and capsule merchandise for Kuro Tech. Engineered technical polo shirt dielines, embroidered logo badges, precision typography layouts, and merchandise packaging.",
+    clientName: "Kuro Techwear & Studio",
+    projectYear: "2025",
+    role: "Brand & Apparel Designer",
+    toolsUsed: ["Adobe Illustrator", "Photoshop", "InDesign"],
+    challenge: "Elevating standard corporate uniforms into modern, minimalist streetwear-inspired apparel that team members want to wear outside work.",
+    creativeProcess: "Mapped optical weight for chest embroidery and engineered breathable technical back-print typography with custom vector iconography.",
+    solution: "Delivered complete front-and-back garment production sheets, colorway specifications, and embroidery digitizing files.",
+    results: [
+      "Produced technical tech-packs for commercial garment manufacturers",
+      "Created complete corporate merchandise capsule spanning polos, caps, and tote kits",
+      "100% positive adoption across employee and executive teams"
+    ],
+    coverImage: "/projects/apparel/apparel-cover.svg",
+    gallery: ["/projects/apparel/apparel-cover.svg"],
+    videoUrl: "",
+    isFeatured: true,
+    isPublished: true,
+    sortOrder: 9,
+    seoTitle: "Kuro Apparel & Corporate Merchandise Identity — Abdul Ahad",
+    seoDescription: "Corporate apparel, uniform design, and merchandise identity by Abdul Ahad J.",
+    createdAt: "2025-05-18T10:00:00Z",
+    updatedAt: "2025-07-22T14:00:00Z"
   }
 ];
