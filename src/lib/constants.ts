@@ -101,6 +101,16 @@ export const SITE_SETTINGS: SiteSettings = {
   educationInstitution: "Government Arts College (Autonomous), Coimbatore",
   educationYear: "2020 – 2023",
   educationAggregate: "80% Aggregate",
+  footerAppearance: "light",
+  footerLogoLightUrl: "/brand/logo-wordmark-clean-light.png",
+  footerLogoDarkUrl: "/brand/logo-wordmark-clean-dark.png",
+  footerDescription: "Independent creative designer specializing in visual branding, digital experiences, motion and creative systems. Based in Coimbatore, India.",
+  footerBrandStatement: "Abdul Ahad",
+  footerNavVisible: true,
+  footerCopyright: "Abdul Ahad J. All rights reserved.",
+  ctaHeadline: "HAVE A PROJECT\nIN MIND?",
+  ctaSupporting: "Let's create something meaningful together.",
+  ctaAvailability: "Available for New Projects · Q1 / Q2",
 };
 
 export const BRAND_COLORS = {

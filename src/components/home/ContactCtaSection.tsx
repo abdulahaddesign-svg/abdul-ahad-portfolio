@@ -1,110 +1,81 @@
 'use client';
 
-import React from 'react';
+import React, { useRef } from 'react';
 import Link from 'next/link';
-import Image from 'next/image';
-import { motion } from 'framer-motion';
-import { ArrowUpRight, Mail, Phone } from 'lucide-react';
-import { SITE_SETTINGS } from '@/lib/constants';
+import { motion, useInView } from 'framer-motion';
+import { ArrowUpRight } from 'lucide-react';
+import { SiteSettings } from '@/lib/types';
 
-export function ContactCtaSection() {
+interface ContactCtaSectionProps {
+  settings?: SiteSettings;
+}
+
+export function ContactCtaSection({ settings }: ContactCtaSectionProps) {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const isInView = useInView(containerRef, { once: true, margin: '-10% 0px' });
+
+  const headline = settings?.ctaHeadline || 'HAVE A PROJECT\nIN MIND?';
+  const supporting = settings?.ctaSupporting || "Let's create something meaningful together.";
+  const availability = settings?.ctaAvailability || 'Available for New Projects · Q1 / Q2';
+
   return (
-    <section className="relative py-28 sm:py-44 bg-charcoal text-ivory overflow-hidden select-none">
-      {/* Background Subtle Watermark */}
-      <div className="absolute right-0 bottom-0 w-80 sm:w-[500px] aspect-[1024/754] pointer-events-none opacity-5">
-        <Image
-          src="/brand/logo-monogram-dark.png"
-          alt=""
-          fill
-          className="object-contain"
-        />
-      </div>
-
-      <div className="max-w-[1400px] mx-auto px-6 sm:px-12 relative z-10">
-        <div className="max-w-5xl space-y-8">
-          <span className="text-xs font-sans font-bold uppercase tracking-[0.25em] text-copper block">
-            Initiate Collaboration
+    <section
+      ref={containerRef}
+      className="relative py-28 sm:py-36 bg-ivory text-charcoal border-b border-charcoal/15 overflow-hidden select-none"
+    >
+      <div className="max-w-[1400px] mx-auto px-6 sm:px-12">
+        {/* Top Header Label & Availability Indicator */}
+        <div className="flex flex-wrap items-center justify-between gap-4 pb-6 border-b border-charcoal/10 mb-12 sm:mb-16">
+          <span className="text-xs font-sans font-bold uppercase tracking-[0.25em] text-copper">
+            INITIATE COLLABORATION
           </span>
 
-          {/* Huge Headline */}
-          <h2 className="font-display font-black text-5xl sm:text-7xl md:text-8xl lg:text-[7.5rem] tracking-tighter leading-[0.92] text-ivory">
-            HAVE A PROJECT <br />
-            <span className="text-copper">IN MIND?</span>
-          </h2>
+          <div className="flex items-center gap-2 text-xs font-sans uppercase tracking-widest text-charcoal-600">
+            <span className="w-2 h-2 rounded-full bg-sage animate-pulse" />
+            <span className="font-semibold">{availability}</span>
+          </div>
+        </div>
 
-          <p className="text-xl sm:text-3xl text-charcoal-300 font-sans font-light max-w-2xl leading-snug">
-            Let&apos;s create something that matters.
-          </p>
+        {/* Expressive Editorial Headline & Action */}
+        <div className="max-w-4xl space-y-8 sm:space-y-10">
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            animate={isInView ? { opacity: 1, y: 0 } : {}}
+            transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+          >
+            <h2 className="font-display font-black text-5xl sm:text-7xl md:text-8xl lg:text-[7.5rem] tracking-tighter leading-[0.92] text-charcoal uppercase whitespace-pre-line">
+              {headline}
+            </h2>
+          </motion.div>
 
-          {/* Primary Action Button */}
-          <div className="pt-6">
+          <motion.p
+            initial={{ opacity: 0, y: 20 }}
+            animate={isInView ? { opacity: 1, y: 0 } : {}}
+            transition={{ duration: 0.8, delay: 0.15, ease: [0.16, 1, 0.3, 1] }}
+            className="text-xl sm:text-2xl md:text-3xl text-charcoal-600 font-sans font-light max-w-2xl leading-relaxed"
+          >
+            {supporting}
+          </motion.p>
+
+          {/* Prominent Start a Project CTA Button */}
+          <motion.div
+            initial={{ opacity: 0, y: 15 }}
+            animate={isInView ? { opacity: 1, y: 0 } : {}}
+            transition={{ duration: 0.8, delay: 0.3, ease: [0.16, 1, 0.3, 1] }}
+            className="pt-2 flex flex-wrap items-center gap-6"
+          >
             <Link
               href="/contact"
-              className="inline-flex items-center gap-3 px-8 py-4.5 bg-copper text-ivory font-display font-bold text-sm sm:text-base uppercase tracking-[0.18em] hover:bg-copper-600 transition-colors duration-200"
+              className="group inline-flex items-center gap-3 px-8 sm:px-10 py-5 bg-charcoal text-ivory font-sans font-bold text-xs sm:text-sm uppercase tracking-[0.18em] hover:bg-copper transition-colors duration-200 rounded-none shadow-sm"
             >
               <span>Start a Project</span>
-              <ArrowUpRight className="w-5 h-5" />
+              <ArrowUpRight className="w-4 h-4 text-copper group-hover:text-ivory transition-colors group-hover:translate-x-0.5 group-hover:-translate-y-0.5 duration-200" />
             </Link>
-          </div>
 
-          {/* Direct Communication Channels Row */}
-          <div className="pt-16 sm:pt-24 border-t border-charcoal-800 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8 text-xs sm:text-sm font-sans">
-            <div>
-              <span className="text-[10px] uppercase tracking-widest text-charcoal-400 block mb-1">
-                Direct Email
-              </span>
-              <a
-                href={`mailto:${SITE_SETTINGS.email}`}
-                className="font-bold text-ivory hover:text-copper transition-colors break-all"
-              >
-                {SITE_SETTINGS.email}
-              </a>
-            </div>
-
-            <div>
-              <span className="text-[10px] uppercase tracking-widest text-charcoal-400 block mb-1">
-                WhatsApp Direct
-              </span>
-              <a
-                href="https://wa.me/919150037005"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="font-bold text-copper hover:text-ivory transition-colors"
-              >
-                {SITE_SETTINGS.phone}
-              </a>
-            </div>
-
-            <div>
-              <span className="text-[10px] uppercase tracking-widest text-charcoal-400 block mb-1">
-                Behance Portfolio
-              </span>
-              <a
-                href={SITE_SETTINGS.behanceUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="font-bold text-ivory hover:text-copper transition-colors inline-flex items-center gap-1"
-              >
-                <span>behance.net/abdulahad438</span>
-                <ArrowUpRight className="w-3 h-3" />
-              </a>
-            </div>
-
-            <div>
-              <span className="text-[10px] uppercase tracking-widest text-charcoal-400 block mb-1">
-                LinkedIn Profile
-              </span>
-              <a
-                href={SITE_SETTINGS.linkedinUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="font-bold text-ivory hover:text-copper transition-colors inline-flex items-center gap-1"
-              >
-                <span>linkedin.com/in/abdulahadj</span>
-                <ArrowUpRight className="w-3 h-3" />
-              </a>
-            </div>
-          </div>
+            <span className="text-xs font-mono text-charcoal-400 uppercase tracking-wider">
+              Typical Response within 24 Hours
+            </span>
+          </motion.div>
         </div>
       </div>
     </section>

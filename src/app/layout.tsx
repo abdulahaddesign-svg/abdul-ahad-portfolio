@@ -4,6 +4,7 @@ import './globals.css';
 import { Navbar } from '@/components/layout/Navbar';
 import { Footer } from '@/components/layout/Footer';
 import { SITE_SETTINGS } from '@/lib/constants';
+import { getSiteSettings } from '@/lib/data';
 
 const spaceGrotesk = Space_Grotesk({
   subsets: ['latin'],
@@ -90,44 +91,45 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const settings = await getSiteSettings();
+
   const jsonLd = {
     '@context': 'https://schema.org',
     '@graph': [
       {
         '@type': 'Person',
         '@id': 'https://abdulahad.design/#person',
-        name: 'Abdul Ahad J',
-        jobTitle: 'Graphic Designer & Visual Branding Specialist',
-        description:
-          'Creative Graphic Designer with 3+ years experience in brand identity, marketing collateral, UI/UX design, and motion graphics.',
+        name: settings.name,
+        jobTitle: settings.title,
+        description: settings.aboutIntro,
         address: {
           '@type': 'PostalAddress',
           addressLocality: 'Coimbatore',
           addressRegion: 'Tamil Nadu',
           addressCountry: 'IN',
         },
-        email: SITE_SETTINGS.email,
-        telephone: SITE_SETTINGS.phone,
+        email: settings.email,
+        telephone: settings.phone,
         url: 'https://abdulahad.design',
         sameAs: [
-          SITE_SETTINGS.linkedinUrl,
-          SITE_SETTINGS.behanceUrl,
+          settings.linkedinUrl,
+          settings.behanceUrl,
         ],
         alumniOf: {
           '@type': 'EducationalOrganization',
-          name: SITE_SETTINGS.educationInstitution,
+          name: settings.educationInstitution,
         },
       },
       {
         '@type': 'WebSite',
         '@id': 'https://abdulahad.design/#website',
         url: 'https://abdulahad.design',
-        name: 'Abdul Ahad J Portfolio',
+        name: `${settings.name} Portfolio`,
         publisher: {
           '@id': 'https://abdulahad.design/#person',
         },
@@ -143,7 +145,7 @@ export default function RootLayout({
           addressRegion: 'Tamil Nadu',
           addressCountry: 'IN',
         },
-        telephone: SITE_SETTINGS.phone,
+        telephone: settings.phone,
         priceRange: '₹₹',
         openingHours: 'Mo-Sa 09:00-19:00',
       },
@@ -161,7 +163,7 @@ export default function RootLayout({
       <body className="flex flex-col min-h-screen">
         <Navbar />
         <main className="flex-1">{children}</main>
-        <Footer />
+        <Footer settings={settings} />
       </body>
     </html>
   );

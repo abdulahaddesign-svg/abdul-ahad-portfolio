@@ -24,6 +24,8 @@ export default function AdminContentPage() {
   const [isSuccess, setIsSuccess] = useState(false);
   const [uploadingPhoto, setUploadingPhoto] = useState(false);
   const [uploadingResume, setUploadingResume] = useState(false);
+  const [uploadingFooterLight, setUploadingFooterLight] = useState(false);
+  const [uploadingFooterDark, setUploadingFooterDark] = useState(false);
 
   useEffect(() => {
     async function load() {
@@ -35,13 +37,15 @@ export default function AdminContentPage() {
 
   const handleFileUpload = async (
     e: React.ChangeEvent<HTMLInputElement>,
-    type: 'photo' | 'resume'
+    type: 'photo' | 'resume' | 'footerLight' | 'footerDark'
   ) => {
     const file = e.target.files?.[0];
     if (!file || !settings) return;
 
     if (type === 'photo') setUploadingPhoto(true);
     if (type === 'resume') setUploadingResume(true);
+    if (type === 'footerLight') setUploadingFooterLight(true);
+    if (type === 'footerDark') setUploadingFooterDark(true);
 
     try {
       const formData = new FormData();
@@ -54,8 +58,12 @@ export default function AdminContentPage() {
       if (data.url) {
         if (type === 'photo') {
           setSettings({ ...settings, profilePhotoUrl: data.url });
-        } else {
+        } else if (type === 'resume') {
           setSettings({ ...settings, resumeUrl: data.url });
+        } else if (type === 'footerLight') {
+          setSettings({ ...settings, footerLogoLightUrl: data.url });
+        } else if (type === 'footerDark') {
+          setSettings({ ...settings, footerLogoDarkUrl: data.url });
         }
       } else {
         alert(data.error || 'Upload failed');
@@ -65,6 +73,8 @@ export default function AdminContentPage() {
     } finally {
       if (type === 'photo') setUploadingPhoto(false);
       if (type === 'resume') setUploadingResume(false);
+      if (type === 'footerLight') setUploadingFooterLight(false);
+      if (type === 'footerDark') setUploadingFooterDark(false);
     }
   };
 
@@ -306,14 +316,188 @@ export default function AdminContentPage() {
               </div>
             )}
           </div>
+
+          {/* Section: Minimal Editorial Footer Settings (Endcap Style) */}
+          <div className="p-6 bg-white border border-charcoal/15 space-y-5">
+            <h2 className="font-display font-bold text-lg text-charcoal pb-3 border-b border-charcoal/10">
+              4. Minimal Editorial Footer (Endcap Style)
+            </h2>
+
+            {/* Appearance Mode */}
+            <div>
+              <label className="block text-xs font-bold uppercase tracking-wider text-charcoal mb-2">
+                Footer Color Appearance Mode
+              </label>
+              <div className="grid grid-cols-2 gap-4">
+                <label className={`p-4 border cursor-pointer transition-colors flex items-center gap-3 ${
+                  settings.footerAppearance === 'light'
+                    ? 'border-copper bg-ivory'
+                    : 'border-charcoal/15 hover:border-charcoal/30'
+                }`}>
+                  <input
+                    type="radio"
+                    name="footerAppearance"
+                    value="light"
+                    checked={settings.footerAppearance === 'light'}
+                    onChange={() => setSettings({ ...settings, footerAppearance: 'light' })}
+                    className="accent-copper"
+                  />
+                  <div>
+                    <span className="text-xs font-bold text-charcoal block">Light Mode</span>
+                    <span className="text-[11px] text-charcoal-500">Warm Ivory Background (#F4EFE6)</span>
+                  </div>
+                </label>
+
+                <label className={`p-4 border cursor-pointer transition-colors flex items-center gap-3 ${
+                  settings.footerAppearance === 'dark'
+                    ? 'border-copper bg-charcoal text-ivory'
+                    : 'border-charcoal/15 hover:border-charcoal/30'
+                }`}>
+                  <input
+                    type="radio"
+                    name="footerAppearance"
+                    value="dark"
+                    checked={settings.footerAppearance === 'dark'}
+                    onChange={() => setSettings({ ...settings, footerAppearance: 'dark' })}
+                    className="accent-copper"
+                  />
+                  <div>
+                    <span className={`text-xs font-bold block ${settings.footerAppearance === 'dark' ? 'text-ivory' : 'text-charcoal'}`}>
+                      Dark Mode
+                    </span>
+                    <span className="text-[11px] opacity-75">Charcoal Background (#25241F)</span>
+                  </div>
+                </label>
+              </div>
+            </div>
+
+            {/* Footer Logo Light Variant */}
+            <div>
+              <label className="block text-xs font-bold uppercase tracking-wider text-charcoal mb-1">
+                Footer Logo Light Variant (For Ivory BG)
+              </label>
+              <div className="flex gap-2">
+                <input
+                  type="text"
+                  value={settings.footerLogoLightUrl || ''}
+                  onChange={(e) => setSettings({ ...settings, footerLogoLightUrl: e.target.value })}
+                  placeholder="/brand/logo-wordmark-clean-light.png"
+                  className="flex-1 px-3 py-2 border border-charcoal/20 bg-ivory text-xs font-mono focus:outline-none focus:border-copper"
+                />
+                <label className="px-4 py-2 bg-charcoal text-ivory text-xs font-bold uppercase tracking-wider cursor-pointer hover:bg-copper transition-colors flex items-center gap-1 shrink-0">
+                  <Upload className="w-3.5 h-3.5" />
+                  <span>{uploadingFooterLight ? '...' : 'Upload'}</span>
+                  <input
+                    type="file"
+                    accept="image/*"
+                    onChange={(e) => handleFileUpload(e, 'footerLight')}
+                    className="hidden"
+                    disabled={uploadingFooterLight}
+                  />
+                </label>
+              </div>
+            </div>
+
+            {/* Footer Logo Dark Variant */}
+            <div>
+              <label className="block text-xs font-bold uppercase tracking-wider text-charcoal mb-1">
+                Footer Logo Dark Variant (For Charcoal BG)
+              </label>
+              <div className="flex gap-2">
+                <input
+                  type="text"
+                  value={settings.footerLogoDarkUrl || ''}
+                  onChange={(e) => setSettings({ ...settings, footerLogoDarkUrl: e.target.value })}
+                  placeholder="/brand/logo-wordmark-clean-dark.png"
+                  className="flex-1 px-3 py-2 border border-charcoal/20 bg-ivory text-xs font-mono focus:outline-none focus:border-copper"
+                />
+                <label className="px-4 py-2 bg-charcoal text-ivory text-xs font-bold uppercase tracking-wider cursor-pointer hover:bg-copper transition-colors flex items-center gap-1 shrink-0">
+                  <Upload className="w-3.5 h-3.5" />
+                  <span>{uploadingFooterDark ? '...' : 'Upload'}</span>
+                  <input
+                    type="file"
+                    accept="image/*"
+                    onChange={(e) => handleFileUpload(e, 'footerDark')}
+                    className="hidden"
+                    disabled={uploadingFooterDark}
+                  />
+                </label>
+              </div>
+            </div>
+
+            <Textarea
+              label="Footer Description"
+              rows={2}
+              value={settings.footerDescription || ''}
+              onChange={(e) => setSettings({ ...settings, footerDescription: e.target.value })}
+              placeholder="Short professional statement next to logo..."
+            />
+
+            <Input
+              label="Oversized Typographic Brand Statement"
+              value={settings.footerBrandStatement || 'Abdul Ahad'}
+              onChange={(e) => setSettings({ ...settings, footerBrandStatement: e.target.value })}
+              placeholder="Abdul Ahad"
+            />
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <Input
+                label="Footer Copyright Text"
+                value={settings.footerCopyright || 'Abdul Ahad J. All rights reserved.'}
+                onChange={(e) => setSettings({ ...settings, footerCopyright: e.target.value })}
+              />
+
+              <div className="flex items-end pb-2">
+                <label className="flex items-center gap-2 cursor-pointer select-none">
+                  <input
+                    type="checkbox"
+                    checked={settings.footerNavVisible ?? true}
+                    onChange={(e) =>
+                      setSettings({ ...settings, footerNavVisible: e.target.checked })
+                    }
+                    className="w-4 h-4 accent-copper"
+                  />
+                  <span className="text-xs font-bold uppercase tracking-wider text-charcoal">
+                    Display Footer Navigation Links
+                  </span>
+                </label>
+              </div>
+            </div>
+          </div>
         </div>
 
-        {/* Right Column: Experience Highlights, Brand Identity & Contact (5 Columns) */}
+        {/* Right Column: Experience Highlights, Brand Identity, Closing CTA & Contact (5 Columns) */}
         <div className="lg:col-span-5 space-y-8">
+          {/* Section: Above-Footer Collaboration CTA Settings */}
+          <div className="p-6 bg-white border border-charcoal/15 space-y-4">
+            <h2 className="font-display font-bold text-lg text-charcoal pb-3 border-b border-charcoal/10">
+              5. Above-Footer Project Inquiry CTA
+            </h2>
+
+            <Textarea
+              label="CTA Headline (supports line breaks)"
+              rows={2}
+              value={settings.ctaHeadline || 'HAVE A PROJECT\nIN MIND?'}
+              onChange={(e) => setSettings({ ...settings, ctaHeadline: e.target.value })}
+            />
+
+            <Input
+              label="CTA Supporting Sentence"
+              value={settings.ctaSupporting || "Let's create something meaningful together."}
+              onChange={(e) => setSettings({ ...settings, ctaSupporting: e.target.value })}
+            />
+
+            <Input
+              label="Availability Status Label"
+              value={settings.ctaAvailability || 'Available for New Projects · Q1 / Q2'}
+              onChange={(e) => setSettings({ ...settings, ctaAvailability: e.target.value })}
+            />
+          </div>
+
           {/* Section: Experience & Highlights Summary */}
           <div className="p-6 bg-white border border-charcoal/15 space-y-4">
             <h2 className="font-display font-bold text-lg text-charcoal pb-3 border-b border-charcoal/10">
-              4. Experience &amp; Highlights Summary
+              6. Experience &amp; Highlights Summary
             </h2>
 
             <Input
@@ -332,7 +516,7 @@ export default function AdminContentPage() {
           {/* Section: Brand & Contact Coordinates */}
           <div className="p-6 bg-white border border-charcoal/15 space-y-4">
             <h2 className="font-display font-bold text-lg text-charcoal pb-3 border-b border-charcoal/10">
-              5. Contact &amp; Channels
+              7. Contact &amp; Channels
             </h2>
 
             <Input
@@ -382,7 +566,7 @@ export default function AdminContentPage() {
           {/* Section: Academic Background */}
           <div className="p-6 bg-white border border-charcoal/15 space-y-4">
             <h2 className="font-display font-bold text-lg text-charcoal pb-3 border-b border-charcoal/10">
-              6. Academic Background
+              8. Academic Background
             </h2>
 
             <Input

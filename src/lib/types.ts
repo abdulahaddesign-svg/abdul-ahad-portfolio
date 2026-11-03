@@ -131,6 +131,16 @@ export interface SiteSettings {
   educationInstitution: string;
   educationYear: string;
   educationAggregate: string;
+  footerAppearance?: 'light' | 'dark';
+  footerLogoLightUrl?: string;
+  footerLogoDarkUrl?: string;
+  footerDescription?: string;
+  footerBrandStatement?: string;
+  footerNavVisible?: boolean;
+  footerCopyright?: string;
+  ctaHeadline?: string;
+  ctaSupporting?: string;
+  ctaAvailability?: string;
 }
 
 export interface ClientLogo {

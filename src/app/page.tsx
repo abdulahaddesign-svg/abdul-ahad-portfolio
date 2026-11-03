@@ -38,8 +38,8 @@ export default async function HomePage() {
       {/* 6. About Direction — Asymmetrical Editorial Portrait, Narrative & Resume Download */}
       <AboutIntroSection settings={settings} />
 
-      {/* 7. Contact Closing Statement */}
-      <ContactCtaSection />
+      {/* 7. Dedicated Above-Footer Project Inquiry CTA */}
+      <ContactCtaSection settings={settings} />
     </div>
   );
 }
