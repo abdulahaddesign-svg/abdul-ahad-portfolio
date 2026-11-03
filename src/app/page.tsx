@@ -1,44 +1,49 @@
 import React from 'react';
 import { getProjects } from '@/lib/data';
+import { Preloader } from '@/components/layout/Preloader';
 import { HeroSection } from '@/components/home/HeroSection';
-import { SelectedWorkSection } from '@/components/home/SelectedWorkSection';
-import { ServicesOverviewSection } from '@/components/home/ServicesOverviewSection';
+import { CapabilitiesTickerSection } from '@/components/home/CapabilitiesTickerSection';
+import { HorizontalPortfolioSection } from '@/components/home/HorizontalPortfolioSection';
+import { FeaturedEditorialStorySection } from '@/components/home/FeaturedEditorialStorySection';
 import { AboutIntroSection } from '@/components/home/AboutIntroSection';
-import { ExperienceSection } from '@/components/home/ExperienceSection';
-import { ReztroCaseStudySection } from '@/components/home/ReztroCaseStudySection';
 import { CreativeProcessSection } from '@/components/home/CreativeProcessSection';
-import { CtaSection } from '@/components/home/CtaSection';
+import { ServicesSection } from '@/components/home/ServicesSection';
+import { ContactCtaSection } from '@/components/home/ContactCtaSection';
 
-export const revalidate = 60; // ISR cache revalidation every minute
+export const revalidate = 60;
 
 export default async function HomePage() {
+  // Dynamic projects loaded from data layer (Supabase / local store)
   const projects = await getProjects({ includeDrafts: false });
 
   return (
-    <div className="flex flex-col w-full">
-      {/* 1. Hero Section */}
+    <div className="flex flex-col w-full selection:bg-copper selection:text-ivory">
+      {/* 1. Opening Brand Loading Experience */}
+      <Preloader />
+
+      {/* 2. Homepage Hero — Who I Am */}
       <HeroSection />
 
-      {/* 2. Flagship Reztro Case Study Spotlight */}
-      <ReztroCaseStudySection />
+      {/* 3. Creative Capability Introduction (Editorial Title Sequence) */}
+      <CapabilitiesTickerSection />
 
-      {/* 3. Selected Work Projects Grid with Filtering */}
-      <SelectedWorkSection initialProjects={projects} />
+      {/* 4. Signature Portfolio Showcase — 4 Alternating Horizontal Motion Rows */}
+      <HorizontalPortfolioSection projects={projects} />
 
-      {/* 4. Creative Services & Capabilities */}
-      <ServicesOverviewSection />
+      {/* 5. Featured Project Visual Storytelling */}
+      <FeaturedEditorialStorySection projects={projects} />
 
-      {/* 5. Professional Introduction & Philosophy */}
+      {/* 6. About Section — Professional Introduction & Timeline */}
       <AboutIntroSection />
 
-      {/* 6. Career Experience Timeline & Achievements */}
-      <ExperienceSection />
-
-      {/* 7. Structured 4-Step Creative Methodology */}
+      {/* 7. Creative Process (01 Understand, 02 Explore, 03 Create, 04 Deliver) */}
       <CreativeProcessSection />
 
-      {/* 8. Client Inquiry Call to Action */}
-      <CtaSection />
+      {/* 8. Typography-Led Services Section */}
+      <ServicesSection />
+
+      {/* 9. Contact Closing Statement */}
+      <ContactCtaSection />
     </div>
   );
 }

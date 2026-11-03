@@ -29,15 +29,29 @@
     background-color: #C4855A;
     color: #F4EFE6;
   }
+
+  /* Editorial typography tweaks */
+  h1, h2, h3, h4, .font-display {
+    font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+  }
+}
+
+/* Horizontal continuous scroll strip hiding standard bars */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 }
 
 /* Custom scrollbars */
 ::-webkit-scrollbar {
-  width: 8px;
+  width: 6px;
 }
 
 ::-webkit-scrollbar-track {
-  background: #ECE3D4;
+  background: #25241F;
 }
 
 ::-webkit-scrollbar-thumb {
@@ -46,4 +60,9 @@
 
 ::-webkit-scrollbar-thumb:hover {
   background: #C4855A;
+}
+
+/* Smooth text reveal clipping */
+.clip-text-reveal {
+  clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
 }

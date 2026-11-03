@@ -1,95 +1,77 @@
 'use client';
 
 import React from 'react';
-import { Compass, Eye, PenTool, CheckCircle, ArrowRight } from 'lucide-react';
-import { Reveal } from '@/components/motion/Reveal';
+import { motion } from 'framer-motion';
 
 const PROCESS_STEPS = [
   {
-    step: '01',
-    title: 'Discovery & Strategic Intent',
-    description:
-      'Every project begins by deconstructing the core problem. We analyze market context, customer psychology, and business objectives to formulate a clear creative brief.',
-    deliverable: 'Strategic brief, visual audit, and audience mapping',
+    number: '01',
+    title: 'Understand',
+    summary: 'Deconstruct the business challenge, examine the competitive terrain, and understand audience psychology to establish uncompromising creative intent.',
   },
   {
-    step: '02',
-    title: 'Conceptual Exploration & Grid',
-    description:
-      'We test multiple visual hypotheses, typographic structures, and layout grids. Exploring both expressive and restrained aesthetic paths to pinpoint the strongest direction.',
-    deliverable: 'Moodboards, typographic pairings, and rough vector concepts',
+    number: '02',
+    title: 'Explore',
+    summary: 'Develop visual directions, typographic moodboards, and structural layout grids. Iteratively validate aesthetic choices against strategic goals.',
   },
   {
-    step: '03',
-    title: 'Precision Craft & Refinement',
-    description:
-      'With the chosen direction locked, we obsess over details: curve continuity, optical kerning, responsive breakpoints, contrast ratios, and print dieline tolerances.',
-    deliverable: 'High-fidelity Figma screens, vector marks, and packaging artwork',
+    number: '03',
+    title: 'Create',
+    summary: 'Execute with mathematical precision. Refining vector letterforms, optical kerning, responsive UI breakpoints, and motion curves.',
   },
   {
-    step: '04',
-    title: 'Guidelines & Production Handoff',
-    description:
-      'Design is only valuable if it can be sustained. We package complete design systems, export suites (SVG, PDF, PNG), and explicit guidelines for seamless implementation.',
-    deliverable: 'Master brand manual, token library, and preflight print packages',
+    number: '04',
+    title: 'Deliver',
+    summary: 'Package complete brand manuals, preflight print-ready packages, Figma component tokens, and production assets engineered for longevity.',
   },
 ];
 
 export function CreativeProcessSection() {
   return (
-    <section className="py-24 bg-ivory text-charcoal relative">
-      <div className="max-w-7xl mx-auto px-6 sm:px-8">
+    <section className="py-24 sm:py-36 bg-ivory text-charcoal border-b border-charcoal/15">
+      <div className="max-w-[1600px] mx-auto px-6 sm:px-12">
         {/* Header */}
-        <Reveal>
-          <div className="max-w-2xl mb-16">
-            <span className="text-xs font-sans font-bold uppercase tracking-widest text-copper block mb-2">
-              Methodology
-            </span>
-            <h2 className="font-display font-bold text-3xl sm:text-5xl text-charcoal tracking-tight">
-              The Creative Process
-            </h2>
-            <p className="mt-4 text-base text-charcoal-500 font-sans leading-relaxed">
-              A structured, transparent workflow designed to eliminate guesswork, respect project timelines, and deliver commercially impactful creative work.
-            </p>
-          </div>
-        </Reveal>
+        <div className="max-w-3xl mb-16 sm:mb-24">
+          <span className="text-xs font-sans font-bold uppercase tracking-[0.25em] text-copper block mb-3">
+            Workflow &amp; Rigor
+          </span>
+          <h2 className="font-display font-black text-4xl sm:text-6xl md:text-7xl text-charcoal tracking-tighter">
+            Creative Process
+          </h2>
+          <p className="mt-4 text-base sm:text-lg text-charcoal-600 font-sans leading-relaxed">
+            A linear, transparent framework designed to eliminate arbitrary styling and deliver measurable business outcomes.
+          </p>
+        </div>
 
-        {/* 4 Steps Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-          {PROCESS_STEPS.map((step, index) => (
-            <Reveal key={step.step} delay={0.1 * index}>
-              <div className="p-8 bg-white border border-charcoal/15 flex flex-col justify-between h-full relative group hover:border-copper transition-colors duration-200">
-                {/* Step Number */}
-                <div>
-                  <div className="flex items-center justify-between pb-6 border-b border-charcoal/10">
-                    <span className="font-display font-bold text-4xl text-copper">
-                      {step.step}
-                    </span>
-                    <span className="text-[10px] font-sans font-bold uppercase tracking-wider text-charcoal-400">
-                      Phase {index + 1}
-                    </span>
-                  </div>
+        {/* 4 Editorial Process Columns */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 lg:gap-8 divide-y lg:divide-y-0 lg:divide-x divide-charcoal/15">
+          {PROCESS_STEPS.map((step, idx) => (
+            <motion.div
+              key={step.number}
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: '-60px' }}
+              transition={{ duration: 0.6, delay: idx * 0.1, ease: [0.16, 1, 0.3, 1] }}
+              className={`pt-8 lg:pt-0 ${idx > 0 ? 'lg:pl-8' : ''} space-y-6 flex flex-col justify-between`}
+            >
+              <div>
+                <span className="font-display font-black text-6xl sm:text-7xl text-copper/40 block leading-none">
+                  {step.number}
+                </span>
 
-                  <h3 className="font-display font-bold text-xl text-charcoal mt-6 group-hover:text-copper transition-colors">
-                    {step.title}
-                  </h3>
+                <h3 className="font-display font-bold text-2xl sm:text-3xl text-charcoal mt-6 tracking-tight">
+                  {step.title}
+                </h3>
 
-                  <p className="mt-3 text-xs sm:text-sm text-charcoal-500 font-sans leading-relaxed">
-                    {step.description}
-                  </p>
-                </div>
-
-                {/* Deliverable Pill */}
-                <div className="mt-8 pt-4 border-t border-charcoal/10">
-                  <span className="text-[10px] font-sans font-bold uppercase tracking-wider text-charcoal-400 block mb-1">
-                    Deliverable:
-                  </span>
-                  <span className="text-xs font-sans text-charcoal-700 font-medium">
-                    {step.deliverable}
-                  </span>
-                </div>
+                <p className="mt-4 text-sm font-sans text-charcoal-600 leading-relaxed font-light">
+                  {step.summary}
+                </p>
               </div>
-            </Reveal>
+
+              <div className="pt-6 border-t border-charcoal/10 text-[10px] font-mono tracking-widest text-charcoal-400 uppercase">
+                Phase 0{idx + 1} Execution
+              </div>
+            </motion.div>
           ))}
         </div>
       </div>
