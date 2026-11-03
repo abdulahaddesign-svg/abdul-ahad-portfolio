@@ -10,25 +10,45 @@ export interface AdminUser {
 }
 
 export async function checkAdminSession(): Promise<AdminUser | null> {
-  // 1. Try Supabase Auth if configured
+  // 1. Try server HTTP-only session verification
+  if (typeof window !== 'undefined') {
+    try {
+      const res = await fetch('/api/admin/me', { credentials: 'include' });
+      if (res.ok) {
+        const data = await res.json();
+        if (data.authenticated && data.user) {
+          localStorage.setItem(ADMIN_AUTH_KEY, JSON.stringify(data.user));
+          return data.user as AdminUser;
+        }
+      }
+    } catch {
+      // Fallback to local check
+    }
+  }
+
+  // 2. Try Supabase Auth if configured
   const supabase = createClient();
   if (supabase) {
     try {
       const { data: { session } } = await supabase.auth.getSession();
       if (session?.user) {
-        return {
+        const user: AdminUser = {
           id: session.user.id,
-          email: session.user.email || 'admin@abdulahad.design',
+          email: session.user.email || 'abdulahad.ofcl@gmail.com',
           name: session.user.user_metadata?.full_name || 'Abdul Ahad J',
           role: 'admin',
         };
+        if (typeof window !== 'undefined') {
+          localStorage.setItem(ADMIN_AUTH_KEY, JSON.stringify(user));
+        }
+        return user;
       }
     } catch {
       // Fallback
     }
   }
 
-  // 2. Check localStorage in browser
+  // 3. Check localStorage in browser (offline cache)
   if (typeof window !== 'undefined') {
     const local = localStorage.getItem(ADMIN_AUTH_KEY);
     if (local) {
@@ -46,56 +66,49 @@ export async function checkAdminSession(): Promise<AdminUser | null> {
   return null;
 }
 
-export async function loginAdmin(email: string, password: string): Promise<{ success: boolean; error?: string }> {
-  const cleanEmail = email.trim().toLowerCase();
+export async function loginAdmin(
+  email: string,
+  password: string
+): Promise<{ success: boolean; error?: string }> {
+  try {
+    const res = await fetch('/api/admin/login', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      credentials: 'include',
+      body: JSON.stringify({ email, password }),
+    });
 
-  // Try Supabase Auth first
-  const supabase = createClient();
-  if (supabase) {
-    try {
-      const { data, error } = await supabase.auth.signInWithPassword({
-        email: cleanEmail,
-        password,
-      });
+    const data = await res.json();
 
-      if (!error && data.user) {
-        if (typeof window !== 'undefined') {
-          const userObj: AdminUser = {
-            id: data.user.id,
-            email: data.user.email || cleanEmail,
-            name: data.user.user_metadata?.full_name || 'Abdul Ahad J',
-            role: 'admin',
-          };
-          localStorage.setItem(ADMIN_AUTH_KEY, JSON.stringify(userObj));
-        }
-        return { success: true };
+    if (res.ok && data.success) {
+      if (typeof window !== 'undefined' && data.user) {
+        localStorage.setItem(ADMIN_AUTH_KEY, JSON.stringify(data.user));
       }
-    } catch {
-      // Fall through to fallback
+      return { success: true };
     }
-  }
 
-  // Fallback demo admin authentication (for local testing before Supabase project is linked)
-  const defaultEmail = (process.env.ADMIN_FALLBACK_EMAIL || 'admin@abdulahad.design').toLowerCase();
-  const defaultPass = process.env.ADMIN_FALLBACK_PASSWORD || 'AdminSecure2025!';
-
-  if (cleanEmail === defaultEmail && password === defaultPass) {
-    const adminObj: AdminUser = {
-      id: 'local-admin-abdul-ahad',
-      email: defaultEmail,
-      name: 'Abdul Ahad J',
-      role: 'admin',
+    return {
+      success: false,
+      error: data.error || 'Authentication failed. Please verify your credentials.',
     };
-    if (typeof window !== 'undefined') {
-      localStorage.setItem(ADMIN_AUTH_KEY, JSON.stringify(adminObj));
-    }
-    return { success: true };
+  } catch (err: unknown) {
+    return {
+      success: false,
+      error: err instanceof Error ? err.message : 'Network connection error during sign-in.',
+    };
   }
-
-  return { success: false, error: 'Invalid administrator credentials. Please check your email and password.' };
 }
 
 export async function logoutAdmin(): Promise<void> {
+  try {
+    await fetch('/api/admin/logout', {
+      method: 'POST',
+      credentials: 'include',
+    });
+  } catch {
+    // Ignore network error on logout
+  }
+
   const supabase = createClient();
   if (supabase) {
     try {
