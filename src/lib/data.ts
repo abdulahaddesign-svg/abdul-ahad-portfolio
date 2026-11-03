@@ -266,7 +266,7 @@ export async function submitInquiry(inquiry: Omit<Inquiry, 'id' | 'createdAt' | 
 
   if (supabase) {
     try {
-      const { data, error } = await supabase
+      const { error } = await supabase
         .from('inquiries')
         .insert({
           name: inquiry.name,
@@ -276,10 +276,16 @@ export async function submitInquiry(inquiry: Omit<Inquiry, 'id' | 'createdAt' | 
           budget_range: inquiry.budgetRange,
           details: inquiry.details,
           status: 'new',
-        })
-        .select()
-        .single();
-      if (!error && data) return data as Inquiry;
+        });
+
+      if (!error) {
+        return {
+          ...inquiry,
+          id: `inq-${Date.now()}`,
+          status: 'new',
+          createdAt: now,
+        };
+      }
     } catch {
       // Fallback
     }
