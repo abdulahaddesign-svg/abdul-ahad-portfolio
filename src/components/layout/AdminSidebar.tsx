@@ -1,36 +1,43 @@
 'use client';
 
-import React from 'react';
+import React, { useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { 
   LayoutDashboard, 
   FolderKanban, 
-  PlusCircle, 
   Layers,
   Building2,
-  MessageSquare, 
-  Image as ImageIcon, 
-  Settings, 
+  User,
+  FileText,
+  Settings,
+  Image as ImageIcon,
+  ShieldCheck,
+  MessageSquare,
   ExternalLink,
-  LogOut 
+  LogOut,
+  Menu,
+  X
 } from 'lucide-react';
 import { Logo } from '@/components/brand/Logo';
 import { logoutAdmin } from '@/lib/auth';
 
-const NAV_ITEMS = [
-  { label: 'Overview', href: '/admin', icon: LayoutDashboard },
-  { label: 'Projects CMS', href: '/admin/projects', icon: FolderKanban },
-  { label: 'New Project', href: '/admin/projects/new', icon: PlusCircle },
-  { label: 'Services CMS', href: '/admin/services', icon: Layers },
+const NAV_SECTIONS = [
+  { label: 'Dashboard', href: '/admin', icon: LayoutDashboard },
+  { label: 'Projects', href: '/admin/projects', icon: FolderKanban },
+  { label: 'Services', href: '/admin/services', icon: Layers },
   { label: 'Clients', href: '/admin/clients', icon: Building2 },
-  { label: 'Client Inquiries', href: '/admin/inquiries', icon: MessageSquare },
+  { label: 'About', href: '/admin/about', icon: User },
+  { label: 'Resume', href: '/admin/resume', icon: FileText },
+  { label: 'Website Settings', href: '/admin/settings', icon: Settings },
   { label: 'Media Library', href: '/admin/media', icon: ImageIcon },
-  { label: 'Site Content', href: '/admin/content', icon: Settings },
+  { label: 'Inquiries', href: '/admin/inquiries', icon: MessageSquare },
+  { label: 'Security / Account', href: '/admin/security', icon: ShieldCheck },
 ];
 
 export function AdminSidebar() {
   const pathname = usePathname();
+  const [mobileOpen, setMobileOpen] = useState(false);
 
   const handleLogout = async () => {
     if (confirm('Are you sure you want to log out of the Admin CMS?')) {
@@ -39,20 +46,25 @@ export function AdminSidebar() {
     }
   };
 
-  return (
-    <aside className="w-64 bg-charcoal text-ivory border-r border-charcoal-800 flex flex-col justify-between shrink-0 min-h-screen">
-      {/* Top Branding */}
+  const navContent = (
+    <div className="flex flex-col justify-between h-full">
       <div>
+        {/* Brand Header */}
         <div className="p-6 border-b border-charcoal-800">
-          <Logo variant="dark" height={36} />
-          <div className="mt-2 text-[10px] font-sans font-bold uppercase tracking-widest text-copper">
-            Admin CMS Portal
+          <Logo variant="dark" height={32} />
+          <div className="mt-3 flex items-center justify-between">
+            <span className="text-[10px] font-sans font-bold uppercase tracking-[0.2em] text-copper">
+              Editorial CMS
+            </span>
+            <span className="text-[9px] font-mono px-1.5 py-0.5 border border-charcoal-700 text-charcoal-400">
+              v2.0
+            </span>
           </div>
         </div>
 
-        {/* Navigation Links */}
-        <nav className="p-4 space-y-1.5 font-sans" aria-label="Admin Navigation">
-          {NAV_ITEMS.map((item) => {
+        {/* Primary Navigation */}
+        <nav className="p-3 space-y-1 font-sans" aria-label="Admin Navigation">
+          {NAV_SECTIONS.map((item) => {
             const isActive =
               item.href === '/admin'
                 ? pathname === '/admin'
@@ -63,13 +75,14 @@ export function AdminSidebar() {
               <Link
                 key={item.href}
                 href={item.href}
-                className={`flex items-center gap-3 px-3.5 py-2.5 text-xs font-semibold tracking-wide transition-colors ${
+                onClick={() => setMobileOpen(false)}
+                className={`flex items-center gap-3 px-3 py-2 text-[12px] font-semibold tracking-wide transition-all ${
                   isActive
-                    ? 'bg-copper text-ivory'
-                    : 'text-charcoal-300 hover:text-ivory hover:bg-charcoal-800'
+                    ? 'bg-copper text-ivory font-bold'
+                    : 'text-charcoal-300 hover:text-ivory hover:bg-charcoal-800/60'
                 }`}
               >
-                <Icon className="w-4 h-4 shrink-0" />
+                <Icon className={`w-3.5 h-3.5 shrink-0 ${isActive ? 'text-ivory' : 'text-copper'}`} />
                 <span>{item.label}</span>
               </Link>
             );
@@ -77,25 +90,71 @@ export function AdminSidebar() {
         </nav>
       </div>
 
-      {/* Bottom Footer Actions */}
+      {/* Footer System Actions */}
       <div className="p-4 border-t border-charcoal-800 space-y-2">
         <Link
           href="/"
           target="_blank"
-          className="flex items-center justify-between px-3 py-2 text-xs font-sans text-charcoal-400 hover:text-ivory transition-colors"
+          className="flex items-center justify-between px-3 py-2 text-xs font-sans text-charcoal-400 hover:text-ivory hover:bg-charcoal-800/40 transition-colors"
         >
-          <span>View Live Site</span>
-          <ExternalLink className="w-3.5 h-3.5" />
+          <span className="flex items-center gap-2">
+            <ExternalLink className="w-3.5 h-3.5 text-copper" />
+            <span>Live Portfolio</span>
+          </span>
+          <span className="text-[10px] uppercase font-mono tracking-wider text-charcoal-500">
+            VIEW
+          </span>
         </Link>
 
         <button
+          type="button"
           onClick={handleLogout}
-          className="w-full flex items-center gap-2.5 px-3 py-2 text-xs font-sans font-semibold text-red-400 hover:bg-red-950/40 transition-colors text-left"
+          className="w-full flex items-center justify-between px-3 py-2 text-xs font-sans text-charcoal-400 hover:text-red-300 hover:bg-red-950/20 transition-colors"
         >
-          <LogOut className="w-4 h-4 shrink-0" />
-          <span>Sign Out</span>
+          <span className="flex items-center gap-2">
+            <LogOut className="w-3.5 h-3.5" />
+            <span>Log Out</span>
+          </span>
         </button>
       </div>
-    </aside>
+    </div>
+  );
+
+  return (
+    <>
+      {/* Mobile Top Header Bar with Drawer Toggle */}
+      <div className="lg:hidden fixed top-0 left-0 right-0 z-40 bg-charcoal text-ivory px-4 py-3 border-b border-charcoal-800 flex items-center justify-between">
+        <div className="flex items-center gap-3">
+          <Logo variant="dark" height={26} />
+          <span className="text-[10px] font-mono text-copper uppercase tracking-wider">CMS</span>
+        </div>
+        <button
+          type="button"
+          onClick={() => setMobileOpen(!mobileOpen)}
+          className="p-1.5 text-ivory hover:text-copper transition-colors"
+          aria-label="Toggle Navigation Drawer"
+        >
+          {mobileOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+        </button>
+      </div>
+
+      {/* Mobile Sliding Drawer */}
+      {mobileOpen && (
+        <div className="lg:hidden fixed inset-0 z-50 bg-black/60 backdrop-blur-sm">
+          <div className="fixed inset-y-0 left-0 w-72 bg-charcoal text-ivory shadow-2xl border-r border-charcoal-800">
+            {navContent}
+          </div>
+          <div
+            className="fixed inset-y-0 right-0 left-72"
+            onClick={() => setMobileOpen(false)}
+          />
+        </div>
+      )}
+
+      {/* Desktop Persistent Left Sidebar */}
+      <aside className="hidden lg:flex flex-col w-64 bg-charcoal text-ivory border-r border-charcoal-800 shrink-0 min-h-screen">
+        {navContent}
+      </aside>
+    </>
   );
 }

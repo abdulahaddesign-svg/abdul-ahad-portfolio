@@ -44,13 +44,13 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   }
 
   return (
-    <div className="min-h-screen flex bg-charcoal-950 text-ivory">
-      {/* Persistent Left Sidebar */}
+    <div className="min-h-screen flex flex-col lg:flex-row bg-charcoal text-ivory">
+      {/* Sidebar (Desktop persistent + Mobile slide-over) */}
       <AdminSidebar />
 
-      {/* Main Admin Content Body */}
-      <main className="flex-1 overflow-y-auto min-h-screen bg-ivory text-charcoal">
-        <div className="max-w-7xl mx-auto p-6 sm:p-10">
+      {/* Main Admin Workspace */}
+      <main className="flex-1 overflow-y-auto min-h-screen bg-ivory text-charcoal pt-14 lg:pt-0">
+        <div className="max-w-7xl mx-auto p-4 sm:p-8 lg:p-10">
           {children}
         </div>
       </main>

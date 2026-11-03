@@ -4,262 +4,381 @@ import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { 
   FolderKanban, 
-  CheckCircle, 
-  FileText, 
-  MessageSquare, 
+  Layers, 
+  Building2, 
+  User, 
+  FileText,
   PlusCircle, 
-  ArrowUpRight, 
   ExternalLink,
-  Clock,
+  ArrowUpRight,
+  MessageSquare,
   Sparkles,
-  Building2
+  Clock,
+  CheckCircle2,
+  AlertCircle
 } from 'lucide-react';
-import { getProjects, getInquiries, getClientLogos } from '@/lib/data';
-import { Project, Inquiry, ClientLogo } from '@/lib/types';
-import { Button } from '@/components/ui/Button';
-import { Badge } from '@/components/ui/Badge';
+import { getProjects, getInquiries, getClientLogos, getServices, getSiteSettings } from '@/lib/data';
+import { Project, Inquiry, ClientLogo, ServiceItem, SiteSettings } from '@/lib/types';
 import { formatDate } from '@/lib/utils';
 
-export default function AdminOverviewPage() {
+export default function AdminDashboardPage() {
   const [projects, setProjects] = useState<Project[]>([]);
-  const [inquiries, setInquiries] = useState<Inquiry[]>([]);
+  const [services, setServices] = useState<ServiceItem[]>([]);
   const [clients, setClients] = useState<ClientLogo[]>([]);
+  const [inquiries, setInquiries] = useState<Inquiry[]>([]);
+  const [settings, setSettings] = useState<SiteSettings | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     async function loadData() {
-      const [projs, inqs, clis] = await Promise.all([
+      const [projs, servs, clis, inqs, sets] = await Promise.all([
         getProjects({ includeDrafts: true }),
-        getInquiries(),
+        getServices(),
         getClientLogos(true),
+        getInquiries(),
+        getSiteSettings(),
       ]);
       setProjects(projs);
-      setInquiries(inqs);
+      setServices(servs);
       setClients(clis);
+      setInquiries(inqs);
+      setSettings(sets);
       setLoading(false);
     }
     loadData();
   }, []);
 
-  const publishedCount = projects.filter((p) => p.isPublished).length;
-  const draftCount = projects.filter((p) => !p.isPublished).length;
+  const publishedProjects = projects.filter((p) => p.isPublished).length;
+  const draftProjects = projects.filter((p) => !p.isPublished).length;
+  const publishedServices = services.length;
+  const clientLogosCount = clients.length;
   const newInquiriesCount = inquiries.filter((i) => i.status === 'new').length;
 
   if (loading) {
     return (
-      <div className="py-20 text-center text-charcoal-500 font-sans text-sm">
-        Loading CMS Overview metrics...
+      <div className="py-24 text-center">
+        <div className="inline-block w-6 h-6 border-2 border-copper border-t-transparent rounded-full animate-spin mb-3" />
+        <p className="text-xs font-mono uppercase tracking-widest text-charcoal-500">
+          Loading editorial CMS overview...
+        </p>
       </div>
     );
   }
 
   return (
-    <div className="space-y-10">
-      {/* Top Header Bar */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-charcoal/15">
+    <div className="space-y-12">
+      {/* =========================================================================
+          1. HEADER: Editorial Title & Quick Actions
+          ========================================================================= */}
+      <div className="pb-8 border-b border-charcoal/15 flex flex-col md:flex-row md:items-end justify-between gap-6">
         <div>
-          <span className="text-xs font-sans font-bold uppercase tracking-widest text-copper block mb-1">
-            Dashboard
-          </span>
-          <h1 className="font-display font-bold text-3xl text-charcoal">
-            Portfolio CMS Overview
+          <div className="flex items-center gap-2 text-xs font-sans uppercase tracking-[0.2em] text-copper font-bold mb-2">
+            <span>ADMIN CMS PORTAL</span>
+            <span>·</span>
+            <span className="text-charcoal-500 font-mono">WORKSPACE DASHBOARD</span>
+          </div>
+          <h1 className="font-display font-extrabold text-3xl sm:text-4xl text-charcoal tracking-tight">
+            Creative Direction & Content
           </h1>
+          <p className="mt-2 text-sm text-charcoal-600 font-sans max-w-xl">
+            Real-time management for portfolio case studies, service offerings, client showcases, and editorial copy.
+          </p>
         </div>
 
-        <div className="flex items-center gap-3">
-          <Button href="/admin/projects/new" variant="primary" size="sm" icon={<PlusCircle className="w-3.5 h-3.5" />}>
-            New Project
-          </Button>
-          <Button href="/" isExternal variant="outline" size="sm" icon={<ExternalLink className="w-3.5 h-3.5" />}>
-            Live Site
-          </Button>
-        </div>
-      </div>
-
-      {/* Metric Cards Row */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6">
-        <div className="p-6 bg-white border border-charcoal/15 space-y-2">
-          <div className="flex items-center justify-between text-charcoal-400">
-            <span className="text-xs font-sans font-bold uppercase tracking-wider">Total Projects</span>
-            <FolderKanban className="w-4 h-4 text-copper" />
-          </div>
-          <div className="font-display font-bold text-4xl text-charcoal">{projects.length}</div>
-          <span className="text-[11px] font-sans text-charcoal-500">Across all categories</span>
-        </div>
-
-        <div className="p-6 bg-white border border-charcoal/15 space-y-2">
-          <div className="flex items-center justify-between text-charcoal-400">
-            <span className="text-xs font-sans font-bold uppercase tracking-wider">Published</span>
-            <CheckCircle className="w-4 h-4 text-sage" />
-          </div>
-          <div className="font-display font-bold text-4xl text-sage-700">{publishedCount}</div>
-          <span className="text-[11px] font-sans text-charcoal-500">Live on public portfolio</span>
-        </div>
-
-        <div className="p-6 bg-white border border-charcoal/15 space-y-2">
-          <div className="flex items-center justify-between text-charcoal-400">
-            <span className="text-xs font-sans font-bold uppercase tracking-wider">Drafts</span>
-            <FileText className="w-4 h-4 text-earthBrown" />
-          </div>
-          <div className="font-display font-bold text-4xl text-charcoal">{draftCount}</div>
-          <span className="text-[11px] font-sans text-charcoal-500">Hidden from public</span>
-        </div>
-
-        <Link href="/admin/clients" className="p-6 bg-white border border-charcoal/15 space-y-2 hover:border-copper transition-colors block group">
-          <div className="flex items-center justify-between text-charcoal-400">
-            <span className="text-xs font-sans font-bold uppercase tracking-wider group-hover:text-copper transition-colors">Client Brands</span>
-            <Building2 className="w-4 h-4 text-copper" />
-          </div>
-          <div className="font-display font-bold text-4xl text-charcoal">{clients.length}</div>
-          <span className="text-[11px] font-sans text-charcoal-500 flex items-center gap-1">
-            {clients.filter(c => c.isVisible).length} active on showcase &rarr;
-          </span>
-        </Link>
-
-        <div className="p-6 bg-white border border-charcoal/15 space-y-2">
-          <div className="flex items-center justify-between text-charcoal-400">
-            <span className="text-xs font-sans font-bold uppercase tracking-wider">New Inquiries</span>
-            <MessageSquare className="w-4 h-4 text-copper" />
-          </div>
-          <div className="font-display font-bold text-4xl text-copper">{newInquiriesCount}</div>
-          <span className="text-[11px] font-sans text-charcoal-500">
-            {inquiries.length} total client submissions
-          </span>
+        {/* Quick Action Button Group */}
+        <div className="flex flex-wrap items-center gap-3">
+          <Link
+            href="/admin/projects/new"
+            className="inline-flex items-center gap-2 px-4 py-2 bg-charcoal text-ivory text-xs font-sans font-bold uppercase tracking-widest hover:bg-copper transition-colors"
+          >
+            <PlusCircle className="w-3.5 h-3.5 text-copper" />
+            <span>Add Project</span>
+          </Link>
+          <Link
+            href="/admin/services"
+            className="inline-flex items-center gap-2 px-4 py-2 border border-charcoal/20 bg-ivory text-charcoal text-xs font-sans font-bold uppercase tracking-widest hover:border-copper hover:text-copper transition-colors"
+          >
+            <Layers className="w-3.5 h-3.5" />
+            <span>Edit Services</span>
+          </Link>
+          <Link
+            href="/admin/about"
+            className="inline-flex items-center gap-2 px-4 py-2 border border-charcoal/20 bg-ivory text-charcoal text-xs font-sans font-bold uppercase tracking-widest hover:border-copper hover:text-copper transition-colors"
+          >
+            <User className="w-3.5 h-3.5" />
+            <span>Update About</span>
+          </Link>
+          <Link
+            href="/"
+            target="_blank"
+            className="inline-flex items-center gap-1.5 px-3 py-2 text-xs font-sans text-charcoal-500 hover:text-charcoal transition-colors"
+          >
+            <span>Live Site</span>
+            <ExternalLink className="w-3 h-3 text-copper" />
+          </Link>
         </div>
       </div>
 
-      {/* Grid: Recent Inquiries + Recent Projects */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-        {/* Left Column: Recent Inquiries */}
-        <div className="lg:col-span-7 bg-white border border-charcoal/15 p-6 sm:p-8 space-y-6">
-          <div className="flex items-center justify-between pb-4 border-b border-charcoal/10">
-            <div>
-              <h2 className="font-display font-bold text-xl text-charcoal">
-                Recent Client Inquiries
-              </h2>
-              <span className="text-xs font-sans text-charcoal-400">
-                Latest messages from contact form
+      {/* =========================================================================
+          2. METRICS: Clean Editorial Grid with Thin Dividers (No Heavy Cards)
+          ========================================================================= */}
+      <div>
+        <div className="text-xs font-sans uppercase tracking-[0.2em] text-charcoal-400 font-bold mb-4">
+          PORTFOLIO METRICS
+        </div>
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 border-t border-l border-charcoal/15">
+          {/* Published Projects */}
+          <div className="p-6 border-b border-r border-charcoal/15 bg-ivory hover:bg-copper/5 transition-colors">
+            <span className="text-[11px] font-mono uppercase tracking-widest text-charcoal-500 block mb-1">
+              Published Work
+            </span>
+            <div className="flex items-baseline gap-2">
+              <span className="font-display font-extrabold text-3xl sm:text-4xl text-charcoal">
+                {publishedProjects}
+              </span>
+              <span className="text-xs font-sans text-copper font-medium">live</span>
+            </div>
+          </div>
+
+          {/* Draft Projects */}
+          <div className="p-6 border-b border-r border-charcoal/15 bg-ivory hover:bg-copper/5 transition-colors">
+            <span className="text-[11px] font-mono uppercase tracking-widest text-charcoal-500 block mb-1">
+              Draft Projects
+            </span>
+            <div className="flex items-baseline gap-2">
+              <span className="font-display font-extrabold text-3xl sm:text-4xl text-charcoal">
+                {draftProjects}
+              </span>
+              <span className="text-xs font-sans text-charcoal-400 font-medium">in prep</span>
+            </div>
+          </div>
+
+          {/* Published Services */}
+          <div className="p-6 border-b border-r border-charcoal/15 bg-ivory hover:bg-copper/5 transition-colors">
+            <span className="text-[11px] font-mono uppercase tracking-widest text-charcoal-500 block mb-1">
+              Services Active
+            </span>
+            <div className="flex items-baseline gap-2">
+              <span className="font-display font-extrabold text-3xl sm:text-4xl text-charcoal">
+                {publishedServices}
+              </span>
+              <span className="text-xs font-sans text-copper font-medium">3D carousel</span>
+            </div>
+          </div>
+
+          {/* Client Logos */}
+          <div className="p-6 border-b border-r border-charcoal/15 bg-ivory hover:bg-copper/5 transition-colors">
+            <span className="text-[11px] font-mono uppercase tracking-widest text-charcoal-500 block mb-1">
+              Client Logos
+            </span>
+            <div className="flex items-baseline gap-2">
+              <span className="font-display font-extrabold text-3xl sm:text-4xl text-charcoal">
+                {clientLogosCount}
+              </span>
+              <span className="text-xs font-sans text-copper font-medium">brands</span>
+            </div>
+          </div>
+
+          {/* Client Inquiries */}
+          <div className="p-6 border-b border-r border-charcoal/15 bg-ivory hover:bg-copper/5 transition-colors col-span-2 sm:col-span-1">
+            <span className="text-[11px] font-mono uppercase tracking-widest text-charcoal-500 block mb-1">
+              New Inquiries
+            </span>
+            <div className="flex items-baseline gap-2">
+              <span className="font-display font-extrabold text-3xl sm:text-4xl text-charcoal">
+                {newInquiriesCount}
+              </span>
+              <span className={`text-xs font-sans font-medium ${newInquiriesCount > 0 ? 'text-copper font-bold' : 'text-charcoal-400'}`}>
+                {newInquiriesCount > 0 ? 'unread' : 'up to date'}
               </span>
             </div>
-            <Link
-              href="/admin/inquiries"
-              className="text-xs font-sans font-bold uppercase tracking-wider text-copper hover:underline"
-            >
-              View All ({inquiries.length})
-            </Link>
           </div>
+        </div>
+      </div>
 
-          {inquiries.length > 0 ? (
-            <div className="space-y-4">
-              {inquiries.slice(0, 4).map((inq) => (
-                <div
-                  key={inq.id}
-                  className="p-4 bg-ivory-100 border border-charcoal/10 space-y-2"
-                >
-                  <div className="flex items-center justify-between">
-                    <span className="font-sans font-bold text-sm text-charcoal">
-                      {inq.name} {inq.company && `(${inq.company})`}
-                    </span>
-                    <Badge variant={inq.status === 'new' ? 'copper' : 'outline'}>
-                      {inq.status}
-                    </Badge>
-                  </div>
-                  <p className="text-xs font-sans text-charcoal-600 line-clamp-2">
-                    {inq.details}
-                  </p>
-                  <div className="flex items-center justify-between text-[11px] font-sans text-charcoal-400 pt-2 border-t border-charcoal/10">
-                    <span>Service: {inq.serviceRequired}</span>
-                    <span>{formatDate(inq.createdAt)}</span>
-                  </div>
-                </div>
-              ))}
+      {/* =========================================================================
+          3. CONTENT HUBS: Quick Route Cards for All 9 Sections
+          ========================================================================= */}
+      <div>
+        <div className="text-xs font-sans uppercase tracking-[0.2em] text-charcoal-400 font-bold mb-4">
+          CONTENT MANAGEMENT HUBS
+        </div>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+          {/* Projects CMS */}
+          <Link
+            href="/admin/projects"
+            className="group p-6 border border-charcoal/15 bg-ivory hover:border-copper transition-all"
+          >
+            <div className="flex items-center justify-between mb-4">
+              <FolderKanban className="w-5 h-5 text-copper" />
+              <ArrowUpRight className="w-4 h-4 text-charcoal-400 group-hover:text-copper group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all" />
             </div>
-          ) : (
-            <div className="py-12 text-center text-xs font-sans text-charcoal-400">
-              No inquiries received yet.
+            <h3 className="font-display font-bold text-lg text-charcoal group-hover:text-copper transition-colors">
+              Projects CMS
+            </h3>
+            <p className="mt-1 text-xs text-charcoal-600 font-sans">
+              Create, edit, feature, and reorder Behance-style case studies with modular narrative sections.
+            </p>
+          </Link>
+
+          {/* Services CMS */}
+          <Link
+            href="/admin/services"
+            className="group p-6 border border-charcoal/15 bg-ivory hover:border-copper transition-all"
+          >
+            <div className="flex items-center justify-between mb-4">
+              <Layers className="w-5 h-5 text-copper" />
+              <ArrowUpRight className="w-4 h-4 text-charcoal-400 group-hover:text-copper group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all" />
             </div>
-          )}
+            <h3 className="font-display font-bold text-lg text-charcoal group-hover:text-copper transition-colors">
+              Services & 3D Carousel
+            </h3>
+            <p className="mt-1 text-xs text-charcoal-600 font-sans">
+              Manage disciplines, detailed descriptions, capabilities checklists, and 360° carousel imagery.
+            </p>
+          </Link>
+
+          {/* Client Logos */}
+          <Link
+            href="/admin/clients"
+            className="group p-6 border border-charcoal/15 bg-ivory hover:border-copper transition-all"
+          >
+            <div className="flex items-center justify-between mb-4">
+              <Building2 className="w-5 h-5 text-copper" />
+              <ArrowUpRight className="w-4 h-4 text-charcoal-400 group-hover:text-copper group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all" />
+            </div>
+            <h3 className="font-display font-bold text-lg text-charcoal group-hover:text-copper transition-colors">
+              Client Logos
+            </h3>
+            <p className="mt-1 text-xs text-charcoal-600 font-sans">
+              Upload brand SVG / PNG logos, configure website links, and toggle homepage marquee visibility.
+            </p>
+          </Link>
+
+          {/* About Biography */}
+          <Link
+            href="/admin/about"
+            className="group p-6 border border-charcoal/15 bg-ivory hover:border-copper transition-all"
+          >
+            <div className="flex items-center justify-between mb-4">
+              <User className="w-5 h-5 text-copper" />
+              <ArrowUpRight className="w-4 h-4 text-charcoal-400 group-hover:text-copper group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all" />
+            </div>
+            <h3 className="font-display font-bold text-lg text-charcoal group-hover:text-copper transition-colors">
+              About & Biography
+            </h3>
+            <p className="mt-1 text-xs text-charcoal-600 font-sans">
+              Edit headline, narrative story, official portrait photo, location, and creative philosophy.
+            </p>
+          </Link>
+
+          {/* Resume & Credentials */}
+          <Link
+            href="/admin/resume"
+            className="group p-6 border border-charcoal/15 bg-ivory hover:border-copper transition-all"
+          >
+            <div className="flex items-center justify-between mb-4">
+              <FileText className="w-5 h-5 text-copper" />
+              <ArrowUpRight className="w-4 h-4 text-charcoal-400 group-hover:text-copper group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all" />
+            </div>
+            <h3 className="font-display font-bold text-lg text-charcoal group-hover:text-copper transition-colors">
+              Resume & Credentials
+            </h3>
+            <p className="mt-1 text-xs text-charcoal-600 font-sans">
+              Upload latest PDF resume, update download destination, and preview in browser.
+            </p>
+          </Link>
+
+          {/* Website Settings */}
+          <Link
+            href="/admin/settings"
+            className="group p-6 border border-charcoal/15 bg-ivory hover:border-copper transition-all"
+          >
+            <div className="flex items-center justify-between mb-4">
+              <Clock className="w-5 h-5 text-copper" />
+              <ArrowUpRight className="w-4 h-4 text-charcoal-400 group-hover:text-copper group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all" />
+            </div>
+            <h3 className="font-display font-bold text-lg text-charcoal group-hover:text-copper transition-colors">
+              Website Settings & SEO
+            </h3>
+            <p className="mt-1 text-xs text-charcoal-600 font-sans">
+              SEO meta tags, social preview images, contact channels, and official wordmark logos.
+            </p>
+          </Link>
+        </div>
+      </div>
+
+      {/* =========================================================================
+          4. RECENT ACTIVITY: Published Work Table with Quick Edits
+          ========================================================================= */}
+      <div>
+        <div className="flex items-center justify-between pb-3 border-b border-charcoal/15 mb-4">
+          <div className="text-xs font-sans uppercase tracking-[0.2em] text-charcoal-400 font-bold">
+            RECENT PORTFOLIO PROJECTS
+          </div>
+          <Link
+            href="/admin/projects"
+            className="text-xs font-sans font-bold uppercase tracking-widest text-copper hover:underline"
+          >
+            View All ({projects.length}) &rarr;
+          </Link>
         </div>
 
-        {/* Right Column: Quick Actions & Projects Overview */}
-        <div className="lg:col-span-5 space-y-6">
-          {/* Quick Actions Panel */}
-          <div className="bg-white border border-charcoal/15 p-6 space-y-4">
-            <h3 className="font-display font-bold text-lg text-charcoal pb-3 border-b border-charcoal/10">
-              Quick Actions
-            </h3>
-            <div className="space-y-2">
-              <Link
-                href="/admin/projects/new"
-                className="flex items-center justify-between p-3 bg-ivory-100 hover:bg-copper/10 hover:text-copper transition-colors text-xs font-sans font-semibold text-charcoal"
-              >
-                <span>Add New Portfolio Project</span>
-                <PlusCircle className="w-4 h-4 text-copper" />
-              </Link>
-              <Link
-                href="/admin/inquiries"
-                className="flex items-center justify-between p-3 bg-ivory-100 hover:bg-copper/10 hover:text-copper transition-colors text-xs font-sans font-semibold text-charcoal"
-              >
-                <span>Manage Client Inquiries</span>
-                <MessageSquare className="w-4 h-4 text-copper" />
-              </Link>
-              <Link
-                href="/admin/media"
-                className="flex items-center justify-between p-3 bg-ivory-100 hover:bg-copper/10 hover:text-copper transition-colors text-xs font-sans font-semibold text-charcoal"
-              >
-                <span>Upload Media Assets</span>
-                <ArrowUpRight className="w-4 h-4 text-copper" />
-              </Link>
-              <Link
-                href="/admin/content"
-                className="flex items-center justify-between p-3 bg-ivory-100 hover:bg-copper/10 hover:text-copper transition-colors text-xs font-sans font-semibold text-charcoal"
-              >
-                <span>Edit Site Copy & Resume Info</span>
-                <ArrowUpRight className="w-4 h-4 text-copper" />
-              </Link>
-            </div>
-          </div>
-
-          {/* Quick Projects List */}
-          <div className="bg-white border border-charcoal/15 p-6 space-y-4">
-            <div className="flex items-center justify-between pb-3 border-b border-charcoal/10">
-              <h3 className="font-display font-bold text-lg text-charcoal">
-                Active Projects
-              </h3>
-              <Link
-                href="/admin/projects"
-                className="text-xs font-sans font-bold uppercase tracking-wider text-copper hover:underline"
-              >
-                Manage
-              </Link>
-            </div>
-            <div className="space-y-3">
-              {projects.slice(0, 5).map((p) => (
-                <div
-                  key={p.id}
-                  className="flex items-center justify-between p-2.5 bg-ivory-100 text-xs font-sans"
-                >
-                  <div className="truncate max-w-[180px]">
-                    <span className="font-bold text-charcoal block truncate">{p.title}</span>
-                    <span className="text-[10px] text-charcoal-400">{p.category}</span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <span
-                      className={`w-2 h-2 rounded-full ${
-                        p.isPublished ? 'bg-sage' : 'bg-charcoal-400'
-                      }`}
-                    />
-                    <Link
-                      href={`/admin/projects/${p.id}/edit`}
-                      className="text-copper hover:underline font-bold text-[11px]"
-                    >
-                      Edit
-                    </Link>
-                  </div>
+        <div className="border border-charcoal/15 divide-y divide-charcoal/10 bg-ivory">
+          {projects.slice(0, 6).map((proj) => (
+            <div
+              key={proj.id}
+              className="p-4 sm:p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4 hover:bg-copper/5 transition-colors"
+            >
+              <div className="space-y-1">
+                <div className="flex items-center gap-3">
+                  <span className="font-display font-bold text-base text-charcoal">
+                    {proj.title}
+                  </span>
+                  {proj.isPublished ? (
+                    <span className="px-2 py-0.5 text-[10px] font-mono uppercase tracking-wider bg-sage/20 text-charcoal border border-sage/40">
+                      Published
+                    </span>
+                  ) : (
+                    <span className="px-2 py-0.5 text-[10px] font-mono uppercase tracking-wider bg-charcoal/10 text-charcoal-600 border border-charcoal/20">
+                      Draft
+                    </span>
+                  )}
+                  {proj.isFeatured && (
+                    <span className="px-2 py-0.5 text-[10px] font-mono uppercase tracking-wider bg-copper/20 text-copper border border-copper/30">
+                      Featured
+                    </span>
+                  )}
                 </div>
-              ))}
+                <div className="text-xs font-sans text-charcoal-500">
+                  <span>{proj.category}</span>
+                  <span className="mx-2">·</span>
+                  <span>{proj.projectYear}</span>
+                  <span className="mx-2">·</span>
+                  <span>{proj.clientName || 'Direct Client'}</span>
+                </div>
+              </div>
+
+              <div className="flex items-center gap-3 self-end sm:self-center">
+                <Link
+                  href={`/admin/projects/${proj.id}`}
+                  className="px-3 py-1.5 border border-charcoal/20 text-xs font-sans font-semibold uppercase tracking-wider text-charcoal hover:border-copper hover:text-copper transition-colors"
+                >
+                  Edit CMS
+                </Link>
+                {proj.isPublished && (
+                  <Link
+                    href={`/work/${proj.slug}`}
+                    target="_blank"
+                    className="p-1.5 text-charcoal-400 hover:text-copper transition-colors"
+                    title="View case study on live site"
+                  >
+                    <ExternalLink className="w-4 h-4" />
+                  </Link>
+                )}
+              </div>
             </div>
-          </div>
+          ))}
         </div>
       </div>
     </div>

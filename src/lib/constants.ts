@@ -90,6 +90,7 @@ export const SITE_SETTINGS: SiteSettings = {
   aboutIntro: "Abdul Ahad J is a creative designer based in Coimbatore, India, with 3+ years of experience in graphic design, visual branding and digital creative production.",
   aboutPhilosophy: "Design is not decorative styling; it is clear thinking made visible. I combine visual harmony, typographic discipline, and strategic intent to craft brand experiences that command attention, build credibility, and inspire action.",
   aboutDescription: "He has worked across enterprise, SaaS and freelance projects, creating visual identities, marketing creatives, digital experiences and motion-led content. He has served 50+ freelance clients and received the Best Employee of the Year award at eClerx in 2025. He works independently and collaborates with teams when projects require broader creative capabilities.",
+  aboutBio: "He has worked across enterprise, SaaS and freelance projects, creating visual identities, marketing creatives, digital experiences and motion-led content. He has served 50+ freelance clients and received the Best Employee of the Year award at eClerx in 2025. He works independently and collaborates with teams when projects require broader creative capabilities.",
   profilePhotoUrl: "/profile/abdul-ahad.jpg",
   profilePhotoAlt: "Abdul Ahad J — Creative Designer & Visual Specialist",
   experienceYears: "3+ Years",

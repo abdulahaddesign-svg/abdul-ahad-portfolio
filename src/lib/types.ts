@@ -134,12 +134,15 @@ export interface SiteSettings {
   location: string;
   behanceUrl: string;
   linkedinUrl: string;
+  instagramUrl?: string;
+  dribbbleUrl?: string;
   heroHeadline: string;
   heroSupportingCopy: string;
   aboutHeadline?: string;
   aboutIntro: string;
   aboutPhilosophy: string;
   aboutDescription?: string;
+  aboutBio?: string;
   profilePhotoUrl?: string;
   profilePhotoAlt?: string;
   experienceYears?: string;

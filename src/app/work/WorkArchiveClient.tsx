@@ -56,7 +56,7 @@ export function WorkArchiveClient({ initialProjects }: WorkArchiveClientProps) {
               className={`transition-all duration-200 relative pb-1.5 pt-0.5 ${
                 selectedCategory === category
                   ? 'text-copper font-bold'
-                  : 'text-charcoal-600 hover:text-charcoal'
+                  : 'text-charcoal-600 dark:text-ivory/60 hover:text-charcoal dark:hover:text-ivory'
               }`}
             >
               <span>{category}</span>

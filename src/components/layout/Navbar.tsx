@@ -6,6 +6,7 @@ import { usePathname } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ArrowUpRight } from 'lucide-react';
 import { Logo } from '@/components/brand/Logo';
+import { ThemeToggle } from '@/components/theme/ThemeToggle';
 
 const NAV_LINKS = [
   { label: 'Work', href: '/work', index: '01' },
@@ -73,29 +74,29 @@ export function Navbar() {
       <header
         className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
           scrolled
-            ? 'bg-ivory/95 backdrop-blur-md border-b border-charcoal/10 py-3.5 shadow-sm'
-            : 'bg-ivory/80 backdrop-blur-sm py-5'
+            ? 'bg-ivory/95 dark:bg-charcoal/95 backdrop-blur-md border-b border-charcoal/10 dark:border-ivory/10 py-3.5 shadow-sm'
+            : 'bg-ivory/80 dark:bg-charcoal/80 backdrop-blur-sm py-5'
         }`}
       >
         <div className="max-w-[1820px] mx-auto px-4 sm:px-8 lg:px-12 flex items-center justify-between">
-          {/* Primary Light Mode Brand Logo */}
+          {/* Brand Logo with automatic light/dark switching */}
           <div className="flex items-center">
-            <Logo variant="light" height={34} />
+            <Logo variant="auto" height={34} />
           </div>
 
           {/* Center Coordinates & Availability Indicator */}
-          <div className="hidden lg:flex items-center gap-6 text-[11px] font-sans text-charcoal-500 uppercase tracking-widest border-x border-charcoal/10 px-8 h-8">
+          <div className="hidden lg:flex items-center gap-6 text-[11px] font-sans text-charcoal-500 dark:text-ivory/60 uppercase tracking-widest border-x border-charcoal/10 dark:border-ivory/10 px-8 h-8">
             <span className="flex items-center gap-2">
               <span className="w-1.5 h-1.5 rounded-full bg-sage animate-pulse" />
               <span>Available for New Projects</span>
             </span>
-            <span className="text-charcoal-300">/</span>
+            <span className="text-charcoal-300 dark:text-ivory/30">/</span>
             <span>Coimbatore, IN · {time || 'IST'}</span>
           </div>
 
           {/* Desktop Navigation Links & Action */}
-          <div className="hidden md:flex items-center gap-8">
-            <nav className="flex items-center gap-8" aria-label="Main Navigation">
+          <div className="hidden md:flex items-center gap-6 lg:gap-8">
+            <nav className="flex items-center gap-6 lg:gap-8" aria-label="Main Navigation">
               {NAV_LINKS.map((link) => {
                 const isActive =
                   pathname === link.href || (link.href !== '/' && pathname.startsWith(link.href));
@@ -103,7 +104,7 @@ export function Navbar() {
                   <Link
                     key={link.href}
                     href={link.href}
-                    className="group relative py-1 text-[13.5px] font-sans font-semibold uppercase tracking-[0.16em] text-charcoal hover:text-copper transition-colors duration-200"
+                    className="group relative py-1 text-[13.5px] font-sans font-semibold uppercase tracking-[0.16em] text-charcoal dark:text-ivory hover:text-copper dark:hover:text-copper transition-colors duration-200"
                   >
                     <span className="inline-block transition-transform duration-200 group-hover:-translate-y-0.5">
                       {link.label}
@@ -119,24 +120,30 @@ export function Navbar() {
               })}
             </nav>
 
+            {/* Theme Toggle Button */}
+            <ThemeToggle />
+
             <Link
               href="/contact"
-              className="group inline-flex items-center gap-2.5 px-6 sm:px-7 py-2.5 bg-charcoal text-ivory text-[12px] sm:text-[13px] font-sans font-bold uppercase tracking-[0.18em] hover:bg-copper transition-all duration-200 shadow-sm"
+              className="group inline-flex items-center gap-2.5 px-6 sm:px-7 py-2.5 bg-charcoal dark:bg-ivory text-ivory dark:text-charcoal text-[12px] sm:text-[13px] font-sans font-bold uppercase tracking-[0.18em] hover:bg-copper dark:hover:bg-copper dark:hover:text-ivory transition-all duration-200 shadow-sm"
             >
               <span>Initiate Brief</span>
               <ArrowUpRight className="w-3.5 h-3.5 text-copper group-hover:text-ivory group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all duration-200" />
             </Link>
           </div>
 
-          {/* Mobile Menu Trigger */}
-          <button
-            type="button"
-            onClick={() => setIsOpen(!isOpen)}
-            className="md:hidden p-2 text-xs font-sans font-bold uppercase tracking-widest text-charcoal focus:outline-none"
-            aria-label={isOpen ? 'Close menu' : 'Open menu'}
-          >
-            {isOpen ? 'Close [X]' : 'Menu [—]'}
-          </button>
+          {/* Mobile Menu Trigger & Theme Toggle */}
+          <div className="flex md:hidden items-center gap-2">
+            <ThemeToggle />
+            <button
+              type="button"
+              onClick={() => setIsOpen(!isOpen)}
+              className="p-2 text-xs font-sans font-bold uppercase tracking-widest text-charcoal dark:text-ivory focus:outline-none"
+              aria-label={isOpen ? 'Close menu' : 'Open menu'}
+            >
+              {isOpen ? 'Close [X]' : 'Menu [—]'}
+            </button>
+          </div>
         </div>
       </header>
 

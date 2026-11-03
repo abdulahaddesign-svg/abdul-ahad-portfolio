@@ -17,6 +17,10 @@
     font-size: 16px;
   }
 
+  html.dark {
+    color-scheme: dark;
+  }
+
   body {
     background-color: #F4EFE6;
     color: #25241F;
@@ -28,6 +32,11 @@
     overflow-x: hidden;
   }
 
+  html.dark body {
+    background-color: #25241F;
+    color: #F4EFE6;
+  }
+
   p {
     line-height: 1.72;
   }
@@ -35,6 +44,11 @@
   ::selection {
     background-color: #C4855A;
     color: #F4EFE6;
+  }
+
+  html.dark ::selection {
+    background-color: #C4855A;
+    color: #25241F;
   }
 
   /* Editorial typography tweaks */
@@ -73,3 +87,84 @@
 .clip-text-reveal {
   clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
 }
+
+/* =========================================================================
+   THEME HARMONIZATION: Light (#F4EFE6) and Dark (#25241F)
+   ========================================================================= */
+html.dark {
+  --theme-bg: #25241F;
+  --theme-text: #F4EFE6;
+}
+
+html.dark body {
+  background-color: #25241F;
+  color: #F4EFE6;
+}
+
+html.dark .bg-ivory {
+  background-color: #25241F !important;
+}
+
+html.dark .bg-ivory\/95 {
+  background-color: rgba(37, 36, 31, 0.95) !important;
+}
+
+html.dark .bg-ivory\/90 {
+  background-color: rgba(37, 36, 31, 0.9) !important;
+}
+
+html.dark .bg-ivory\/80 {
+  background-color: rgba(37, 36, 31, 0.8) !important;
+}
+
+html.dark .bg-white {
+  background-color: #1F1E1A !important;
+}
+
+html.dark .text-charcoal {
+  color: #F4EFE6 !important;
+}
+
+html.dark .text-charcoal-900,
+html.dark .text-charcoal-800,
+html.dark .text-charcoal-700 {
+  color: #ECE3D4 !important;
+}
+
+html.dark .text-charcoal-600 {
+  color: #D3CEC4 !important;
+}
+
+html.dark .text-charcoal-500 {
+  color: #B8B1A1 !important;
+}
+
+html.dark .text-charcoal-400 {
+  color: #8B8474 !important;
+}
+
+html.dark .border-charcoal\/10 {
+  border-color: rgba(244, 239, 230, 0.1) !important;
+}
+
+html.dark .border-charcoal\/15 {
+  border-color: rgba(244, 239, 230, 0.15) !important;
+}
+
+html.dark .border-charcoal\/20 {
+  border-color: rgba(244, 239, 230, 0.2) !important;
+}
+
+html.dark .border-charcoal\/30 {
+  border-color: rgba(244, 239, 230, 0.3) !important;
+}
+
+html.dark .border-charcoal\/40 {
+  border-color: rgba(244, 239, 230, 0.4) !important;
+}
+
+html.dark .divide-charcoal\/10 > :not([hidden]) ~ :not([hidden]),
+html.dark .divide-charcoal\/15 > :not([hidden]) ~ :not([hidden]) {
+  border-color: rgba(244, 239, 230, 0.15) !important;
+}
+
