@@ -500,11 +500,42 @@ export async function getSiteSettings(): Promise<SiteSettings> {
     try {
       const { data, error } = await supabase
         .from('site_settings')
-        .select('data')
-        .eq('id', 'global')
-        .single();
-      if (!error && data?.data) {
-        return { ...localSettings, ...data.data };
+        .select('*')
+        .limit(1)
+        .maybeSingle();
+
+      if (!error && data) {
+        return {
+          ...localSettings,
+          name: data.name ?? localSettings.name,
+          title: data.title ?? localSettings.title,
+          tagline: data.tagline ?? localSettings.tagline,
+          email: data.email ?? localSettings.email,
+          phone: data.phone ?? localSettings.phone,
+          location: data.location ?? localSettings.location,
+          behanceUrl: data.behance_url ?? localSettings.behanceUrl,
+          linkedinUrl: data.linkedin_url ?? localSettings.linkedinUrl,
+          heroHeadline: data.hero_headline ?? localSettings.heroHeadline,
+          heroSupportingCopy: data.hero_supporting_copy ?? localSettings.heroSupportingCopy,
+          aboutHeadline: data.about_headline ?? localSettings.aboutHeadline,
+          aboutIntro: data.about_intro ?? localSettings.aboutIntro,
+          aboutPhilosophy: data.about_philosophy ?? localSettings.aboutPhilosophy,
+          aboutDescription: data.about_description ?? localSettings.aboutDescription,
+          aboutBio: data.about_bio ?? localSettings.aboutBio,
+          profilePhotoUrl: data.profile_photo_url ?? localSettings.profilePhotoUrl,
+          resumeUrl: data.resume_url ?? localSettings.resumeUrl,
+          resumeLabel: data.resume_label ?? localSettings.resumeLabel,
+          resumeVisible: data.resume_visible ?? localSettings.resumeVisible,
+          educationDegree: data.education_degree ?? localSettings.educationDegree,
+          educationInstitution: data.education_institution ?? localSettings.educationInstitution,
+          educationYear: data.education_year ?? localSettings.educationYear,
+          educationAggregate: data.education_aggregate ?? localSettings.educationAggregate,
+          footerAppearance: (data.footer_appearance as any) ?? localSettings.footerAppearance,
+          footerLogoLightUrl: data.footer_logo_light_url ?? localSettings.footerLogoLightUrl,
+          footerLogoDarkUrl: data.footer_logo_dark_url ?? localSettings.footerLogoDarkUrl,
+          footerDescription: data.footer_description ?? localSettings.footerDescription,
+          footerCopyright: data.footer_copyright ?? localSettings.footerCopyright,
+        };
       }
     } catch {
       // Fallback
@@ -515,12 +546,62 @@ export async function getSiteSettings(): Promise<SiteSettings> {
 
 export async function updateSiteSettings(newSettings: Partial<SiteSettings>): Promise<SiteSettings> {
   localSettings = { ...localSettings, ...newSettings };
+
+  if (typeof window !== 'undefined') {
+    try {
+      const res = await fetch('/api/settings', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(newSettings),
+      });
+      if (res.ok) {
+        const data = await res.json();
+        return { ...localSettings, ...data };
+      }
+    } catch {
+      // Continue to direct Supabase update
+    }
+  }
+
   const supabase = createClient();
   if (supabase) {
     try {
+      const dbPayload: Record<string, any> = {
+        updated_at: new Date().toISOString(),
+      };
+      if (newSettings.name !== undefined) dbPayload.name = newSettings.name;
+      if (newSettings.title !== undefined) dbPayload.title = newSettings.title;
+      if (newSettings.tagline !== undefined) dbPayload.tagline = newSettings.tagline;
+      if (newSettings.email !== undefined) dbPayload.email = newSettings.email;
+      if (newSettings.phone !== undefined) dbPayload.phone = newSettings.phone;
+      if (newSettings.location !== undefined) dbPayload.location = newSettings.location;
+      if (newSettings.behanceUrl !== undefined) dbPayload.behance_url = newSettings.behanceUrl;
+      if (newSettings.linkedinUrl !== undefined) dbPayload.linkedin_url = newSettings.linkedinUrl;
+      if (newSettings.heroHeadline !== undefined) dbPayload.hero_headline = newSettings.heroHeadline;
+      if (newSettings.heroSupportingCopy !== undefined) dbPayload.hero_supporting_copy = newSettings.heroSupportingCopy;
+      if (newSettings.aboutHeadline !== undefined) dbPayload.about_headline = newSettings.aboutHeadline;
+      if (newSettings.aboutIntro !== undefined) dbPayload.about_intro = newSettings.aboutIntro;
+      if (newSettings.aboutPhilosophy !== undefined) dbPayload.about_philosophy = newSettings.aboutPhilosophy;
+      if (newSettings.aboutDescription !== undefined) dbPayload.about_description = newSettings.aboutDescription;
+      if (newSettings.aboutBio !== undefined) dbPayload.about_bio = newSettings.aboutBio;
+      if (newSettings.profilePhotoUrl !== undefined) dbPayload.profile_photo_url = newSettings.profilePhotoUrl;
+      if (newSettings.resumeUrl !== undefined) dbPayload.resume_url = newSettings.resumeUrl;
+      if (newSettings.resumeLabel !== undefined) dbPayload.resume_label = newSettings.resumeLabel;
+      if (newSettings.resumeVisible !== undefined) dbPayload.resume_visible = newSettings.resumeVisible;
+      if (newSettings.educationDegree !== undefined) dbPayload.education_degree = newSettings.educationDegree;
+      if (newSettings.educationInstitution !== undefined) dbPayload.education_institution = newSettings.educationInstitution;
+      if (newSettings.educationYear !== undefined) dbPayload.education_year = newSettings.educationYear;
+      if (newSettings.educationAggregate !== undefined) dbPayload.education_aggregate = newSettings.educationAggregate;
+      if (newSettings.footerAppearance !== undefined) dbPayload.footer_appearance = newSettings.footerAppearance;
+      if (newSettings.footerLogoLightUrl !== undefined) dbPayload.footer_logo_light_url = newSettings.footerLogoLightUrl;
+      if (newSettings.footerLogoDarkUrl !== undefined) dbPayload.footer_logo_dark_url = newSettings.footerLogoDarkUrl;
+      if (newSettings.footerDescription !== undefined) dbPayload.footer_description = newSettings.footerDescription;
+      if (newSettings.footerCopyright !== undefined) dbPayload.footer_copyright = newSettings.footerCopyright;
+
       await supabase
         .from('site_settings')
-        .upsert({ id: 'global', data: localSettings, updated_at: new Date().toISOString() });
+        .update(dbPayload)
+        .eq('id', 'primary');
     } catch {
       // Fallback
     }
