@@ -1,0 +1,54 @@
+<svg width="1200" height="800" viewBox="0 0 1200 800" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1200" height="800" fill="#25241F"/>
+  <text x="80" y="80" font-family="'Space Grotesk', sans-serif" font-weight="700" font-size="32" fill="#F4EFE6">Reztro User Journey & Order Placement Flow</text>
+  <text x="80" y="115" font-family="'Manrope', sans-serif" font-weight="500" font-size="16" fill="#C4855A">Zero-install Progressive Web App · 3-Step Ordering</text>
+
+  <!-- Step 1 Phone -->
+  <g transform="translate(80, 160)">
+    <rect width="300" height="560" rx="32" fill="#171613" stroke="#443F35" stroke-width="2"/>
+    <rect x="12" y="30" width="276" height="500" rx="20" fill="#F4EFE6"/>
+    <text x="150" y="70" font-family="'Space Grotesk', sans-serif" font-weight="700" font-size="16" fill="#25241F" text-anchor="middle">Step 1: Scan & Browse</text>
+    <rect x="30" y="100" width="240" height="120" rx="12" fill="#DFD2BC"/>
+    <rect x="30" y="240" width="240" height="50" rx="8" fill="#FFFFFF"/>
+    <rect x="30" y="305" width="240" height="50" rx="8" fill="#FFFFFF"/>
+    <rect x="30" y="370" width="240" height="50" rx="8" fill="#FFFFFF"/>
+    <rect x="30" y="445" width="240" height="40" rx="20" fill="#C4855A"/>
+    <text x="150" y="470" font-family="'Manrope', sans-serif" font-weight="700" font-size="12" fill="#FFFFFF" text-anchor="middle">Browse Full Menu</text>
+  </g>
+
+  <!-- Step 2 Phone -->
+  <g transform="translate(450, 160)">
+    <rect width="300" height="560" rx="32" fill="#171613" stroke="#443F35" stroke-width="2"/>
+    <rect x="12" y="30" width="276" height="500" rx="20" fill="#F4EFE6"/>
+    <text x="150" y="70" font-family="'Space Grotesk', sans-serif" font-weight="700" font-size="16" fill="#25241F" text-anchor="middle">Step 2: Customize Dish</text>
+    <rect x="30" y="100" width="240" height="150" rx="12" fill="#FFFFFF"/>
+    <text x="45" y="130" font-family="'Space Grotesk', sans-serif" font-weight="700" font-size="14" fill="#25241F">Spice Level</text>
+    <circle cx="55" cy="160" r="8" fill="#C4855A"/>
+    <text x="75" y="165" font-family="'Manrope', sans-serif" font-weight="600" font-size="12" fill="#25241F">Medium Spiced</text>
+    <circle cx="55" cy="190" r="8" fill="#DFD2BC"/>
+    <text x="75" y="195" font-family="'Manrope', sans-serif" font-weight="600" font-size="12" fill="#5D574B">Mild / Non-Spicy</text>
+    <rect x="30" y="270" width="240" height="140" rx="12" fill="#FFFFFF"/>
+    <text x="45" y="300" font-family="'Space Grotesk', sans-serif" font-weight="700" font-size="14" fill="#25241F">Special Kitchen Notes</text>
+    <rect x="45" y="320" width="210" height="60" rx="8" fill="#ECE3D4"/>
+    <text x="55" y="345" font-family="'Manrope', sans-serif" font-size="11" fill="#8B8474">"Extra dressing on side please"</text>
+    <rect x="30" y="445" width="240" height="40" rx="20" fill="#25241F"/>
+    <text x="150" y="470" font-family="'Manrope', sans-serif" font-weight="700" font-size="12" fill="#F4EFE6" text-anchor="middle">Add to Table Order</text>
+  </g>
+
+  <!-- Step 3 Phone -->
+  <g transform="translate(820, 160)">
+    <rect width="300" height="560" rx="32" fill="#171613" stroke="#443F35" stroke-width="2"/>
+    <rect x="12" y="30" width="276" height="500" rx="20" fill="#F4EFE6"/>
+    <text x="150" y="70" font-family="'Space Grotesk', sans-serif" font-weight="700" font-size="16" fill="#25241F" text-anchor="middle">Step 3: Live Prep Status</text>
+    <rect x="30" y="100" width="240" height="200" rx="16" fill="#FFFFFF"/>
+    <circle cx="150" cy="160" r="34" fill="#8A9E88" fill-opacity="0.2"/>
+    <circle cx="150" cy="160" r="16" fill="#8A9E88"/>
+    <text x="150" y="225" font-family="'Space Grotesk', sans-serif" font-weight="700" font-size="16" fill="#25241F" text-anchor="middle">In Kitchen Prep</text>
+    <text x="150" y="248" font-family="'Manrope', sans-serif" font-weight="500" font-size="12" fill="#7C5C3E" text-anchor="middle">Estimated: ~8 mins</text>
+    <rect x="30" y="325" width="240" height="100" rx="12" fill="#FFFFFF"/>
+    <text x="45" y="355" font-family="'Manrope', sans-serif" font-weight="600" font-size="12" fill="#5D574B">Order #RZ-8402</text>
+    <text x="45" y="380" font-family="'Manrope', sans-serif" font-weight="600" font-size="12" fill="#5D574B">Total: ₹ 990 (Taxes incl.)</text>
+    <rect x="30" y="445" width="240" height="40" rx="20" fill="#7C5C3E"/>
+    <text x="150" y="470" font-family="'Manrope', sans-serif" font-weight="700" font-size="12" fill="#FFFFFF" text-anchor="middle">Split Bill / Call Server</text>
+  </g>
+</svg>

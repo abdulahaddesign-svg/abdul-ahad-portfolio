@@ -1,0 +1,35 @@
+<svg width="1200" height="800" viewBox="0 0 1200 800" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1200" height="800" fill="#25241F"/>
+  <rect x="50" y="50" width="1100" height="700" rx="24" fill="#2B2A24" stroke="#443F35"/>
+  <text x="120" y="150" font-family="'Space Grotesk', sans-serif" font-weight="700" font-size="44" fill="#F4EFE6">Visual Identity & Packaging</text>
+  <text x="120" y="190" font-family="'Manrope', sans-serif" font-weight="600" font-size="20" fill="#C4855A">Curated Brand Systems & Retail Packaging (50+ Clients)</text>
+  <text x="120" y="225" font-family="'Manrope', sans-serif" font-weight="400" font-size="16" fill="#B8B1A1">Logomarks, stationery suites, dielines, and retail packaging</text>
+
+  <!-- Showcase Grid -->
+  <g transform="translate(120, 270)">
+    <rect width="300" height="420" rx="16" fill="#171613" stroke="#7C5C3E" stroke-opacity="0.3"/>
+    <rect x="30" y="30" width="240" height="200" rx="10" fill="#7C5C3E" fill-opacity="0.2"/>
+    <!-- Logo Monogram Symbol -->
+    <circle cx="150" cy="130" r="45" stroke="#C4855A" stroke-width="4" fill="none"/>
+    <text x="150" y="140" font-family="'Space Grotesk', sans-serif" font-weight="700" font-size="24" fill="#F4EFE6" text-anchor="middle">VO</text>
+    <text x="30" y="275" font-family="'Space Grotesk', sans-serif" font-weight="700" font-size="18" fill="#F4EFE6">Verve Botanicals</text>
+    <text x="30" y="305" font-family="'Manrope', sans-serif" font-weight="500" font-size="13" fill="#8B8474">Packaging & Bottle Labels</text>
+  </g>
+
+  <g transform="translate(460, 270)">
+    <rect width="300" height="420" rx="16" fill="#171613" stroke="#7C5C3E" stroke-opacity="0.3"/>
+    <rect x="30" y="30" width="240" height="200" rx="10" fill="#C4855A" fill-opacity="0.15"/>
+    <rect x="90" y="75" width="120" height="110" rx="6" stroke="#F4EFE6" stroke-width="3" fill="none"/>
+    <text x="150" y="140" font-family="'Space Grotesk', sans-serif" font-weight="700" font-size="22" fill="#C4855A" text-anchor="middle">AXIS</text>
+    <text x="30" y="275" font-family="'Space Grotesk', sans-serif" font-weight="700" font-size="18" fill="#F4EFE6">Axis Architecture</text>
+    <text x="30" y="305" font-family="'Manrope', sans-serif" font-weight="500" font-size="13" fill="#8B8474">Minimalist Identity & Stationery</text>
+  </g>
+
+  <g transform="translate(800, 270)">
+    <rect width="300" height="420" rx="16" fill="#171613" stroke="#7C5C3E" stroke-opacity="0.3"/>
+    <rect x="30" y="30" width="240" height="200" rx="10" fill="#8A9E88" fill-opacity="0.2"/>
+    <polygon points="150,75 200,165 100,165" stroke="#8A9E88" stroke-width="4" fill="none"/>
+    <text x="30" y="275" font-family="'Space Grotesk', sans-serif" font-weight="700" font-size="18" fill="#F4EFE6">Kuro Coffee Roasters</text>
+    <text x="30" y="305" font-family="'Manrope', sans-serif" font-weight="500" font-size="13" fill="#8B8474">Pouch Dieline & Brand Manual</text>
+  </g>
+</svg>

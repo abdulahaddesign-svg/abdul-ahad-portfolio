@@ -1,0 +1,73 @@
+<svg width="1200" height="800" viewBox="0 0 1200 800" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1200" height="800" fill="#25241F"/>
+  
+  <!-- Subtle Grid Pattern -->
+  <g opacity="0.05">
+    <path d="M0 100H1200M0 200H1200M0 300H1200M0 400H1200M0 500H1200M0 600H1200M0 700H1200" stroke="#F4EFE6" stroke-width="1"/>
+    <path d="M150 0V800M300 0V800M450 0V800M600 0V800M750 0V800M900 0V800M1050 0V800" stroke="#F4EFE6" stroke-width="1"/>
+  </g>
+
+  <!-- Accent glow and shapes -->
+  <circle cx="950" cy="350" r="280" fill="#C4855A" opacity="0.12" filter="blur(60px)"/>
+  
+  <!-- Project Branding Badge -->
+  <rect x="100" y="90" width="130" height="34" rx="17" fill="#C4855A" fill-opacity="0.15" stroke="#C4855A" stroke-width="1.5"/>
+  <text x="165" y="112" font-family="'Manrope', sans-serif" font-weight="700" font-size="12" fill="#C4855A" text-anchor="middle" letter-spacing="0.15em">CASE STUDY</text>
+
+  <!-- Title & Subtitle -->
+  <text x="100" y="180" font-family="'Space Grotesk', sans-serif" font-weight="700" font-size="52" fill="#F4EFE6" letter-spacing="-0.03em">REZTRO</text>
+  <text x="100" y="225" font-family="'Manrope', sans-serif" font-weight="500" font-size="22" fill="#CDBDA2">Digital Table Ordering System</text>
+  <text x="100" y="270" font-family="'Manrope', sans-serif" font-weight="400" font-size="16" fill="#8B8474" width="450">
+    <tspan x="100" dy="0">Mobile-first QR ordering interface, kitchen display system,</tspan>
+    <tspan x="100" dy="24">and cohesive restaurant visual identity.</tspan>
+  </text>
+
+  <!-- Metrics Pill -->
+  <g transform="translate(100, 340)">
+    <rect width="280" height="90" rx="12" fill="#2B2A24" stroke="#7C5C3E" stroke-opacity="0.4"/>
+    <text x="24" y="44" font-family="'Space Grotesk', sans-serif" font-weight="700" font-size="34" fill="#C4855A">-40%</text>
+    <text x="24" y="68" font-family="'Manrope', sans-serif" font-weight="500" font-size="14" fill="#EAE8E3">Reduction in Order Delays</text>
+  </g>
+
+  <!-- Mobile Mockup Screen Preview -->
+  <g transform="translate(680, 80)">
+    <!-- Device Frame -->
+    <rect width="400" height="660" rx="42" fill="#171613" stroke="#5D574B" stroke-width="3"/>
+    <rect x="140" y="16" width="120" height="20" rx="10" fill="#25241F"/>
+    
+    <!-- Screen Content -->
+    <rect x="16" y="46" width="368" height="598" rx="28" fill="#F4EFE6"/>
+    
+    <!-- App Header -->
+    <rect x="36" y="70" width="328" height="50" rx="8" fill="#FFFFFF"/>
+    <circle cx="65" cy="95" r="14" fill="#C4855A"/>
+    <text x="92" y="100" font-family="'Space Grotesk', sans-serif" font-weight="700" font-size="16" fill="#25241F">Reztro Dining</text>
+    <rect x="290" y="83" width="55" height="24" rx="12" fill="#7C5C3E" fill-opacity="0.15"/>
+    <text x="317" y="99" font-family="'Manrope', sans-serif" font-weight="700" font-size="11" fill="#7C5C3E" text-anchor="middle">Table 04</text>
+    
+    <!-- Featured Food Item Card -->
+    <rect x="36" y="140" width="328" height="180" rx="16" fill="#FFFFFF"/>
+    <rect x="36" y="140" width="328" height="110" rx="16" fill="#CDBDA2"/>
+    <text x="200" y="200" font-family="'Manrope', sans-serif" font-weight="600" font-size="14" fill="#5D574B" text-anchor="middle">[ Signature Artisan Dish ]</text>
+    <text x="52" y="278" font-family="'Space Grotesk', sans-serif" font-weight="700" font-size="18" fill="#25241F">Truffle Herb Tagliatelle</text>
+    <text x="52" y="302" font-family="'Manrope', sans-serif" font-weight="700" font-size="15" fill="#C4855A">₹ 420</text>
+    <rect x="270" y="274" width="76" height="32" rx="16" fill="#25241F"/>
+    <text x="308" y="294" font-family="'Manrope', sans-serif" font-weight="700" font-size="12" fill="#F4EFE6" text-anchor="middle">+ ADD</text>
+
+    <!-- Secondary Items List -->
+    <rect x="36" y="340" width="328" height="90" rx="14" fill="#FFFFFF"/>
+    <rect x="48" y="352" width="66" height="66" rx="10" fill="#DFD2BC"/>
+    <text x="126" y="380" font-family="'Space Grotesk', sans-serif" font-weight="700" font-size="15" fill="#25241F">Burrata Peach Salad</text>
+    <text x="126" y="402" font-family="'Manrope', sans-serif" font-weight="700" font-size="13" fill="#C4855A">₹ 360</text>
+
+    <rect x="36" y="445" width="328" height="90" rx="14" fill="#FFFFFF"/>
+    <rect x="48" y="457" width="66" height="66" rx="10" fill="#DFD2BC"/>
+    <text x="126" y="485" font-family="'Space Grotesk', sans-serif" font-weight="700" font-size="15" fill="#25241F">Charred Citrus Mocktail</text>
+    <text x="126" y="507" font-family="'Manrope', sans-serif" font-weight="700" font-size="13" fill="#C4855A">₹ 210</text>
+
+    <!-- Floating Order Bar -->
+    <rect x="36" y="555" width="328" height="62" rx="18" fill="#25241F"/>
+    <text x="60" y="591" font-family="'Manrope', sans-serif" font-weight="600" font-size="13" fill="#CDBDA2">2 Items in Cart</text>
+    <text x="290" y="591" font-family="'Space Grotesk', sans-serif" font-weight="700" font-size="14" fill="#C4855A">Place Order →</text>
+  </g>
+</svg>

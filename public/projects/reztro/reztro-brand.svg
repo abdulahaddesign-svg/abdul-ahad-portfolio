@@ -1,0 +1,47 @@
+<svg width="1200" height="800" viewBox="0 0 1200 800" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1200" height="800" fill="#F4EFE6"/>
+  <text x="100" y="120" font-family="'Space Grotesk', sans-serif" font-weight="700" font-size="36" fill="#25241F">Reztro Brand Identity & Design System</text>
+  <text x="100" y="160" font-family="'Manrope', sans-serif" font-weight="500" font-size="18" fill="#7C5C3E">Geometric logomark, gastronomic color tokens, and QR table standees</text>
+  
+  <!-- Color Palette Chips -->
+  <g transform="translate(100, 220)">
+    <rect width="180" height="240" rx="16" fill="#C4855A"/>
+    <text x="20" y="190" font-family="'Space Grotesk', sans-serif" font-weight="700" font-size="18" fill="#FFFFFF">Burnt Ochre</text>
+    <text x="20" y="215" font-family="'Manrope', sans-serif" font-weight="500" font-size="14" fill="#FDF7F3">#C4855A</text>
+  </g>
+  <g transform="translate(310, 220)">
+    <rect width="180" height="240" rx="16" fill="#25241F"/>
+    <text x="20" y="190" font-family="'Space Grotesk', sans-serif" font-weight="700" font-size="18" fill="#FFFFFF">Deep Charcoal</text>
+    <text x="20" y="215" font-family="'Manrope', sans-serif" font-weight="500" font-size="14" fill="#EAE8E3">#25241F</text>
+  </g>
+  <g transform="translate(520, 220)">
+    <rect width="180" height="240" rx="16" fill="#8A9E88"/>
+    <text x="20" y="190" font-family="'Space Grotesk', sans-serif" font-weight="700" font-size="18" fill="#FFFFFF">Culinary Sage</text>
+    <text x="20" y="215" font-family="'Manrope', sans-serif" font-weight="500" font-size="14" fill="#F5F7F5">#8A9E88</text>
+  </g>
+  <g transform="translate(730, 220)">
+    <rect width="370" height="240" rx="16" fill="#ECE3D4" stroke="#7C5C3E" stroke-opacity="0.3"/>
+    <text x="30" y="60" font-family="'Space Grotesk', sans-serif" font-weight="700" font-size="22" fill="#25241F">Typography System</text>
+    <text x="30" y="105" font-family="'Space Grotesk', sans-serif" font-weight="700" font-size="28" fill="#25241F">Space Grotesk Bold</text>
+    <text x="30" y="145" font-family="'Manrope', sans-serif" font-weight="500" font-size="16" fill="#5D574B">Manrope Medium / Regular for menus & metadata</text>
+    <text x="30" y="180" font-family="'Manrope', sans-serif" font-weight="400" font-size="14" fill="#8B8474">Engineered for sub-second legibility in low ambient lighting</text>
+  </g>
+
+  <!-- Physical QR Standee Spec -->
+  <g transform="translate(100, 500)">
+    <rect width="1000" height="220" rx="18" fill="#FFFFFF" stroke="#DFD2BC"/>
+    <rect x="40" y="35" width="150" height="150" rx="12" fill="#25241F"/>
+    <!-- Simulated QR Code Icon -->
+    <rect x="55" y="50" width="40" height="40" fill="#FFFFFF"/>
+    <rect x="65" y="60" width="20" height="20" fill="#25241F"/>
+    <rect x="135" y="50" width="40" height="40" fill="#FFFFFF"/>
+    <rect x="145" y="60" width="20" height="20" fill="#25241F"/>
+    <rect x="55" y="130" width="40" height="40" fill="#FFFFFF"/>
+    <rect x="65" y="140" width="20" height="20" fill="#25241F"/>
+    <rect x="120" y="120" width="25" height="25" fill="#C4855A"/>
+
+    <text x="230" y="75" font-family="'Space Grotesk', sans-serif" font-weight="700" font-size="24" fill="#25241F">Physical Touchpoint: Acrylic QR Table Standee</text>
+    <text x="230" y="110" font-family="'Manrope', sans-serif" font-weight="500" font-size="16" fill="#5D574B">Direct NFC-tap + Laser-etched high contrast QR matrix.</text>
+    <text x="230" y="140" font-family="'Manrope', sans-serif" font-weight="400" font-size="14" fill="#8B8474">Designed to withstand spillages, sunlight glare, and rapid customer scanning angles.</text>
+  </g>
+</svg>

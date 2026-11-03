@@ -1,0 +1,109 @@
+import type { Config } from "tailwindcss";
+
+const config: Config = {
+  content: [
+    "./src/pages/**/*.{js,ts,jsx,tsx,mdx}",
+    "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
+    "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
+  ],
+  theme: {
+    extend: {
+      colors: {
+        charcoal: {
+          DEFAULT: "#25241F",
+          50: "#F6F5F3",
+          100: "#EAE8E3",
+          200: "#D3CEC4",
+          300: "#B8B1A1",
+          400: "#8B8474",
+          500: "#5D574B",
+          600: "#443F35",
+          700: "#343129",
+          800: "#2B2A24",
+          900: "#25241F",
+          950: "#171613",
+        },
+        ivory: {
+          DEFAULT: "#F4EFE6",
+          50: "#FCFAF7",
+          100: "#F8F5F0",
+          200: "#F4EFE6",
+          300: "#ECE3D4",
+          400: "#DFD2BC",
+          500: "#CDBDA2",
+          600: "#B09E81",
+          700: "#8C7A5E",
+          800: "#695A44",
+          900: "#493D2C",
+        },
+        brown: {
+          DEFAULT: "#7C5C3E",
+          50: "#F9F5F1",
+          100: "#EFE6DD",
+          200: "#DEC8B6",
+          300: "#CAA78D",
+          400: "#A97F5B",
+          500: "#7C5C3E",
+          600: "#65492F",
+          700: "#4F3823",
+          800: "#3D2B1A",
+          900: "#2B1E12",
+        },
+        copper: {
+          DEFAULT: "#C4855A",
+          50: "#FDF7F3",
+          100: "#FAECE3",
+          200: "#F4D7C3",
+          300: "#EBBFA0",
+          400: "#DC9E77",
+          500: "#C4855A",
+          600: "#B26E40",
+          700: "#91542D",
+          800: "#714122",
+          900: "#522F18",
+        },
+        sage: {
+          DEFAULT: "#8A9E88",
+          50: "#F5F7F5",
+          100: "#E8ECE7",
+          200: "#D2DDD0",
+          300: "#BAC9B7",
+          400: "#A2B49F",
+          500: "#8A9E88",
+          600: "#70836E",
+          700: "#576755",
+          800: "#3F4B3E",
+          900: "#2B332A",
+        },
+      },
+      fontFamily: {
+        display: ["var(--font-space-grotesk)", "sans-serif"],
+        sans: ["var(--font-manrope)", "sans-serif"],
+      },
+      letterSpacing: {
+        tighter: "-0.04em",
+        tight: "-0.02em",
+        wide: "0.04em",
+        wider: "0.08em",
+        widest: "0.15em",
+      },
+      animation: {
+        "fade-in": "fadeIn 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards",
+        "pulse-subtle": "pulseSubtle 4s ease-in-out infinite",
+      },
+      keyframes: {
+        fadeIn: {
+          "0%": { opacity: "0", transform: "translateY(8px)" },
+          "100%": { opacity: "1", transform: "translateY(0)" },
+        },
+        pulseSubtle: {
+          "0%, 100%": { opacity: "1" },
+          "50%": { opacity: "0.7" },
+        },
+      },
+    },
+  },
+  plugins: [],
+};
+
+export default config;

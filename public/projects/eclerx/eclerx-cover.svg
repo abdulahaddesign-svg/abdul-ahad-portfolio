@@ -1,0 +1,33 @@
+<svg width="1200" height="800" viewBox="0 0 1200 800" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1200" height="800" fill="#F4EFE6"/>
+  <rect x="50" y="50" width="1100" height="700" rx="24" fill="#FFFFFF" stroke="#DFD2BC"/>
+  
+  <rect x="110" y="100" width="180" height="32" rx="16" fill="#8A9E88" fill-opacity="0.2"/>
+  <text x="200" y="121" font-family="'Manrope', sans-serif" font-weight="700" font-size="12" fill="#576755" text-anchor="middle">AWARD-WINNING CAMPAIGN</text>
+
+  <text x="110" y="180" font-family="'Space Grotesk', sans-serif" font-weight="700" font-size="44" fill="#25241F">eClerx Global Client Collaterals</text>
+  <text x="110" y="215" font-family="'Manrope', sans-serif" font-weight="600" font-size="20" fill="#7C5C3E">Editorial Magazines, Promotional Collateral & Digital Banners</text>
+  <text x="110" y="250" font-family="'Manrope', sans-serif" font-weight="400" font-size="16" fill="#5D574B">Led creative visual updates driving a verified 25% lift in campaign engagement.</text>
+
+  <!-- Editorial Layout Preview -->
+  <g transform="translate(110, 300)">
+    <rect width="460" height="380" rx="14" fill="#ECE3D4" stroke="#CDBDA2"/>
+    <rect x="30" y="30" width="400" height="180" rx="8" fill="#DFD2BC"/>
+    <text x="50" y="250" font-family="'Space Grotesk', sans-serif" font-weight="700" font-size="22" fill="#25241F">Corporate Publications</text>
+    <text x="50" y="280" font-family="'Manrope', sans-serif" font-weight="500" font-size="14" fill="#7C5C3E">Multi-page corporate brochures, flyers and magazines</text>
+    <text x="50" y="315" font-family="'Manrope', sans-serif" font-weight="400" font-size="13" fill="#8B8474">Precision preflight CMYK color profiles & editorial typography</text>
+  </g>
+  
+  <g transform="translate(600, 300)">
+    <rect width="460" height="380" rx="14" fill="#25241F"/>
+    <text x="40" y="60" font-family="'Space Grotesk', sans-serif" font-weight="700" font-size="20" fill="#C4855A">EMPLOYEE OF THE YEAR 2025</text>
+    <text x="40" y="110" font-family="'Space Grotesk', sans-serif" font-weight="700" font-size="48" fill="#F4EFE6">+25%</text>
+    <text x="40" y="145" font-family="'Manrope', sans-serif" font-weight="600" font-size="18" fill="#DFD2BC">Campaign Audience Engagement</text>
+    <rect x="40" y="190" width="380" height="1" fill="#443F35"/>
+    <text x="40" y="230" font-family="'Manrope', sans-serif" font-weight="500" font-size="15" fill="#B8B1A1">
+      <tspan x="40" dy="0">Designed visual communication systems</tspan>
+      <tspan x="40" dy="24">and cross-channel assets for premier accounts,</tspan>
+      <tspan x="40" dy="24">recognized with top company annual honor.</tspan>
+    </text>
+  </g>
+</svg>

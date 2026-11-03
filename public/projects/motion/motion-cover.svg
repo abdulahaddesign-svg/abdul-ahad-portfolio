@@ -1,0 +1,35 @@
+<svg width="1200" height="800" viewBox="0 0 1200 800" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1200" height="800" fill="#171613"/>
+  <rect x="50" y="50" width="1100" height="700" rx="24" fill="#25241F" stroke="#343129"/>
+  <text x="120" y="150" font-family="'Space Grotesk', sans-serif" font-weight="700" font-size="44" fill="#F4EFE6">Kinetic Motion & Social Reels</text>
+  <text x="120" y="190" font-family="'Manrope', sans-serif" font-weight="600" font-size="20" fill="#C4855A">2D Keyframe Animation, Logo Stings & Video Editing</text>
+  <text x="120" y="225" font-family="'Manrope', sans-serif" font-weight="400" font-size="16" fill="#8B8474">Dynamic easing curves, typographic timing, and 9:16 mobile reel formats</text>
+
+  <!-- Motion Frames Strip -->
+  <g transform="translate(120, 280)">
+    <rect width="960" height="380" rx="16" fill="#171613" stroke="#443F35"/>
+    
+    <!-- Timeline Ruler -->
+    <line x1="40" y1="50" x2="920" y2="50" stroke="#443F35" stroke-width="2"/>
+    <circle cx="280" cy="50" r="8" fill="#C4855A"/>
+    <text x="280" y="35" font-family="'Manrope', sans-serif" font-weight="700" font-size="12" fill="#C4855A" text-anchor="middle">00:04:12</text>
+    
+    <!-- Frame 1 -->
+    <rect x="50" y="80" width="260" height="260" rx="12" fill="#25241F" stroke="#7C5C3E" stroke-opacity="0.3"/>
+    <text x="70" y="200" font-family="'Space Grotesk', sans-serif" font-weight="700" font-size="28" fill="#F4EFE6">KINETIC</text>
+    <line x1="70" y1="220" x2="160" y2="220" stroke="#C4855A" stroke-width="3"/>
+    <text x="70" y="310" font-family="'Manrope', sans-serif" font-weight="500" font-size="12" fill="#8B8474">Frame 01 · Type Pop</text>
+
+    <!-- Frame 2 -->
+    <rect x="350" y="80" width="260" height="260" rx="12" fill="#25241F" stroke="#C4855A"/>
+    <circle cx="480" cy="180" r="50" stroke="#C4855A" stroke-width="4" fill="none"/>
+    <polygon points="480,150 510,200 450,200" fill="#F4EFE6"/>
+    <text x="370" y="310" font-family="'Manrope', sans-serif" font-weight="500" font-size="12" fill="#C4855A">Frame 02 · Geometric Morph</text>
+
+    <!-- Frame 3 -->
+    <rect x="650" y="80" width="260" height="260" rx="12" fill="#25241F" stroke="#7C5C3E" stroke-opacity="0.3"/>
+    <text x="670" y="190" font-family="'Space Grotesk', sans-serif" font-weight="700" font-size="22" fill="#F4EFE6">SEAMLESS</text>
+    <text x="670" y="215" font-family="'Space Grotesk', sans-serif" font-weight="700" font-size="22" fill="#8A9E88">TRANSITION</text>
+    <text x="670" y="310" font-family="'Manrope', sans-serif" font-weight="500" font-size="12" fill="#8B8474">Frame 03 · Velocity Blur</text>
+  </g>
+</svg>
