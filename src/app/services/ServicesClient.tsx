@@ -135,10 +135,6 @@ export function ServicesClient({ services }: ServicesClientProps) {
         className="sticky top-16 sm:top-20 z-30 bg-ivory/95 backdrop-blur-md border-b border-charcoal/15 py-4 overflow-x-auto scrollbar-none"
       >
         <div className="max-w-[1820px] mx-auto px-4 sm:px-8 lg:px-12 flex items-center gap-2 sm:gap-6 whitespace-nowrap min-w-max">
-          <span className="text-[11px] font-mono uppercase tracking-widest text-charcoal-400 mr-2 shrink-0">
-            Index ({services.length}):
-          </span>
-
           {services.map((srv, idx) => {
             const isActive = activeSlug === srv.slug;
             const numberFormatted = String(srv.sortOrder || idx + 1).padStart(2, '0');
