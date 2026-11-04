@@ -23,9 +23,10 @@ export function SafeImage({
     setCurrentSrc(src || actualFallback);
   }, [src, actualFallback]);
 
-  const isDataOrSvg =
+  const isDirectLoad =
     typeof currentSrc === 'string' &&
-    (currentSrc.startsWith('data:') ||
+    (currentSrc.startsWith('http') ||
+      currentSrc.startsWith('data:') ||
       currentSrc.endsWith('.svg') ||
       currentSrc.includes('.svg?'));
 
@@ -34,7 +35,7 @@ export function SafeImage({
       {...props}
       alt={alt || 'Abdul Ahad Portfolio Media'}
       src={currentSrc}
-      unoptimized={props.unoptimized !== undefined ? props.unoptimized : isDataOrSvg}
+      unoptimized={props.unoptimized !== undefined ? props.unoptimized : isDirectLoad}
       onError={() => {
         if (currentSrc !== actualFallback) {
           setCurrentSrc(actualFallback);

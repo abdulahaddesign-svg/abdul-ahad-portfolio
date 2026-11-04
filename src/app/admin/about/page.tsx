@@ -71,8 +71,8 @@ export default function AdminAboutPage() {
       await updateSiteSettings(settings);
       setIsSuccess(true);
       setTimeout(() => setIsSuccess(false), 3000);
-    } catch {
-      alert('Failed to save About section.');
+    } catch (err: any) {
+      alert(err.message || 'Failed to save About section.');
     } finally {
       setIsSaving(false);
     }
@@ -90,7 +90,7 @@ export default function AdminAboutPage() {
   }
 
   return (
-    <form onSubmit={handleSave} className="space-y-10 font-sans max-w-5xl">
+    <form onSubmit={handleSave} noValidate className="space-y-10 font-sans max-w-5xl">
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-charcoal/15">
         <div>
@@ -117,6 +117,7 @@ export default function AdminAboutPage() {
             size="md"
             isLoading={isSaving}
             icon={<Save className="w-4 h-4" />}
+            onClick={(e) => handleSave(e)}
           >
             Save Changes
           </Button>

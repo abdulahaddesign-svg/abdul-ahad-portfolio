@@ -25,12 +25,17 @@ export default function AdminInquiriesPage() {
 
   const fetchInquiries = async () => {
     setLoading(true);
-    const data = await getInquiries();
-    setInquiries(data);
-    if (data.length > 0 && !selectedInquiry) {
-      setSelectedInquiry(data[0]);
+    try {
+      const data = await getInquiries();
+      setInquiries(data || []);
+      if (data && data.length > 0) {
+        setSelectedInquiry(prev => prev ? (data.find(d => d.id === prev.id) || data[0]) : data[0]);
+      }
+    } catch (err) {
+      console.error('Failed to fetch inquiries:', err);
+    } finally {
+      setLoading(false);
     }
-    setLoading(false);
   };
 
   useEffect(() => {

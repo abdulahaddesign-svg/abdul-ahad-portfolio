@@ -85,7 +85,7 @@ export function HeroSection({ settings }: HeroSectionProps) {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
           >
-            <h1 className="font-display font-extrabold text-5xl sm:text-7xl md:text-8xl lg:text-[7.2rem] xl:text-[8rem] tracking-tighter leading-[0.92] text-charcoal uppercase">
+            <h1 className="font-display font-extrabold text-5xl sm:text-7xl md:text-8xl lg:text-[7.2rem] xl:text-[8rem] tracking-tighter leading-[0.92] text-charcoal">
               {headline}
               {headlineLine2 && <span className="block text-copper">{headlineLine2}</span>}
             </h1>

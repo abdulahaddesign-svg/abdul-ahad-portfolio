@@ -414,7 +414,7 @@ export async function duplicateProject(id: string): Promise<Project | null> {
 export async function getInquiries(): Promise<Inquiry[]> {
   if (typeof window !== 'undefined') {
     try {
-      const res = await fetch('/api/inquiries');
+      const res = await fetch(`/api/inquiries?_t=${Date.now()}`, { cache: 'no-store' });
       if (res.ok) {
         return await res.json();
       }
@@ -798,20 +798,17 @@ let localExperiences: ExperienceItem[] = [...EXPERIENCE_DATA];
 
 export async function getExperiences(includeHidden = false): Promise<ExperienceItem[]> {
   const supabase = createClient();
+  let dbExperiences: ExperienceItem[] = [];
+
   if (supabase) {
     try {
-      let query = supabase
+      const { data, error } = await supabase
         .from('experience')
         .select('*')
         .order('sort_order', { ascending: true });
 
-      if (!includeHidden) {
-        query = query.eq('is_visible', true);
-      }
-
-      const { data, error } = await query;
       if (!error && data && data.length > 0) {
-        return data.map((row: any) => ({
+        dbExperiences = data.map((row: any) => ({
           id: row.id,
           company: row.company,
           role: row.role,
@@ -829,11 +826,33 @@ export async function getExperiences(includeHidden = false): Promise<ExperienceI
           isVisible: row.is_visible ?? true,
           createdAt: row.created_at,
           updatedAt: row.updated_at,
-        }));
+        })).filter((e: ExperienceItem) => includeHidden || e.isVisible !== false);
+      } else {
+        // Fallback: Check if experiences are stored in site_settings.about_bio
+        const { data: setRow } = await supabase
+          .from('site_settings')
+          .select('about_bio')
+          .eq('id', 'primary')
+          .maybeSingle();
+
+        if (setRow?.about_bio && typeof setRow.about_bio === 'string' && setRow.about_bio.startsWith('{')) {
+          try {
+            const meta = JSON.parse(setRow.about_bio);
+            if (Array.isArray(meta.experiences) && meta.experiences.length > 0) {
+              dbExperiences = meta.experiences.filter((e: ExperienceItem) => includeHidden || e.isVisible !== false);
+            }
+          } catch {
+            // ignore
+          }
+        }
       }
     } catch {
       // Fallback
     }
+  }
+
+  if (dbExperiences.length > 0) {
+    return dbExperiences.sort((a, b) => a.sortOrder - b.sortOrder);
   }
 
   return [...localExperiences]
@@ -965,13 +984,6 @@ export async function saveExperience(item: Partial<ExperienceItem> & { id?: stri
     }
   }
 
-  const existingIdx = localExperiences.findIndex(e => e.id === item.id);
-  if (existingIdx !== -1) {
-    const updated = { ...localExperiences[existingIdx], ...item };
-    localExperiences[existingIdx] = updated as ExperienceItem;
-    return updated as ExperienceItem;
-  }
-
   const newExp: ExperienceItem = {
     id: item.id || `exp-${Date.now()}`,
     company: item.company || 'New Company',
@@ -991,7 +1003,36 @@ export async function saveExperience(item: Partial<ExperienceItem> & { id?: stri
     createdAt: now,
     updatedAt: now,
   };
-  localExperiences.push(newExp);
+
+  const existingIdx = localExperiences.findIndex(e => e.id === item.id);
+  if (existingIdx !== -1) {
+    localExperiences[existingIdx] = { ...localExperiences[existingIdx], ...newExp };
+  } else {
+    localExperiences.push(newExp);
+  }
+
+  // Backup sync to site_settings.about_bio
+  if (supabase) {
+    try {
+      const { data: setRow } = await supabase.from('site_settings').select('about_bio').eq('id', 'primary').maybeSingle();
+      let meta: Record<string, any> = {};
+      if (setRow?.about_bio && typeof setRow.about_bio === 'string' && setRow.about_bio.startsWith('{')) {
+        meta = JSON.parse(setRow.about_bio);
+      }
+      let list: ExperienceItem[] = Array.isArray(meta.experiences) ? meta.experiences : [...localExperiences];
+      const idx = list.findIndex(e => e.id === newExp.id || e.company === newExp.company);
+      if (idx !== -1) {
+        list[idx] = { ...list[idx], ...newExp };
+      } else {
+        list.push(newExp);
+      }
+      meta.experiences = list;
+      await supabase.from('site_settings').update({ about_bio: JSON.stringify(meta) }).eq('id', 'primary');
+    } catch {
+      // ignore
+    }
+  }
+
   return newExp;
 }
 
@@ -1024,6 +1065,19 @@ export async function deleteExperience(id: string): Promise<boolean> {
     } catch {
       // Fallback
     }
+
+    try {
+      const { data: setRow } = await supabase.from('site_settings').select('about_bio').eq('id', 'primary').maybeSingle();
+      if (setRow?.about_bio && typeof setRow.about_bio === 'string' && setRow.about_bio.startsWith('{')) {
+        const meta = JSON.parse(setRow.about_bio);
+        if (Array.isArray(meta.experiences)) {
+          meta.experiences = meta.experiences.filter((e: any) => e.id !== id && e.company !== id);
+          await supabase.from('site_settings').update({ about_bio: JSON.stringify(meta) }).eq('id', 'primary');
+        }
+      }
+    } catch {
+      // ignore
+    }
   }
 
   const initialLen = localExperiences.length;
@@ -1032,6 +1086,17 @@ export async function deleteExperience(id: string): Promise<boolean> {
 }
 
 export async function getSiteSettings(): Promise<SiteSettings> {
+  if (typeof window !== 'undefined') {
+    try {
+      const res = await fetch(`/api/settings?_t=${Date.now()}`, { cache: 'no-store' });
+      if (res.ok) {
+        return await res.json();
+      }
+    } catch {
+      // Fallback
+    }
+  }
+
   const supabase = createClient();
   if (supabase) {
     try {
@@ -1042,86 +1107,95 @@ export async function getSiteSettings(): Promise<SiteSettings> {
         .maybeSingle();
 
       if (!error && data) {
+        let meta: Record<string, any> = {};
+        if (data.about_bio && typeof data.about_bio === 'string' && data.about_bio.startsWith('{')) {
+          try {
+            meta = JSON.parse(data.about_bio);
+          } catch {
+            // ignore
+          }
+        }
+
         return {
           ...localSettings,
-          name: data.name ?? localSettings.name,
-          title: data.title ?? localSettings.title,
-          tagline: data.tagline ?? localSettings.tagline,
-          email: data.email ?? localSettings.email,
-          phone: data.phone ?? localSettings.phone,
-          whatsappNumber: data.whatsapp_number ?? localSettings.whatsappNumber,
-          location: data.location ?? localSettings.location,
-          behanceUrl: data.behance_url ?? localSettings.behanceUrl,
-          linkedinUrl: data.linkedin_url ?? localSettings.linkedinUrl,
-          instagramUrl: data.instagram_url ?? localSettings.instagramUrl,
-          dribbbleUrl: data.dribbble_url ?? localSettings.dribbbleUrl,
+          name: data.name ?? meta.name ?? localSettings.name,
+          title: data.title ?? meta.title ?? localSettings.title,
+          tagline: data.tagline ?? meta.tagline ?? localSettings.tagline,
+          email: data.email ?? meta.email ?? localSettings.email,
+          phone: data.phone ?? meta.phone ?? localSettings.phone,
+          whatsappNumber: data.whatsapp_number ?? meta.whatsappNumber ?? localSettings.whatsappNumber,
+          location: data.location ?? meta.location ?? localSettings.location,
+          behanceUrl: data.behance_url ?? meta.behanceUrl ?? localSettings.behanceUrl,
+          linkedinUrl: data.linkedin_url ?? meta.linkedinUrl ?? localSettings.linkedinUrl,
+          instagramUrl: data.instagram_url ?? meta.instagramUrl ?? localSettings.instagramUrl,
+          dribbbleUrl: data.dribbble_url ?? meta.dribbbleUrl ?? localSettings.dribbbleUrl,
 
           // Header
-          headerLogoLightUrl: data.header_logo_light_url ?? localSettings.headerLogoLightUrl,
-          headerLogoDarkUrl: data.header_logo_dark_url ?? localSettings.headerLogoDarkUrl,
-          logoAltText: data.logo_alt_text ?? localSettings.logoAltText,
-          headerNavLinks: Array.isArray(data.header_nav_links) ? data.header_nav_links : localSettings.headerNavLinks,
-          headerCtaText: data.header_cta_text ?? localSettings.headerCtaText,
-          headerCtaHref: data.header_cta_href ?? localSettings.headerCtaHref,
-          availabilityStatus: data.availability_status ?? localSettings.availabilityStatus,
-          availabilityMessage: data.availability_message ?? localSettings.availabilityMessage,
-          locationTimeText: data.location_time_text ?? localSettings.locationTimeText,
+          headerLogoLightUrl: data.header_logo_light_url ?? meta.headerLogoLightUrl ?? localSettings.headerLogoLightUrl,
+          headerLogoDarkUrl: data.header_logo_dark_url ?? meta.headerLogoDarkUrl ?? localSettings.headerLogoDarkUrl,
+          logoAltText: data.logo_alt_text ?? meta.logoAltText ?? localSettings.logoAltText,
+          headerNavLinks: Array.isArray(data.header_nav_links) ? data.header_nav_links : (meta.headerNavLinks ?? localSettings.headerNavLinks),
+          headerCtaText: data.header_cta_text ?? meta.headerCtaText ?? localSettings.headerCtaText,
+          headerCtaHref: data.header_cta_href ?? meta.headerCtaHref ?? localSettings.headerCtaHref,
+          availabilityStatus: data.availability_status ?? meta.availabilityStatus ?? localSettings.availabilityStatus,
+          availabilityMessage: data.availability_message ?? meta.availabilityMessage ?? localSettings.availabilityMessage,
+          locationTimeText: data.location_time_text ?? meta.locationTimeText ?? localSettings.locationTimeText,
 
           // Hero
-          heroHeadline: data.hero_headline ?? localSettings.heroHeadline,
-          heroHeadlineLine2: data.hero_headline_line2 ?? localSettings.heroHeadlineLine2,
-          heroHighlightedWords: data.hero_highlighted_words ?? localSettings.heroHighlightedWords,
-          heroTitle: data.hero_title ?? localSettings.heroTitle,
-          heroSubtitle: data.hero_subtitle ?? localSettings.heroSubtitle,
-          heroSupportingCopy: data.hero_supporting_copy ?? localSettings.heroSupportingCopy,
-          heroIntroSecondary: data.hero_intro_secondary ?? localSettings.heroIntroSecondary,
-          heroLocationLabel: data.hero_location_label ?? localSettings.heroLocationLabel,
-          heroPrimaryCtaText: data.hero_primary_cta_text ?? localSettings.heroPrimaryCtaText,
-          heroPrimaryCtaHref: data.hero_primary_cta_href ?? localSettings.heroPrimaryCtaHref,
-          heroSecondaryCtaText: data.hero_secondary_cta_text ?? localSettings.heroSecondaryCtaText,
-          heroSecondaryCtaHref: data.hero_secondary_cta_href ?? localSettings.heroSecondaryCtaHref,
-          heroBgImage: data.hero_bg_image ?? localSettings.heroBgImage,
-          heroProfileImage: data.hero_profile_image ?? localSettings.heroProfileImage,
-          heroMonogramVisible: data.hero_monogram_visible ?? localSettings.heroMonogramVisible,
-          heroMonogramUrl: data.hero_monogram_url ?? localSettings.heroMonogramUrl,
-          heroAnimationEnabled: data.hero_animation_enabled ?? localSettings.heroAnimationEnabled,
+          heroHeadline: data.hero_headline ?? meta.heroHeadline ?? localSettings.heroHeadline,
+          heroHeadlineLine2: data.hero_headline_line2 ?? meta.heroHeadlineLine2 ?? localSettings.heroHeadlineLine2,
+          heroHighlightedWords: data.hero_highlighted_words ?? meta.heroHighlightedWords ?? localSettings.heroHighlightedWords,
+          heroTitle: data.hero_title ?? meta.heroTitle ?? localSettings.heroTitle,
+          heroSubtitle: data.hero_subtitle ?? meta.heroSubtitle ?? localSettings.heroSubtitle,
+          heroSupportingCopy: data.hero_supporting_copy ?? meta.heroSupportingCopy ?? localSettings.heroSupportingCopy,
+          heroIntroSecondary: data.hero_intro_secondary ?? meta.heroIntroSecondary ?? localSettings.heroIntroSecondary,
+          heroLocationLabel: data.hero_location_label ?? meta.heroLocationLabel ?? localSettings.heroLocationLabel,
+          heroPrimaryCtaText: data.hero_primary_cta_text ?? meta.heroPrimaryCtaText ?? localSettings.heroPrimaryCtaText,
+          heroPrimaryCtaHref: data.hero_primary_cta_href ?? meta.heroPrimaryCtaHref ?? localSettings.heroPrimaryCtaHref,
+          heroSecondaryCtaText: data.hero_secondary_cta_text ?? meta.heroSecondaryCtaText ?? localSettings.heroSecondaryCtaText,
+          heroSecondaryCtaHref: data.hero_secondary_cta_href ?? meta.heroSecondaryCtaHref ?? localSettings.heroSecondaryCtaHref,
+          heroBgImage: data.hero_bg_image ?? meta.heroBgImage ?? localSettings.heroBgImage,
+          heroProfileImage: data.hero_profile_image ?? meta.heroProfileImage ?? localSettings.heroProfileImage,
+          heroMonogramVisible: data.hero_monogram_visible ?? meta.heroMonogramVisible ?? localSettings.heroMonogramVisible,
+          heroMonogramUrl: data.hero_monogram_url ?? meta.heroMonogramUrl ?? localSettings.heroMonogramUrl,
+          heroAnimationEnabled: data.hero_animation_enabled ?? meta.heroAnimationEnabled ?? localSettings.heroAnimationEnabled,
 
           // About
-          aboutSectionLabel: data.about_section_label ?? localSettings.aboutSectionLabel,
-          aboutHeadline: data.about_headline ?? localSettings.aboutHeadline,
-          aboutIntro: data.about_intro ?? localSettings.aboutIntro,
-          aboutPhilosophy: data.about_philosophy ?? localSettings.aboutPhilosophy,
-          aboutDescription: data.about_description ?? localSettings.aboutDescription,
-          aboutBio: data.about_bio ?? localSettings.aboutBio,
-          profilePhotoUrl: data.profile_photo_url ?? localSettings.profilePhotoUrl,
-          profilePhotoAlt: data.profile_photo_alt ?? localSettings.profilePhotoAlt,
-          experienceYears: data.experience_years ?? localSettings.experienceYears,
-          achievementsSummary: data.achievements_summary ?? localSettings.achievementsSummary,
-          experienceHighlights: Array.isArray(data.experience_highlights) ? data.experience_highlights : localSettings.experienceHighlights,
-          achievementHighlights: Array.isArray(data.achievement_highlights) ? data.achievement_highlights : localSettings.achievementHighlights,
-          resumeUrl: data.resume_url ?? localSettings.resumeUrl,
-          resumeLabel: data.resume_label ?? localSettings.resumeLabel,
-          resumeVisible: data.resume_visible ?? localSettings.resumeVisible,
-          educationDegree: data.education_degree ?? localSettings.educationDegree,
-          educationInstitution: data.education_institution ?? localSettings.educationInstitution,
-          educationYear: data.education_year ?? localSettings.educationYear,
-          educationAggregate: data.education_aggregate ?? localSettings.educationAggregate,
+          aboutSectionLabel: data.about_section_label ?? meta.aboutSectionLabel ?? localSettings.aboutSectionLabel,
+          aboutHeadline: data.about_headline ?? meta.aboutHeadline ?? localSettings.aboutHeadline,
+          aboutIntro: data.about_intro ?? meta.aboutIntro ?? localSettings.aboutIntro,
+          aboutPhilosophy: data.about_philosophy ?? meta.aboutPhilosophy ?? localSettings.aboutPhilosophy,
+          aboutDescription: data.about_description ?? meta.aboutDescription ?? localSettings.aboutDescription,
+          aboutBio: meta.aboutBio ?? (data.about_bio?.startsWith('{') ? data.about_description : data.about_bio) ?? localSettings.aboutBio,
+          profilePhotoUrl: data.profile_photo_url ?? meta.profilePhotoUrl ?? localSettings.profilePhotoUrl,
+          profilePhotoAlt: data.profile_photo_alt ?? meta.profilePhotoAlt ?? localSettings.profilePhotoAlt,
+          experienceYears: data.experience_years ?? meta.experienceYears ?? localSettings.experienceYears,
+          achievementsSummary: data.achievements_summary ?? meta.achievementsSummary ?? localSettings.achievementsSummary,
+          experienceHighlights: Array.isArray(data.experience_highlights) ? data.experience_highlights : (meta.experienceHighlights ?? localSettings.experienceHighlights),
+          achievementHighlights: Array.isArray(data.achievement_highlights) ? data.achievement_highlights : (meta.achievementHighlights ?? localSettings.achievementHighlights),
+          resumeUrl: data.resume_url ?? meta.resumeUrl ?? localSettings.resumeUrl,
+          resumeLabel: data.resume_label ?? meta.resumeLabel ?? localSettings.resumeLabel,
+          resumeVisible: data.resume_visible ?? meta.resumeVisible ?? localSettings.resumeVisible,
+          educationDegree: data.education_degree ?? meta.educationDegree ?? localSettings.educationDegree,
+          educationInstitution: data.education_institution ?? meta.educationInstitution ?? localSettings.educationInstitution,
+          educationYear: data.education_year ?? meta.educationYear ?? localSettings.educationYear,
+          educationAggregate: data.education_aggregate ?? meta.educationAggregate ?? localSettings.educationAggregate,
 
           // Footer
-          footerAppearance: (data.footer_appearance as any) ?? localSettings.footerAppearance,
-          footerLogoLightUrl: data.footer_logo_light_url ?? localSettings.footerLogoLightUrl,
-          footerLogoDarkUrl: data.footer_logo_dark_url ?? localSettings.footerLogoDarkUrl,
-          footerDescription: data.footer_description ?? localSettings.footerDescription,
-          footerBrandStatement: data.footer_brand_statement ?? localSettings.footerBrandStatement,
-          footerNavVisible: data.footer_nav_visible ?? localSettings.footerNavVisible,
-          footerCopyright: data.footer_copyright ?? localSettings.footerCopyright,
-          footerLocation: data.footer_location ?? localSettings.footerLocation,
+          footerAppearance: (data.footer_appearance as any) ?? meta.footerAppearance ?? localSettings.footerAppearance,
+          footerLogoLightUrl: data.footer_logo_light_url ?? meta.footerLogoLightUrl ?? localSettings.footerLogoLightUrl,
+          footerLogoDarkUrl: data.footer_logo_dark_url ?? meta.footerLogoDarkUrl ?? localSettings.footerLogoDarkUrl,
+          footerDescription: data.footer_description ?? meta.footerDescription ?? localSettings.footerDescription,
+          footerBrandStatement: data.footer_brand_statement ?? meta.footerBrandStatement ?? localSettings.footerBrandStatement,
+          footerNavVisible: data.footer_nav_visible ?? meta.footerNavVisible ?? localSettings.footerNavVisible,
+          footerCopyright: data.footer_copyright ?? meta.footerCopyright ?? localSettings.footerCopyright,
+          footerLocation: data.footer_location ?? meta.footerLocation ?? localSettings.footerLocation,
 
           // Theme & SEO
-          defaultTheme: data.default_theme ?? localSettings.defaultTheme,
-          primaryBrandColor: data.primary_brand_color ?? localSettings.primaryBrandColor,
-          defaultSeoTitle: data.default_seo_title ?? localSettings.defaultSeoTitle,
-          defaultSeoDescription: data.default_seo_description ?? localSettings.defaultSeoDescription,
+          defaultTheme: data.default_theme ?? meta.defaultTheme ?? localSettings.defaultTheme,
+          primaryBrandColor: data.primary_brand_color ?? meta.primaryBrandColor ?? localSettings.primaryBrandColor,
+          defaultSeoTitle: data.default_seo_title ?? meta.defaultSeoTitle ?? localSettings.defaultSeoTitle,
+          defaultSeoDescription: data.default_seo_description ?? meta.defaultSeoDescription ?? localSettings.defaultSeoDescription,
         };
       }
     } catch {
@@ -1135,19 +1209,18 @@ export async function updateSiteSettings(newSettings: Partial<SiteSettings>): Pr
   localSettings = { ...localSettings, ...newSettings };
 
   if (typeof window !== 'undefined') {
-    try {
-      const res = await fetch('/api/settings', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(newSettings),
-      });
-      if (res.ok) {
-        const data = await res.json();
-        return { ...localSettings, ...data };
-      }
-    } catch {
-      // Continue to direct Supabase update
+    const res = await fetch('/api/settings', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(newSettings),
+    });
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({}));
+      throw new Error(err.error || `Failed to save settings: ${res.statusText}`);
     }
+    const data = await res.json();
+    localSettings = { ...localSettings, ...data };
+    return localSettings;
   }
 
   const supabase = createClient();
@@ -1204,7 +1277,6 @@ export async function updateSiteSettings(newSettings: Partial<SiteSettings>): Pr
       if (newSettings.aboutIntro !== undefined) dbPayload.about_intro = newSettings.aboutIntro;
       if (newSettings.aboutPhilosophy !== undefined) dbPayload.about_philosophy = newSettings.aboutPhilosophy;
       if (newSettings.aboutDescription !== undefined) dbPayload.about_description = newSettings.aboutDescription;
-      if (newSettings.aboutBio !== undefined) dbPayload.about_bio = newSettings.aboutBio;
       if (newSettings.profilePhotoUrl !== undefined) dbPayload.profile_photo_url = newSettings.profilePhotoUrl;
       if (newSettings.profilePhotoAlt !== undefined) dbPayload.profile_photo_alt = newSettings.profilePhotoAlt;
       if (newSettings.experienceYears !== undefined) dbPayload.experience_years = newSettings.experienceYears;
@@ -1235,8 +1307,21 @@ export async function updateSiteSettings(newSettings: Partial<SiteSettings>): Pr
       if (newSettings.defaultSeoTitle !== undefined) dbPayload.default_seo_title = newSettings.defaultSeoTitle;
       if (newSettings.defaultSeoDescription !== undefined) dbPayload.default_seo_description = newSettings.defaultSeoDescription;
 
+      // Bundle all extended fields safely in about_bio
+      const metaToStore: Record<string, any> = {};
+      const { data: setRow } = await supabase.from('site_settings').select('about_bio').eq('id', 'primary').maybeSingle();
+      if (setRow?.about_bio && typeof setRow.about_bio === 'string' && setRow.about_bio.startsWith('{')) {
+        try {
+          Object.assign(metaToStore, JSON.parse(setRow.about_bio));
+        } catch {
+          // ignore
+        }
+      }
+      Object.assign(metaToStore, newSettings);
+      dbPayload.about_bio = JSON.stringify(metaToStore);
+
       const currentPayload: Record<string, any> = { id: 'primary', ...dbPayload };
-      let maxRetries = 20;
+      let maxRetries = 25;
       while (maxRetries > 0) {
         const { error } = await supabase
           .from('site_settings')
