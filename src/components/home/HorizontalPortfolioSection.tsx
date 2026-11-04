@@ -1,19 +1,53 @@
 'use client';
 
-import React, { useRef } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { motion, useScroll, useTransform, useReducedMotion } from 'framer-motion';
 import { ArrowUpRight } from 'lucide-react';
 import { Project } from '@/lib/types';
+import { createClient } from '@/lib/supabase/client';
 
 interface HorizontalPortfolioSectionProps {
   projects: Project[];
 }
 
 export function HorizontalPortfolioSection({ projects }: HorizontalPortfolioSectionProps) {
+  const [projectList, setProjectList] = useState<Project[]>(projects);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
   const shouldReduceMotion = useReducedMotion();
+
+  useEffect(() => {
+    setProjectList(projects);
+
+    const supabase = createClient();
+    if (!supabase) return;
+
+    const channel = supabase
+      .channel('realtime:home_projects')
+      .on(
+        'postgres_changes',
+        { event: '*', schema: 'public', table: 'projects' },
+        async () => {
+          try {
+            const res = await fetch('/api/projects');
+            if (res.ok) {
+              const fresh = await res.json();
+              if (Array.isArray(fresh) && fresh.length > 0) {
+                setProjectList(fresh);
+              }
+            }
+          } catch {
+            // Keep current
+          }
+        }
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, [projects]);
 
   // Scroll progress for the 2-row horizontal motion
   const { scrollYProgress } = useScroll({
@@ -26,7 +60,7 @@ export function HorizontalPortfolioSection({ projects }: HorizontalPortfolioSect
   // Row 2: Right to Left
   const xRow2 = useTransform(scrollYProgress, [0, 1], ['12%', '-18%']);
 
-  const pool = projects.length > 0 ? projects : [];
+  const pool = projectList.length > 0 ? projectList : [];
   const getRowItems = (offset: number) => {
     if (pool.length === 0) return [];
     const items = [];

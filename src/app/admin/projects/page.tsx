@@ -16,6 +16,7 @@ import {
 } from 'lucide-react';
 import { getProjects, deleteProject, duplicateProject } from '@/lib/data';
 import { Project } from '@/lib/types';
+import { createClient } from '@/lib/supabase/client';
 import { Button } from '@/components/ui/Button';
 import { Badge } from '@/components/ui/Badge';
 
@@ -33,6 +34,24 @@ export default function AdminProjectsListPage() {
 
   useEffect(() => {
     fetchProjects();
+
+    const supabase = createClient();
+    if (!supabase) return;
+
+    const channel = supabase
+      .channel('realtime:admin_projects')
+      .on(
+        'postgres_changes',
+        { event: '*', schema: 'public', table: 'projects' },
+        () => {
+          fetchProjects();
+        }
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
   }, []);
 
   const handleDelete = async (id: string, title: string) => {

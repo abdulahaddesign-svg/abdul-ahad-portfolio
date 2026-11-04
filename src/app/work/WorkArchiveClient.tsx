@@ -1,11 +1,12 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { motion } from 'framer-motion';
 import { ArrowUpRight } from 'lucide-react';
 import { Project } from '@/lib/types';
+import { createClient } from '@/lib/supabase/client';
 
 const CATEGORIES = [
   'All',
@@ -24,9 +25,43 @@ interface WorkArchiveClientProps {
 }
 
 export function WorkArchiveClient({ initialProjects }: WorkArchiveClientProps) {
+  const [projects, setProjects] = useState<Project[]>(initialProjects);
   const [selectedCategory, setSelectedCategory] = useState('All');
 
-  const filtered = initialProjects.filter((p) => {
+  // Real-time listener for instant portfolio updates
+  useEffect(() => {
+    setProjects(initialProjects);
+
+    const supabase = createClient();
+    if (!supabase) return;
+
+    const channel = supabase
+      .channel('realtime:public_projects')
+      .on(
+        'postgres_changes',
+        { event: '*', schema: 'public', table: 'projects' },
+        async () => {
+          try {
+            const res = await fetch('/api/projects');
+            if (res.ok) {
+              const fresh = await res.json();
+              if (Array.isArray(fresh) && fresh.length > 0) {
+                setProjects(fresh);
+              }
+            }
+          } catch {
+            // Keep current
+          }
+        }
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, [initialProjects]);
+
+  const filtered = projects.filter((p) => {
     if (selectedCategory === 'All') return true;
     return p.category.toLowerCase() === selectedCategory.toLowerCase();
   });
