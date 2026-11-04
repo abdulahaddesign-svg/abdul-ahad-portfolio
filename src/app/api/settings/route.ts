@@ -14,9 +14,11 @@ export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
     const updated = await updateSiteSettings(body);
+    revalidatePath('/', 'layout');
     revalidatePath('/');
     revalidatePath('/about');
     revalidatePath('/services');
+    revalidatePath('/work');
     revalidatePath('/contact');
     revalidatePath('/resume');
     revalidatePath('/admin/settings');

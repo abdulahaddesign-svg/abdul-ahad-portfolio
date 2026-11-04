@@ -64,6 +64,7 @@ export async function POST(req: NextRequest) {
           .select()
           .single();
         if (!error && data) {
+          revalidatePath('/', 'layout');
           revalidatePath('/');
           revalidatePath('/admin/clients');
           return NextResponse.json(data);
@@ -75,6 +76,7 @@ export async function POST(req: NextRequest) {
           .select()
           .single();
         if (!error && data) {
+          revalidatePath('/', 'layout');
           revalidatePath('/');
           revalidatePath('/admin/clients');
           return NextResponse.json(data);
@@ -82,6 +84,8 @@ export async function POST(req: NextRequest) {
       }
     }
 
+    revalidatePath('/', 'layout');
+    revalidatePath('/', 'layout');
     revalidatePath('/');
     revalidatePath('/admin/clients');
     return NextResponse.json(client);
@@ -110,6 +114,7 @@ export async function DELETE(req: NextRequest) {
       await query;
     }
 
+    revalidatePath('/', 'layout');
     revalidatePath('/');
     revalidatePath('/admin/clients');
     return NextResponse.json({ success: true });

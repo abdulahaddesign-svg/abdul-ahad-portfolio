@@ -16,6 +16,7 @@ export async function POST(request: Request) {
   try {
     const body = await request.json();
     const newService = await createService(body);
+    revalidatePath('/', 'layout');
     revalidatePath('/services');
     revalidatePath('/');
     revalidatePath('/admin/services');
@@ -32,6 +33,7 @@ export async function PUT(request: Request) {
       return NextResponse.json({ error: 'Service ID is required' }, { status: 400 });
     }
     const updated = await updateService(body);
+    revalidatePath('/', 'layout');
     revalidatePath('/services');
     revalidatePath('/');
     revalidatePath('/admin/services');
@@ -49,6 +51,7 @@ export async function DELETE(request: Request) {
       return NextResponse.json({ error: 'Service ID is required' }, { status: 400 });
     }
     const success = await deleteService(id);
+    revalidatePath('/', 'layout');
     revalidatePath('/services');
     revalidatePath('/');
     revalidatePath('/admin/services');

@@ -116,6 +116,7 @@ export async function POST(req: NextRequest) {
 
         if (savedData) {
           // Invalidate cache immediately on all affected pages
+          revalidatePath('/', 'layout');
           revalidatePath('/');
           revalidatePath('/work');
           revalidatePath(`/work/${project.slug}`);
@@ -129,6 +130,7 @@ export async function POST(req: NextRequest) {
     }
 
     // Fallback response if DB offline
+    revalidatePath('/', 'layout');
     revalidatePath('/');
     revalidatePath('/work');
     revalidatePath('/admin/projects');
@@ -166,6 +168,7 @@ export async function DELETE(req: NextRequest) {
       }
     }
 
+    revalidatePath('/', 'layout');
     revalidatePath('/');
     revalidatePath('/work');
     revalidatePath('/admin/projects');

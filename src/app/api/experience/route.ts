@@ -20,6 +20,7 @@ export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
     const saved = await saveExperience(body);
+    revalidatePath('/', 'layout');
     revalidatePath('/');
     revalidatePath('/about');
     revalidatePath('/admin/experience');
@@ -38,6 +39,7 @@ export async function DELETE(req: NextRequest) {
       return NextResponse.json({ error: 'ID is required' }, { status: 400 });
     }
     const success = await deleteExperience(id);
+    revalidatePath('/', 'layout');
     revalidatePath('/');
     revalidatePath('/about');
     revalidatePath('/admin/experience');
