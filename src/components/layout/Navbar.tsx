@@ -7,19 +7,34 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { ArrowUpRight } from 'lucide-react';
 import { Logo } from '@/components/brand/Logo';
 import { ThemeToggle } from '@/components/theme/ThemeToggle';
+import { SiteSettings } from '@/lib/types';
+import { SafeImage } from '@/components/ui/SafeImage';
 
-const NAV_LINKS = [
+const DEFAULT_NAV_LINKS = [
   { label: 'Work', href: '/work', index: '01' },
   { label: 'About', href: '/about', index: '02' },
   { label: 'Services', href: '/services', index: '03' },
   { label: 'Contact', href: '/contact', index: '04' },
 ];
 
-export function Navbar() {
+interface NavbarProps {
+  settings?: SiteSettings;
+}
+
+export function Navbar({ settings }: NavbarProps) {
   const pathname = usePathname();
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [time, setTime] = useState('');
+
+  const navLinks = settings?.headerNavLinks && settings.headerNavLinks.length > 0 
+    ? settings.headerNavLinks 
+    : DEFAULT_NAV_LINKS;
+
+  const availability = settings?.availabilityStatus || 'Available for New Projects';
+  const locationText = settings?.locationTimeText || 'Coimbatore, IN';
+  const ctaText = settings?.headerCtaText || 'Initiate Brief';
+  const ctaHref = settings?.headerCtaHref || '/contact';
 
   useEffect(() => {
     const handleScroll = () => {
@@ -79,25 +94,44 @@ export function Navbar() {
         }`}
       >
         <div className="max-w-[1820px] mx-auto px-4 sm:px-8 lg:px-12 flex items-center justify-between">
-          {/* Brand Logo with automatic light/dark switching */}
+          {/* Brand Logo with automatic light/dark switching or custom logo */}
           <div className="flex items-center">
-            <Logo variant="auto" height={34} />
+            {settings?.headerLogoDarkUrl && settings?.headerLogoLightUrl ? (
+              <Link href="/" className="inline-block">
+                <SafeImage
+                  src={settings.headerLogoLightUrl}
+                  alt={settings.logoAltText || settings.name || 'Abdul Ahad Logo'}
+                  width={180}
+                  height={34}
+                  className="h-8 sm:h-9 w-auto object-contain dark:hidden"
+                />
+                <SafeImage
+                  src={settings.headerLogoDarkUrl}
+                  alt={settings.logoAltText || settings.name || 'Abdul Ahad Logo'}
+                  width={180}
+                  height={34}
+                  className="h-8 sm:h-9 w-auto object-contain hidden dark:block"
+                />
+              </Link>
+            ) : (
+              <Logo variant="auto" height={34} />
+            )}
           </div>
 
           {/* Center Coordinates & Availability Indicator */}
           <div className="hidden lg:flex items-center gap-6 text-[11px] font-sans text-charcoal-500 dark:text-ivory/60 uppercase tracking-widest border-x border-charcoal/10 dark:border-ivory/10 px-8 h-8">
             <span className="flex items-center gap-2">
               <span className="w-1.5 h-1.5 rounded-full bg-sage animate-pulse" />
-              <span>Available for New Projects</span>
+              <span>{availability}</span>
             </span>
             <span className="text-charcoal-300 dark:text-ivory/30">/</span>
-            <span>Coimbatore, IN · {time || 'IST'}</span>
+            <span>{locationText} · {time || 'IST'}</span>
           </div>
 
           {/* Desktop Navigation Links & Action */}
           <div className="hidden md:flex items-center gap-6 lg:gap-8">
             <nav className="flex items-center gap-6 lg:gap-8" aria-label="Main Navigation">
-              {NAV_LINKS.map((link) => {
+              {navLinks.map((link) => {
                 const isActive =
                   pathname === link.href || (link.href !== '/' && pathname.startsWith(link.href));
                 return (
@@ -124,10 +158,10 @@ export function Navbar() {
             <ThemeToggle />
 
             <Link
-              href="/contact"
+              href={ctaHref}
               className="group inline-flex items-center gap-2.5 px-6 sm:px-7 py-2.5 bg-charcoal dark:bg-ivory text-ivory dark:text-charcoal text-[12px] sm:text-[13px] font-sans font-bold uppercase tracking-[0.18em] hover:bg-copper dark:hover:bg-copper dark:hover:text-ivory transition-all duration-200 shadow-sm"
             >
-              <span>Initiate Brief</span>
+              <span>{ctaText}</span>
               <ArrowUpRight className="w-3.5 h-3.5 text-copper group-hover:text-ivory group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all duration-200" />
             </Link>
           </div>
@@ -163,7 +197,7 @@ export function Navbar() {
             </div>
 
             <div className="py-12 space-y-6">
-              {NAV_LINKS.map((link, idx) => (
+              {navLinks.map((link, idx) => (
                 <motion.div
                   key={link.href}
                   initial={{ opacity: 0, x: -30 }}

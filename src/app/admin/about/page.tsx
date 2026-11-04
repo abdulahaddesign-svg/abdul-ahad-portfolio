@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import Image from 'next/image';
+import Link from 'next/link';
 import { 
   Save, 
   CheckCircle2, 
@@ -10,12 +10,16 @@ import {
   Sparkles, 
   ExternalLink,
   MapPin,
-  Briefcase
+  Briefcase,
+  GraduationCap,
+  Award,
+  ArrowRight
 } from 'lucide-react';
 import { getSiteSettings, updateSiteSettings } from '@/lib/data';
 import { SiteSettings } from '@/lib/types';
 import { Input, Textarea } from '@/components/ui/Input';
 import { Button } from '@/components/ui/Button';
+import { SafeImage } from '@/components/ui/SafeImage';
 
 export default function AdminAboutPage() {
   const [settings, setSettings] = useState<SiteSettings | null>(null);
@@ -129,12 +133,12 @@ export default function AdminAboutPage() {
         <div className="flex flex-col sm:flex-row items-start sm:items-center gap-6 pt-2">
           <div className="relative w-36 h-48 border border-charcoal/20 bg-charcoal-900 shrink-0 overflow-hidden">
             {settings.profilePhotoUrl ? (
-              <Image
+              <SafeImage
                 src={settings.profilePhotoUrl}
+                fallback="/profile/abdul-ahad.jpg"
                 alt={settings.name}
                 fill
                 className="object-cover"
-                unoptimized
               />
             ) : (
               <div className="w-full h-full flex items-center justify-center text-ivory/40 text-xs font-mono">
@@ -175,6 +179,13 @@ export default function AdminAboutPage() {
               onChange={(e) => setSettings({ ...settings, profilePhotoUrl: e.target.value })}
               placeholder="https://media.abdulahad.design/uploads/portrait.jpg"
               className="text-xs font-mono"
+            />
+            <Input
+              label="Photo Alternative Text"
+              value={settings.profilePhotoAlt || ''}
+              onChange={(e) => setSettings({ ...settings, profilePhotoAlt: e.target.value })}
+              placeholder="Abdul Ahad J — Creative Designer"
+              className="text-xs"
             />
           </div>
         </div>
@@ -226,12 +237,20 @@ export default function AdminAboutPage() {
           <span>Editorial Narrative &amp; Story</span>
         </div>
 
-        <Input
-          label="Headline Statement"
-          value={settings.aboutHeadline || ''}
-          onChange={(e) => setSettings({ ...settings, aboutHeadline: e.target.value })}
-          placeholder="DISCIPLINE IN VISUAL IDENTITY, STRATEGY AND MOTION."
-        />
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <Input
+            label="Section Label"
+            value={settings.aboutSectionLabel || 'BIOGRAPHY & CAPABILITIES'}
+            onChange={(e) => setSettings({ ...settings, aboutSectionLabel: e.target.value })}
+            placeholder="BIOGRAPHY & CAPABILITIES"
+          />
+          <Input
+            label="Headline Statement"
+            value={settings.aboutHeadline || ''}
+            onChange={(e) => setSettings({ ...settings, aboutHeadline: e.target.value })}
+            placeholder="DISCIPLINE IN VISUAL IDENTITY, STRATEGY AND MOTION."
+          />
+        </div>
 
         <Textarea
           label="Intro Summary (Displays on Homepage & Case Study Headers)"
@@ -241,11 +260,39 @@ export default function AdminAboutPage() {
         />
 
         <Textarea
+          label="Design Philosophy Statement"
+          value={settings.aboutPhilosophy || ''}
+          onChange={(e) => setSettings({ ...settings, aboutPhilosophy: e.target.value })}
+          rows={3}
+          placeholder="Design is not decorative styling; it is clear thinking made visible..."
+        />
+
+        <Textarea
           label="Full Biography (Displays on Dedicated /about Page)"
-          value={settings.aboutBio || ''}
-          onChange={(e) => setSettings({ ...settings, aboutBio: e.target.value })}
+          value={settings.aboutBio || settings.aboutDescription || ''}
+          onChange={(e) => setSettings({ ...settings, aboutBio: e.target.value, aboutDescription: e.target.value })}
           rows={6}
         />
+      </div>
+
+      {/* Quick link to Work Experience */}
+      <div className="p-6 border border-copper/30 bg-copper/5 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div>
+          <h3 className="font-display font-bold text-lg text-charcoal flex items-center gap-2">
+            <Briefcase className="w-5 h-5 text-copper" />
+            Manage Career Timeline &amp; Experience
+          </h3>
+          <p className="text-xs text-charcoal-600 mt-1">
+            Add, edit, reorder or hide employment history, company logos and verified achievements.
+          </p>
+        </div>
+        <Link
+          href="/admin/experience"
+          className="inline-flex items-center gap-2 px-4 py-2 bg-charcoal text-ivory text-xs font-sans font-bold uppercase tracking-wider hover:bg-copper transition-colors"
+        >
+          <span>Open Work Experience CMS</span>
+          <ArrowRight className="w-3.5 h-3.5" />
+        </Link>
       </div>
 
       {/* 4. Credentials & Education */}

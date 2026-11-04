@@ -15,10 +15,13 @@ import {
   Sparkles,
   Clock,
   CheckCircle2,
-  AlertCircle
+  AlertCircle,
+  Home,
+  PanelTop,
+  Briefcase
 } from 'lucide-react';
-import { getProjects, getInquiries, getClientLogos, getServices, getSiteSettings } from '@/lib/data';
-import { Project, Inquiry, ClientLogo, ServiceItem, SiteSettings } from '@/lib/types';
+import { getProjects, getInquiries, getClientLogos, getServices, getSiteSettings, getExperiences } from '@/lib/data';
+import { Project, Inquiry, ClientLogo, ServiceItem, SiteSettings, ExperienceItem } from '@/lib/types';
 import { formatDate } from '@/lib/utils';
 
 export default function AdminDashboardPage() {
@@ -26,23 +29,26 @@ export default function AdminDashboardPage() {
   const [services, setServices] = useState<ServiceItem[]>([]);
   const [clients, setClients] = useState<ClientLogo[]>([]);
   const [inquiries, setInquiries] = useState<Inquiry[]>([]);
+  const [experiences, setExperiences] = useState<ExperienceItem[]>([]);
   const [settings, setSettings] = useState<SiteSettings | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     async function loadData() {
-      const [projs, servs, clis, inqs, sets] = await Promise.all([
+      const [projs, servs, clis, inqs, sets, exps] = await Promise.all([
         getProjects({ includeDrafts: true }),
         getServices(),
         getClientLogos(true),
         getInquiries(),
         getSiteSettings(),
+        getExperiences(true),
       ]);
       setProjects(projs);
       setServices(servs);
       setClients(clis);
       setInquiries(inqs);
       setSettings(sets);
+      setExperiences(exps);
       setLoading(false);
     }
     loadData();
@@ -204,6 +210,57 @@ export default function AdminDashboardPage() {
           CONTENT MANAGEMENT HUBS
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+          {/* Homepage Hero */}
+          <Link
+            href="/admin/homepage"
+            className="group p-6 border border-charcoal/15 bg-ivory hover:border-copper transition-all"
+          >
+            <div className="flex items-center justify-between mb-4">
+              <Home className="w-5 h-5 text-copper" />
+              <ArrowUpRight className="w-4 h-4 text-charcoal-400 group-hover:text-copper group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all" />
+            </div>
+            <h3 className="font-display font-bold text-lg text-charcoal group-hover:text-copper transition-colors">
+              Homepage Hero
+            </h3>
+            <p className="mt-1 text-xs text-charcoal-600 font-sans">
+              Edit headline text, professional subtitle, narrative introduction, CTAs and monogram watermark.
+            </p>
+          </Link>
+
+          {/* Header & Footer */}
+          <Link
+            href="/admin/header-footer"
+            className="group p-6 border border-charcoal/15 bg-ivory hover:border-copper transition-all"
+          >
+            <div className="flex items-center justify-between mb-4">
+              <PanelTop className="w-5 h-5 text-copper" />
+              <ArrowUpRight className="w-4 h-4 text-charcoal-400 group-hover:text-copper group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all" />
+            </div>
+            <h3 className="font-display font-bold text-lg text-charcoal group-hover:text-copper transition-colors">
+              Header &amp; Footer
+            </h3>
+            <p className="mt-1 text-xs text-charcoal-600 font-sans">
+              Customize light/dark logos, navigation destinations, availability beacon, and footer statement.
+            </p>
+          </Link>
+
+          {/* Work Experience */}
+          <Link
+            href="/admin/experience"
+            className="group p-6 border border-charcoal/15 bg-ivory hover:border-copper transition-all"
+          >
+            <div className="flex items-center justify-between mb-4">
+              <Briefcase className="w-5 h-5 text-copper" />
+              <ArrowUpRight className="w-4 h-4 text-charcoal-400 group-hover:text-copper group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all" />
+            </div>
+            <h3 className="font-display font-bold text-lg text-charcoal group-hover:text-copper transition-colors">
+              Work Experience ({experiences.length})
+            </h3>
+            <p className="mt-1 text-xs text-charcoal-600 font-sans">
+              Manage employment history, company logos, roles, responsibilities, and verified honors.
+            </p>
+          </Link>
+
           {/* Projects CMS */}
           <Link
             href="/admin/projects"

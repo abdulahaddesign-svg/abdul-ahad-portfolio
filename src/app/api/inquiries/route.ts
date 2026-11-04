@@ -2,6 +2,9 @@ import { NextRequest, NextResponse } from 'next/server';
 import { revalidatePath } from 'next/cache';
 import { getInquiries, updateInquiryStatus, deleteInquiry } from '@/lib/data';
 
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
+
 export async function GET() {
   try {
     const inquiries = await getInquiries();

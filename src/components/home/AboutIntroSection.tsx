@@ -6,6 +6,7 @@ import Image from 'next/image';
 import { motion, useScroll, useTransform, useInView } from 'framer-motion';
 import { ArrowDown, ArrowUpRight, FileText, CheckCircle2, Award } from 'lucide-react';
 import { SiteSettings } from '@/lib/types';
+import { SafeImage } from '@/components/ui/SafeImage';
 
 interface AboutIntroSectionProps {
   settings: SiteSettings;
@@ -169,8 +170,9 @@ export function AboutIntroSection({ settings }: AboutIntroSectionProps) {
               className="relative w-full max-w-[460px] aspect-[4/5] bg-charcoal-900 border border-charcoal/20 overflow-hidden"
             >
               <motion.div style={{ y: imageY }} className="relative w-full h-full">
-                <Image
+                <SafeImage
                   src={photoUrl}
+                  fallback="/profile/abdul-ahad.jpg"
                   alt={photoAlt}
                   fill
                   sizes="(max-width: 768px) 100vw, 460px"

@@ -5,10 +5,13 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { 
   LayoutDashboard, 
+  Home,
+  PanelTop,
   FolderKanban, 
   Layers,
   Building2,
   User,
+  Briefcase,
   FileText,
   Settings,
   Image as ImageIcon,
@@ -24,15 +27,18 @@ import { logoutAdmin } from '@/lib/auth';
 
 const NAV_SECTIONS = [
   { label: 'Dashboard', href: '/admin', icon: LayoutDashboard },
+  { label: 'Homepage', href: '/admin/homepage', icon: Home },
+  { label: 'Header & Footer', href: '/admin/header-footer', icon: PanelTop },
+  { label: 'About', href: '/admin/about', icon: User },
+  { label: 'Work Experience', href: '/admin/experience', icon: Briefcase },
   { label: 'Projects', href: '/admin/projects', icon: FolderKanban },
   { label: 'Services', href: '/admin/services', icon: Layers },
   { label: 'Clients', href: '/admin/clients', icon: Building2 },
-  { label: 'About', href: '/admin/about', icon: User },
   { label: 'Resume', href: '/admin/resume', icon: FileText },
   { label: 'Website Settings', href: '/admin/settings', icon: Settings },
   { label: 'Media Library', href: '/admin/media', icon: ImageIcon },
   { label: 'Inquiries', href: '/admin/inquiries', icon: MessageSquare },
-  { label: 'Security / Account', href: '/admin/security', icon: ShieldCheck },
+  { label: 'Account & Security', href: '/admin/security', icon: ShieldCheck },
 ];
 
 export function AdminSidebar() {

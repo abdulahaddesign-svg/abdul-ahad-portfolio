@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import Image from 'next/image';
+import Link from 'next/link';
 import { 
   Settings, 
   Save, 
@@ -11,12 +11,17 @@ import {
   Mail, 
   Phone, 
   Share2,
+  Sparkles,
+  ArrowRight,
+  Shield,
+  Palette,
   Image as ImageIcon
 } from 'lucide-react';
 import { getSiteSettings, updateSiteSettings } from '@/lib/data';
 import { SiteSettings } from '@/lib/types';
 import { Input, Textarea } from '@/components/ui/Input';
 import { Button } from '@/components/ui/Button';
+import { SafeImage } from '@/components/ui/SafeImage';
 
 export default function AdminSettingsPage() {
   const [settings, setSettings] = useState<SiteSettings | null>(null);
@@ -105,11 +110,12 @@ export default function AdminSettingsPage() {
           <span className="text-xs font-sans font-bold uppercase tracking-[0.2em] text-copper block mb-1">
             CONFIGURATION CMS
           </span>
-          <h1 className="font-display font-extrabold text-3xl text-charcoal tracking-tight">
+          <h1 className="font-display font-extrabold text-3xl text-charcoal tracking-tight flex items-center gap-3">
+            <Settings className="w-7 h-7 text-copper" />
             Website Settings &amp; SEO
           </h1>
           <p className="text-xs text-charcoal-600 mt-1">
-            Configure global website metadata, contact channels, social profiles, and brand assets.
+            Configure global website metadata, search engine optimization (SEO), brand identity colors, and contact info.
           </p>
         </div>
 
@@ -131,157 +137,229 @@ export default function AdminSettingsPage() {
         </div>
       </div>
 
-      {/* 1. Contact & Communication Channels */}
-      <div className="p-6 border border-charcoal/15 bg-ivory space-y-5">
-        <div className="flex items-center gap-2 text-xs font-sans uppercase tracking-widest text-copper font-bold">
-          <Mail className="w-4 h-4" />
-          <span>Contact &amp; Client Inquiry Channels</span>
-        </div>
+      {/* Quick Navigation Cards */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <Link
+          href="/admin/homepage"
+          className="p-4 border border-charcoal/15 bg-white hover:border-copper transition-colors flex items-center justify-between group"
+        >
+          <div>
+            <span className="text-xs font-sans font-bold uppercase text-copper block">Content CMS</span>
+            <span className="font-display font-bold text-base text-charcoal">Homepage Hero &amp; Headlines</span>
+          </div>
+          <ArrowRight className="w-4 h-4 text-charcoal-400 group-hover:text-copper group-hover:translate-x-1 transition-all" />
+        </Link>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <Input
-            label="Direct Email Address"
-            type="email"
-            value={settings.email || ''}
-            onChange={(e) => setSettings({ ...settings, email: e.target.value })}
-            required
-          />
-          <Input
-            label="WhatsApp / Phone Number"
-            value={settings.phone || ''}
-            onChange={(e) => setSettings({ ...settings, phone: e.target.value })}
-            placeholder="+91 9150037005"
-            required
-          />
-        </div>
+        <Link
+          href="/admin/header-footer"
+          className="p-4 border border-charcoal/15 bg-white hover:border-copper transition-colors flex items-center justify-between group"
+        >
+          <div>
+            <span className="text-xs font-sans font-bold uppercase text-copper block">Layout CMS</span>
+            <span className="font-display font-bold text-base text-charcoal">Header Navigation &amp; Footer</span>
+          </div>
+          <ArrowRight className="w-4 h-4 text-charcoal-400 group-hover:text-copper group-hover:translate-x-1 transition-all" />
+        </Link>
       </div>
 
-      {/* 2. Professional Social Profiles */}
-      <div className="p-6 border border-charcoal/15 bg-ivory space-y-5">
-        <div className="flex items-center gap-2 text-xs font-sans uppercase tracking-widest text-copper font-bold">
-          <Share2 className="w-4 h-4" />
-          <span>Social Media &amp; Portfolio Networks</span>
+      {/* 1. Global Identity & SEO */}
+      <div className="p-6 sm:p-8 border border-charcoal/15 bg-ivory space-y-6">
+        <div className="flex items-center gap-2 pb-4 border-b border-charcoal/10">
+          <Globe className="w-4 h-4 text-copper" />
+          <h2 className="font-display font-bold text-lg text-charcoal">
+            Global Search Engine Optimization (SEO) &amp; Metadata
+          </h2>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <Input
-            label="Behance Profile URL"
-            value={settings.behanceUrl || ''}
-            onChange={(e) => setSettings({ ...settings, behanceUrl: e.target.value })}
-            placeholder="https://www.behance.net/abdulahad438"
-          />
-          <Input
-            label="LinkedIn Profile URL"
-            value={settings.linkedinUrl || ''}
-            onChange={(e) => setSettings({ ...settings, linkedinUrl: e.target.value })}
-            placeholder="https://www.linkedin.com/in/abdulahadj"
-          />
-          <Input
-            label="Instagram Profile URL"
-            value={settings.instagramUrl || ''}
-            onChange={(e) => setSettings({ ...settings, instagramUrl: e.target.value })}
-            placeholder="https://www.instagram.com/abdulahad"
-          />
-          <Input
-            label="Dribbble Profile URL"
-            value={settings.dribbbleUrl || ''}
-            onChange={(e) => setSettings({ ...settings, dribbbleUrl: e.target.value })}
-            placeholder="https://dribbble.com/abdulahad"
-          />
-        </div>
-      </div>
-
-      {/* 3. Official Wordmark Logos (Light & Dark Mode) */}
-      <div className="p-6 border border-charcoal/15 bg-ivory space-y-5">
-        <div className="flex items-center gap-2 text-xs font-sans uppercase tracking-widest text-copper font-bold">
-          <ImageIcon className="w-4 h-4" />
-          <span>Official Footer Wordmark Brand Logos</span>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-2">
-          {/* Light Mode Wordmark */}
-          <div className="p-5 border border-charcoal/15 bg-ivory space-y-3">
-            <span className="text-xs font-sans font-bold uppercase tracking-wider text-charcoal block">
-              Light Mode Wordmark (Dark Text on Ivory)
-            </span>
-            <div className="h-20 bg-ivory-100 border border-charcoal/10 flex items-center justify-center p-3">
-              <Image
-                src={settings.footerLogoLightUrl || '/brand/logo-wordmark-clean-light.png'}
-                alt="Light Wordmark Preview"
-                width={200}
-                height={50}
-                className="max-h-12 w-auto object-contain"
-                unoptimized
-              />
-            </div>
-            <label className="inline-flex items-center gap-2 px-3 py-1.5 bg-charcoal text-ivory text-xs font-sans font-bold uppercase tracking-wider cursor-pointer hover:bg-copper transition-colors">
-              <Upload className="w-3 h-3 text-copper" />
-              <span>{uploadingFooterLight ? 'Uploading...' : 'Replace Light Logo'}</span>
-              <input
-                type="file"
-                accept="image/png,image/svg+xml,image/webp"
-                onChange={(e) => handleLogoUpload(e, 'light')}
-                className="hidden"
-                disabled={uploadingFooterLight}
-              />
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+          <div className="space-y-1">
+            <label className="text-xs font-sans font-bold uppercase tracking-wider text-charcoal">
+              Website Owner Name
             </label>
+            <Input
+              value={settings.name || ''}
+              onChange={(e) => setSettings({ ...settings, name: e.target.value })}
+              required
+            />
           </div>
 
-          {/* Dark Mode Wordmark */}
-          <div className="p-5 border border-charcoal/15 bg-charcoal text-ivory space-y-3">
-            <span className="text-xs font-sans font-bold uppercase tracking-wider text-ivory block">
-              Dark Mode Wordmark (Ivory Text on Dark)
-            </span>
-            <div className="h-20 bg-charcoal-900 border border-charcoal-800 flex items-center justify-center p-3">
-              <Image
-                src={settings.footerLogoDarkUrl || '/brand/logo-wordmark-clean-dark.png'}
-                alt="Dark Wordmark Preview"
-                width={200}
-                height={50}
-                className="max-h-12 w-auto object-contain"
-                unoptimized
+          <div className="space-y-1">
+            <label className="text-xs font-sans font-bold uppercase tracking-wider text-charcoal">
+              Default Theme
+            </label>
+            <select
+              value={settings.defaultTheme || 'dark'}
+              onChange={(e) => setSettings({ ...settings, defaultTheme: e.target.value as 'light' | 'dark' })}
+              className="w-full px-3 py-2.5 border border-charcoal/20 bg-white text-xs font-sans font-bold uppercase focus:outline-none focus:border-copper"
+            >
+              <option value="dark">Dark Theme (Charcoal / Ivory Accent)</option>
+              <option value="light">Light Theme (Ivory / Charcoal Accent)</option>
+            </select>
+          </div>
+        </div>
+
+        <div className="space-y-1">
+          <label className="text-xs font-sans font-bold uppercase tracking-wider text-charcoal">
+            Default SEO Page Title
+          </label>
+          <Input
+            value={settings.defaultSeoTitle || settings.title || ''}
+            onChange={(e) => setSettings({ ...settings, defaultSeoTitle: e.target.value })}
+            placeholder="Abdul Ahad J — Graphic Designer & Visual Branding Specialist | Coimbatore"
+          />
+          <p className="text-[11px] text-charcoal-500">Appears in Google search snippets and browser tab titles.</p>
+        </div>
+
+        <div className="space-y-1">
+          <label className="text-xs font-sans font-bold uppercase tracking-wider text-charcoal">
+            Default SEO Meta Description
+          </label>
+          <Textarea
+            rows={3}
+            value={settings.defaultSeoDescription || ''}
+            onChange={(e) => setSettings({ ...settings, defaultSeoDescription: e.target.value })}
+            placeholder="Portfolio of Abdul Ahad J, a multidisciplinary creative designer in Coimbatore, Tamil Nadu, India. Specializing in brand identity, marketing collateral, UI/UX design, and motion graphics."
+          />
+        </div>
+
+        {/* Primary Brand Color */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 pt-2">
+          <div className="space-y-1">
+            <label className="text-xs font-sans font-bold uppercase tracking-wider text-charcoal flex items-center gap-2">
+              <Palette className="w-4 h-4 text-copper" />
+              Primary Accent Color
+            </label>
+            <div className="flex items-center gap-3">
+              <input
+                type="color"
+                value={settings.primaryBrandColor || '#C4855A'}
+                onChange={(e) => setSettings({ ...settings, primaryBrandColor: e.target.value })}
+                className="w-10 h-10 border border-charcoal/20 cursor-pointer p-0.5 bg-white"
+              />
+              <Input
+                value={settings.primaryBrandColor || '#C4855A'}
+                onChange={(e) => setSettings({ ...settings, primaryBrandColor: e.target.value })}
+                className="font-mono text-xs uppercase"
               />
             </div>
-            <label className="inline-flex items-center gap-2 px-3 py-1.5 bg-copper text-ivory text-xs font-sans font-bold uppercase tracking-wider cursor-pointer hover:bg-copper-600 transition-colors">
-              <Upload className="w-3 h-3 text-ivory" />
-              <span>{uploadingFooterDark ? 'Uploading...' : 'Replace Dark Logo'}</span>
-              <input
-                type="file"
-                accept="image/png,image/svg+xml,image/webp"
-                onChange={(e) => handleLogoUpload(e, 'dark')}
-                className="hidden"
-                disabled={uploadingFooterDark}
-              />
-            </label>
+            <p className="text-[11px] text-charcoal-500">Default Burnt Copper: #C4855A</p>
           </div>
         </div>
       </div>
 
-      {/* 4. Footer Narrative & Copyright */}
-      <div className="p-6 border border-charcoal/15 bg-ivory space-y-4">
-        <div className="text-xs font-sans uppercase tracking-widest text-copper font-bold">
-          FOOTER EDITORIAL COPY &amp; COPYRIGHT
+      {/* 2. Contact & Client Inquiry Channels */}
+      <div className="p-6 sm:p-8 border border-charcoal/15 bg-ivory space-y-6">
+        <div className="flex items-center gap-2 pb-4 border-b border-charcoal/10">
+          <Mail className="w-4 h-4 text-copper" />
+          <h2 className="font-display font-bold text-lg text-charcoal">
+            Contact &amp; Client Inquiry Channels
+          </h2>
         </div>
-        <Textarea
-          label="Footer Editorial Description"
-          value={settings.footerDescription || ''}
-          onChange={(e) => setSettings({ ...settings, footerDescription: e.target.value })}
-          rows={3}
-        />
-        <Input
-          label="Copyright Notice"
-          value={settings.footerCopyright || ''}
-          onChange={(e) => setSettings({ ...settings, footerCopyright: e.target.value })}
-          placeholder="Abdul Ahad J. All rights reserved."
-        />
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+          <div className="space-y-1">
+            <label className="text-xs font-sans font-bold uppercase tracking-wider text-charcoal">
+              Direct Contact Email
+            </label>
+            <Input
+              type="email"
+              value={settings.email || ''}
+              onChange={(e) => setSettings({ ...settings, email: e.target.value })}
+              required
+            />
+          </div>
+
+          <div className="space-y-1">
+            <label className="text-xs font-sans font-bold uppercase tracking-wider text-charcoal">
+              Phone / WhatsApp Number
+            </label>
+            <Input
+              value={settings.phone || ''}
+              onChange={(e) => setSettings({ ...settings, phone: e.target.value, whatsappNumber: e.target.value })}
+              placeholder="+91 9150037005"
+              required
+            />
+          </div>
+        </div>
+
+        <div className="space-y-1">
+          <label className="text-xs font-sans font-bold uppercase tracking-wider text-charcoal">
+            Physical Location
+          </label>
+          <Input
+            value={settings.location || ''}
+            onChange={(e) => setSettings({ ...settings, location: e.target.value })}
+            placeholder="Coimbatore, Tamil Nadu, India"
+          />
+        </div>
       </div>
 
-      {/* Save Button */}
-      <div className="pt-4 flex justify-end">
+      {/* 3. Professional Social Profiles */}
+      <div className="p-6 sm:p-8 border border-charcoal/15 bg-ivory space-y-6">
+        <div className="flex items-center gap-2 pb-4 border-b border-charcoal/10">
+          <Share2 className="w-4 h-4 text-copper" />
+          <h2 className="font-display font-bold text-lg text-charcoal">
+            Social Networks &amp; Portfolio Handles
+          </h2>
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+          <div className="space-y-1">
+            <label className="text-xs font-sans font-bold uppercase tracking-wider text-charcoal">
+              Behance Portfolio URL
+            </label>
+            <Input
+              value={settings.behanceUrl || ''}
+              onChange={(e) => setSettings({ ...settings, behanceUrl: e.target.value })}
+              placeholder="https://www.behance.net/abdulahad438"
+            />
+          </div>
+
+          <div className="space-y-1">
+            <label className="text-xs font-sans font-bold uppercase tracking-wider text-charcoal">
+              LinkedIn Profile URL
+            </label>
+            <Input
+              value={settings.linkedinUrl || ''}
+              onChange={(e) => setSettings({ ...settings, linkedinUrl: e.target.value })}
+              placeholder="https://www.linkedin.com/in/abdulahadj"
+            />
+          </div>
+
+          <div className="space-y-1">
+            <label className="text-xs font-sans font-bold uppercase tracking-wider text-charcoal">
+              Instagram Profile URL
+            </label>
+            <Input
+              value={settings.instagramUrl || ''}
+              onChange={(e) => setSettings({ ...settings, instagramUrl: e.target.value })}
+              placeholder="https://www.instagram.com/..."
+            />
+          </div>
+
+          <div className="space-y-1">
+            <label className="text-xs font-sans font-bold uppercase tracking-wider text-charcoal">
+              Dribbble Profile URL
+            </label>
+            <Input
+              value={settings.dribbbleUrl || ''}
+              onChange={(e) => setSettings({ ...settings, dribbbleUrl: e.target.value })}
+              placeholder="https://dribbble.com/..."
+            />
+          </div>
+        </div>
+      </div>
+
+      {/* Sticky Bottom Actions */}
+      <div className="sticky bottom-6 z-20 p-4 bg-charcoal text-ivory border border-charcoal-700 flex items-center justify-between shadow-2xl">
+        <div className="text-xs font-sans text-charcoal-300">
+          All changes apply dynamically to public site via Next.js on-demand cache revalidation.
+        </div>
+
         <Button
           type="submit"
           variant="primary"
-          size="lg"
+          size="md"
           isLoading={isSaving}
           icon={<Save className="w-4 h-4" />}
         >

@@ -781,8 +781,241 @@ export async function deleteService(id: string): Promise<boolean> {
   return localServices.length < initialLen;
 }
 
+let localExperiences: ExperienceItem[] = [...EXPERIENCE_DATA];
+
+export async function getExperiences(includeHidden = false): Promise<ExperienceItem[]> {
+  const supabase = createClient();
+  if (supabase) {
+    try {
+      let query = supabase
+        .from('experience')
+        .select('*')
+        .order('sort_order', { ascending: true });
+
+      if (!includeHidden) {
+        query = query.eq('is_visible', true);
+      }
+
+      const { data, error } = await query;
+      if (!error && data && data.length > 0) {
+        return data.map((row: any) => ({
+          id: row.id,
+          company: row.company,
+          role: row.role,
+          employmentType: row.employment_type || 'Full-time',
+          startDate: row.start_date || '',
+          endDate: row.end_date || '',
+          period: row.period || `${row.start_date || ''} – ${row.end_date || 'Present'}`,
+          isCurrent: row.is_current ?? false,
+          location: row.location || 'Coimbatore, India',
+          description: row.description || '',
+          responsibilities: Array.isArray(row.responsibilities) ? row.responsibilities : [],
+          achievements: Array.isArray(row.achievements) ? row.achievements : [],
+          companyLogo: row.company_logo || '',
+          sortOrder: row.sort_order ?? 0,
+          isVisible: row.is_visible ?? true,
+          createdAt: row.created_at,
+          updatedAt: row.updated_at,
+        }));
+      }
+    } catch {
+      // Fallback
+    }
+  }
+
+  return [...localExperiences]
+    .filter(e => includeHidden || e.isVisible !== false)
+    .sort((a, b) => a.sortOrder - b.sortOrder);
+}
+
 export async function getExperience(): Promise<ExperienceItem[]> {
-  return EXPERIENCE_DATA;
+  return getExperiences(false);
+}
+
+export async function getExperienceById(id: string): Promise<ExperienceItem | null> {
+  const all = await getExperiences(true);
+  return all.find(e => e.id === id) || null;
+}
+
+export async function saveExperience(item: Partial<ExperienceItem> & { id?: string }): Promise<ExperienceItem> {
+  if (typeof window !== 'undefined') {
+    try {
+      const res = await fetch('/api/experience', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(item),
+      });
+      if (res.ok) {
+        return await res.json();
+      }
+    } catch {
+      // Fallback
+    }
+  }
+
+  const supabase = createClient();
+  const now = new Date().toISOString();
+  const row: Record<string, any> = {
+    updated_at: now,
+  };
+
+  if (item.company !== undefined) row.company = item.company;
+  if (item.role !== undefined) row.role = item.role;
+  if (item.employmentType !== undefined) row.employment_type = item.employmentType;
+  if (item.startDate !== undefined) row.start_date = item.startDate;
+  if (item.endDate !== undefined) row.end_date = item.endDate;
+  if (item.period !== undefined) row.period = item.period;
+  if (item.isCurrent !== undefined) row.is_current = item.isCurrent;
+  if (item.location !== undefined) row.location = item.location;
+  if (item.description !== undefined) row.description = item.description;
+  if (item.responsibilities !== undefined) row.responsibilities = item.responsibilities;
+  if (item.achievements !== undefined) row.achievements = item.achievements;
+  if (item.companyLogo !== undefined) row.company_logo = item.companyLogo;
+  if (item.sortOrder !== undefined) row.sort_order = item.sortOrder;
+  if (item.isVisible !== undefined) row.is_visible = item.isVisible;
+
+  if (supabase) {
+    try {
+      let savedRow: any = null;
+      const isUuid = item.id && /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(item.id);
+
+      if (isUuid) {
+        const { data, error } = await supabase
+          .from('experience')
+          .update(row)
+          .eq('id', item.id)
+          .select()
+          .maybeSingle();
+        if (!error && data) savedRow = data;
+      }
+
+      if (!savedRow && item.id) {
+        const { data: existing } = await supabase
+          .from('experience')
+          .select('id')
+          .eq('company', item.company)
+          .maybeSingle();
+
+        if (existing?.id) {
+          const { data, error } = await supabase
+            .from('experience')
+            .update(row)
+            .eq('id', existing.id)
+            .select()
+            .maybeSingle();
+          if (!error && data) savedRow = data;
+        }
+      }
+
+      if (!savedRow) {
+        const { data, error } = await supabase
+          .from('experience')
+          .insert({
+            ...row,
+            company: item.company || 'New Company',
+            role: item.role || 'Role',
+            location: item.location || 'Coimbatore, India',
+            created_at: now,
+          })
+          .select()
+          .single();
+        if (!error && data) savedRow = data;
+      }
+
+      if (savedRow) {
+        const mapped: ExperienceItem = {
+          id: savedRow.id,
+          company: savedRow.company,
+          role: savedRow.role,
+          employmentType: savedRow.employment_type || 'Full-time',
+          startDate: savedRow.start_date || '',
+          endDate: savedRow.end_date || '',
+          period: savedRow.period || '',
+          isCurrent: savedRow.is_current ?? false,
+          location: savedRow.location,
+          description: savedRow.description || '',
+          responsibilities: savedRow.responsibilities || [],
+          achievements: savedRow.achievements || [],
+          companyLogo: savedRow.company_logo || '',
+          sortOrder: savedRow.sort_order ?? 0,
+          isVisible: savedRow.is_visible ?? true,
+          createdAt: savedRow.created_at,
+          updatedAt: savedRow.updated_at,
+        };
+        const idx = localExperiences.findIndex(e => e.id === mapped.id || e.company === mapped.company);
+        if (idx !== -1) localExperiences[idx] = mapped;
+        else localExperiences.push(mapped);
+        return mapped;
+      }
+    } catch {
+      // Fallback
+    }
+  }
+
+  const existingIdx = localExperiences.findIndex(e => e.id === item.id);
+  if (existingIdx !== -1) {
+    const updated = { ...localExperiences[existingIdx], ...item };
+    localExperiences[existingIdx] = updated as ExperienceItem;
+    return updated as ExperienceItem;
+  }
+
+  const newExp: ExperienceItem = {
+    id: item.id || `exp-${Date.now()}`,
+    company: item.company || 'New Company',
+    role: item.role || 'Role',
+    employmentType: item.employmentType || 'Full-time',
+    startDate: item.startDate || '',
+    endDate: item.endDate || '',
+    period: item.period || '2025 – Present',
+    isCurrent: item.isCurrent ?? false,
+    location: item.location || 'Coimbatore, India',
+    description: item.description || '',
+    responsibilities: item.responsibilities || [],
+    achievements: item.achievements || [],
+    companyLogo: item.companyLogo || '',
+    sortOrder: item.sortOrder ?? localExperiences.length + 1,
+    isVisible: item.isVisible ?? true,
+    createdAt: now,
+    updatedAt: now,
+  };
+  localExperiences.push(newExp);
+  return newExp;
+}
+
+export async function deleteExperience(id: string): Promise<boolean> {
+  if (typeof window !== 'undefined') {
+    try {
+      const res = await fetch(`/api/experience?id=${encodeURIComponent(id)}`, {
+        method: 'DELETE',
+      });
+      if (res.ok) {
+        localExperiences = localExperiences.filter(e => e.id !== id);
+        return true;
+      }
+    } catch {
+      // Fallback
+    }
+  }
+
+  const supabase = createClient();
+  if (supabase) {
+    try {
+      const isUuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(id);
+      let query = supabase.from('experience').delete();
+      if (isUuid) {
+        query = query.eq('id', id);
+      } else {
+        query = query.or(`id.eq.${id},company.eq.${id}`);
+      }
+      await query;
+    } catch {
+      // Fallback
+    }
+  }
+
+  const initialLen = localExperiences.length;
+  localExperiences = localExperiences.filter(e => e.id !== id);
+  return localExperiences.length < initialLen;
 }
 
 export async function getSiteSettings(): Promise<SiteSettings> {
@@ -803,17 +1036,56 @@ export async function getSiteSettings(): Promise<SiteSettings> {
           tagline: data.tagline ?? localSettings.tagline,
           email: data.email ?? localSettings.email,
           phone: data.phone ?? localSettings.phone,
+          whatsappNumber: data.whatsapp_number ?? localSettings.whatsappNumber,
           location: data.location ?? localSettings.location,
           behanceUrl: data.behance_url ?? localSettings.behanceUrl,
           linkedinUrl: data.linkedin_url ?? localSettings.linkedinUrl,
+          instagramUrl: data.instagram_url ?? localSettings.instagramUrl,
+          dribbbleUrl: data.dribbble_url ?? localSettings.dribbbleUrl,
+
+          // Header
+          headerLogoLightUrl: data.header_logo_light_url ?? localSettings.headerLogoLightUrl,
+          headerLogoDarkUrl: data.header_logo_dark_url ?? localSettings.headerLogoDarkUrl,
+          logoAltText: data.logo_alt_text ?? localSettings.logoAltText,
+          headerNavLinks: Array.isArray(data.header_nav_links) ? data.header_nav_links : localSettings.headerNavLinks,
+          headerCtaText: data.header_cta_text ?? localSettings.headerCtaText,
+          headerCtaHref: data.header_cta_href ?? localSettings.headerCtaHref,
+          availabilityStatus: data.availability_status ?? localSettings.availabilityStatus,
+          availabilityMessage: data.availability_message ?? localSettings.availabilityMessage,
+          locationTimeText: data.location_time_text ?? localSettings.locationTimeText,
+
+          // Hero
           heroHeadline: data.hero_headline ?? localSettings.heroHeadline,
+          heroHeadlineLine2: data.hero_headline_line2 ?? localSettings.heroHeadlineLine2,
+          heroHighlightedWords: data.hero_highlighted_words ?? localSettings.heroHighlightedWords,
+          heroTitle: data.hero_title ?? localSettings.heroTitle,
+          heroSubtitle: data.hero_subtitle ?? localSettings.heroSubtitle,
           heroSupportingCopy: data.hero_supporting_copy ?? localSettings.heroSupportingCopy,
+          heroIntroSecondary: data.hero_intro_secondary ?? localSettings.heroIntroSecondary,
+          heroLocationLabel: data.hero_location_label ?? localSettings.heroLocationLabel,
+          heroPrimaryCtaText: data.hero_primary_cta_text ?? localSettings.heroPrimaryCtaText,
+          heroPrimaryCtaHref: data.hero_primary_cta_href ?? localSettings.heroPrimaryCtaHref,
+          heroSecondaryCtaText: data.hero_secondary_cta_text ?? localSettings.heroSecondaryCtaText,
+          heroSecondaryCtaHref: data.hero_secondary_cta_href ?? localSettings.heroSecondaryCtaHref,
+          heroBgImage: data.hero_bg_image ?? localSettings.heroBgImage,
+          heroProfileImage: data.hero_profile_image ?? localSettings.heroProfileImage,
+          heroMonogramVisible: data.hero_monogram_visible ?? localSettings.heroMonogramVisible,
+          heroMonogramUrl: data.hero_monogram_url ?? localSettings.heroMonogramUrl,
+          heroAnimationEnabled: data.hero_animation_enabled ?? localSettings.heroAnimationEnabled,
+
+          // About
+          aboutSectionLabel: data.about_section_label ?? localSettings.aboutSectionLabel,
           aboutHeadline: data.about_headline ?? localSettings.aboutHeadline,
           aboutIntro: data.about_intro ?? localSettings.aboutIntro,
           aboutPhilosophy: data.about_philosophy ?? localSettings.aboutPhilosophy,
           aboutDescription: data.about_description ?? localSettings.aboutDescription,
           aboutBio: data.about_bio ?? localSettings.aboutBio,
           profilePhotoUrl: data.profile_photo_url ?? localSettings.profilePhotoUrl,
+          profilePhotoAlt: data.profile_photo_alt ?? localSettings.profilePhotoAlt,
+          experienceYears: data.experience_years ?? localSettings.experienceYears,
+          achievementsSummary: data.achievements_summary ?? localSettings.achievementsSummary,
+          experienceHighlights: Array.isArray(data.experience_highlights) ? data.experience_highlights : localSettings.experienceHighlights,
+          achievementHighlights: Array.isArray(data.achievement_highlights) ? data.achievement_highlights : localSettings.achievementHighlights,
           resumeUrl: data.resume_url ?? localSettings.resumeUrl,
           resumeLabel: data.resume_label ?? localSettings.resumeLabel,
           resumeVisible: data.resume_visible ?? localSettings.resumeVisible,
@@ -821,11 +1093,22 @@ export async function getSiteSettings(): Promise<SiteSettings> {
           educationInstitution: data.education_institution ?? localSettings.educationInstitution,
           educationYear: data.education_year ?? localSettings.educationYear,
           educationAggregate: data.education_aggregate ?? localSettings.educationAggregate,
+
+          // Footer
           footerAppearance: (data.footer_appearance as any) ?? localSettings.footerAppearance,
           footerLogoLightUrl: data.footer_logo_light_url ?? localSettings.footerLogoLightUrl,
           footerLogoDarkUrl: data.footer_logo_dark_url ?? localSettings.footerLogoDarkUrl,
           footerDescription: data.footer_description ?? localSettings.footerDescription,
+          footerBrandStatement: data.footer_brand_statement ?? localSettings.footerBrandStatement,
+          footerNavVisible: data.footer_nav_visible ?? localSettings.footerNavVisible,
           footerCopyright: data.footer_copyright ?? localSettings.footerCopyright,
+          footerLocation: data.footer_location ?? localSettings.footerLocation,
+
+          // Theme & SEO
+          defaultTheme: data.default_theme ?? localSettings.defaultTheme,
+          primaryBrandColor: data.primary_brand_color ?? localSettings.primaryBrandColor,
+          defaultSeoTitle: data.default_seo_title ?? localSettings.defaultSeoTitle,
+          defaultSeoDescription: data.default_seo_description ?? localSettings.defaultSeoDescription,
         };
       }
     } catch {
@@ -865,17 +1148,56 @@ export async function updateSiteSettings(newSettings: Partial<SiteSettings>): Pr
       if (newSettings.tagline !== undefined) dbPayload.tagline = newSettings.tagline;
       if (newSettings.email !== undefined) dbPayload.email = newSettings.email;
       if (newSettings.phone !== undefined) dbPayload.phone = newSettings.phone;
+      if (newSettings.whatsappNumber !== undefined) dbPayload.whatsapp_number = newSettings.whatsappNumber;
       if (newSettings.location !== undefined) dbPayload.location = newSettings.location;
       if (newSettings.behanceUrl !== undefined) dbPayload.behance_url = newSettings.behanceUrl;
       if (newSettings.linkedinUrl !== undefined) dbPayload.linkedin_url = newSettings.linkedinUrl;
+      if (newSettings.instagramUrl !== undefined) dbPayload.instagram_url = newSettings.instagramUrl;
+      if (newSettings.dribbbleUrl !== undefined) dbPayload.dribbble_url = newSettings.dribbbleUrl;
+
+      // Header
+      if (newSettings.headerLogoLightUrl !== undefined) dbPayload.header_logo_light_url = newSettings.headerLogoLightUrl;
+      if (newSettings.headerLogoDarkUrl !== undefined) dbPayload.header_logo_dark_url = newSettings.headerLogoDarkUrl;
+      if (newSettings.logoAltText !== undefined) dbPayload.logo_alt_text = newSettings.logoAltText;
+      if (newSettings.headerNavLinks !== undefined) dbPayload.header_nav_links = newSettings.headerNavLinks;
+      if (newSettings.headerCtaText !== undefined) dbPayload.header_cta_text = newSettings.headerCtaText;
+      if (newSettings.headerCtaHref !== undefined) dbPayload.header_cta_href = newSettings.headerCtaHref;
+      if (newSettings.availabilityStatus !== undefined) dbPayload.availability_status = newSettings.availabilityStatus;
+      if (newSettings.availabilityMessage !== undefined) dbPayload.availability_message = newSettings.availabilityMessage;
+      if (newSettings.locationTimeText !== undefined) dbPayload.location_time_text = newSettings.locationTimeText;
+
+      // Hero
       if (newSettings.heroHeadline !== undefined) dbPayload.hero_headline = newSettings.heroHeadline;
+      if (newSettings.heroHeadlineLine2 !== undefined) dbPayload.hero_headline_line2 = newSettings.heroHeadlineLine2;
+      if (newSettings.heroHighlightedWords !== undefined) dbPayload.hero_highlighted_words = newSettings.heroHighlightedWords;
+      if (newSettings.heroTitle !== undefined) dbPayload.hero_title = newSettings.heroTitle;
+      if (newSettings.heroSubtitle !== undefined) dbPayload.hero_subtitle = newSettings.heroSubtitle;
       if (newSettings.heroSupportingCopy !== undefined) dbPayload.hero_supporting_copy = newSettings.heroSupportingCopy;
+      if (newSettings.heroIntroSecondary !== undefined) dbPayload.hero_intro_secondary = newSettings.heroIntroSecondary;
+      if (newSettings.heroLocationLabel !== undefined) dbPayload.hero_location_label = newSettings.heroLocationLabel;
+      if (newSettings.heroPrimaryCtaText !== undefined) dbPayload.hero_primary_cta_text = newSettings.heroPrimaryCtaText;
+      if (newSettings.heroPrimaryCtaHref !== undefined) dbPayload.hero_primary_cta_href = newSettings.heroPrimaryCtaHref;
+      if (newSettings.heroSecondaryCtaText !== undefined) dbPayload.hero_secondary_cta_text = newSettings.heroSecondaryCtaText;
+      if (newSettings.heroSecondaryCtaHref !== undefined) dbPayload.hero_secondary_cta_href = newSettings.heroSecondaryCtaHref;
+      if (newSettings.heroBgImage !== undefined) dbPayload.hero_bg_image = newSettings.heroBgImage;
+      if (newSettings.heroProfileImage !== undefined) dbPayload.hero_profile_image = newSettings.heroProfileImage;
+      if (newSettings.heroMonogramVisible !== undefined) dbPayload.hero_monogram_visible = newSettings.heroMonogramVisible;
+      if (newSettings.heroMonogramUrl !== undefined) dbPayload.hero_monogram_url = newSettings.heroMonogramUrl;
+      if (newSettings.heroAnimationEnabled !== undefined) dbPayload.hero_animation_enabled = newSettings.heroAnimationEnabled;
+
+      // About
+      if (newSettings.aboutSectionLabel !== undefined) dbPayload.about_section_label = newSettings.aboutSectionLabel;
       if (newSettings.aboutHeadline !== undefined) dbPayload.about_headline = newSettings.aboutHeadline;
       if (newSettings.aboutIntro !== undefined) dbPayload.about_intro = newSettings.aboutIntro;
       if (newSettings.aboutPhilosophy !== undefined) dbPayload.about_philosophy = newSettings.aboutPhilosophy;
       if (newSettings.aboutDescription !== undefined) dbPayload.about_description = newSettings.aboutDescription;
       if (newSettings.aboutBio !== undefined) dbPayload.about_bio = newSettings.aboutBio;
       if (newSettings.profilePhotoUrl !== undefined) dbPayload.profile_photo_url = newSettings.profilePhotoUrl;
+      if (newSettings.profilePhotoAlt !== undefined) dbPayload.profile_photo_alt = newSettings.profilePhotoAlt;
+      if (newSettings.experienceYears !== undefined) dbPayload.experience_years = newSettings.experienceYears;
+      if (newSettings.achievementsSummary !== undefined) dbPayload.achievements_summary = newSettings.achievementsSummary;
+      if (newSettings.experienceHighlights !== undefined) dbPayload.experience_highlights = newSettings.experienceHighlights;
+      if (newSettings.achievementHighlights !== undefined) dbPayload.achievement_highlights = newSettings.achievementHighlights;
       if (newSettings.resumeUrl !== undefined) dbPayload.resume_url = newSettings.resumeUrl;
       if (newSettings.resumeLabel !== undefined) dbPayload.resume_label = newSettings.resumeLabel;
       if (newSettings.resumeVisible !== undefined) dbPayload.resume_visible = newSettings.resumeVisible;
@@ -883,11 +1205,22 @@ export async function updateSiteSettings(newSettings: Partial<SiteSettings>): Pr
       if (newSettings.educationInstitution !== undefined) dbPayload.education_institution = newSettings.educationInstitution;
       if (newSettings.educationYear !== undefined) dbPayload.education_year = newSettings.educationYear;
       if (newSettings.educationAggregate !== undefined) dbPayload.education_aggregate = newSettings.educationAggregate;
+
+      // Footer
       if (newSettings.footerAppearance !== undefined) dbPayload.footer_appearance = newSettings.footerAppearance;
       if (newSettings.footerLogoLightUrl !== undefined) dbPayload.footer_logo_light_url = newSettings.footerLogoLightUrl;
       if (newSettings.footerLogoDarkUrl !== undefined) dbPayload.footer_logo_dark_url = newSettings.footerLogoDarkUrl;
       if (newSettings.footerDescription !== undefined) dbPayload.footer_description = newSettings.footerDescription;
+      if (newSettings.footerBrandStatement !== undefined) dbPayload.footer_brand_statement = newSettings.footerBrandStatement;
+      if (newSettings.footerNavVisible !== undefined) dbPayload.footer_nav_visible = newSettings.footerNavVisible;
       if (newSettings.footerCopyright !== undefined) dbPayload.footer_copyright = newSettings.footerCopyright;
+      if (newSettings.footerLocation !== undefined) dbPayload.footer_location = newSettings.footerLocation;
+
+      // Theme & SEO
+      if (newSettings.defaultTheme !== undefined) dbPayload.default_theme = newSettings.defaultTheme;
+      if (newSettings.primaryBrandColor !== undefined) dbPayload.primary_brand_color = newSettings.primaryBrandColor;
+      if (newSettings.defaultSeoTitle !== undefined) dbPayload.default_seo_title = newSettings.defaultSeoTitle;
+      if (newSettings.defaultSeoDescription !== undefined) dbPayload.default_seo_description = newSettings.defaultSeoDescription;
 
       await supabase
         .from('site_settings')

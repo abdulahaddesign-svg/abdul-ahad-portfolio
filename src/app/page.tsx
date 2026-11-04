@@ -24,7 +24,7 @@ export default async function HomePage() {
       <Preloader />
 
       {/* 2. Homepage Hero — Who I Am & Highlights Bar */}
-      <HeroSection />
+      <HeroSection settings={settings} />
 
       {/* 3. Selected Client Brands Showcase (Larger Logos, Scroll-Linked) */}
       <ClientShowcaseSection clients={clients} />

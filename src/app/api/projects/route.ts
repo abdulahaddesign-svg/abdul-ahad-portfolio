@@ -5,6 +5,9 @@ import { Project } from '@/lib/types';
 import { INITIAL_PROJECTS } from '@/lib/constants';
 import { mapRowToProject, mapProjectToRow, UUID_REGEX } from '@/lib/project-mapper';
 
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
+
 export async function GET(req: NextRequest) {
   const { searchParams } = new URL(req.url);
   const slug = searchParams.get('slug');

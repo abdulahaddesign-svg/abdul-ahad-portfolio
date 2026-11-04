@@ -63,12 +63,20 @@ export interface ExperienceItem {
   id: string;
   company: string;
   role: string;
+  employmentType?: string;
+  startDate?: string;
+  endDate?: string;
   period: string;
   isCurrent: boolean;
   location: string;
+  description?: string;
   responsibilities: string[];
   achievements?: string[];
+  companyLogo?: string;
   sortOrder: number;
+  isVisible?: boolean;
+  createdAt?: string;
+  updatedAt?: string;
 }
 
 export interface ServiceItem {
@@ -131,13 +139,45 @@ export interface SiteSettings {
   tagline: string;
   email: string;
   phone: string;
+  whatsappNumber?: string;
   location: string;
   behanceUrl: string;
   linkedinUrl: string;
   instagramUrl?: string;
   dribbbleUrl?: string;
+
+  // Header & Navigation CMS
+  headerLogoLightUrl?: string;
+  headerLogoDarkUrl?: string;
+  logoAltText?: string;
+  headerNavLinks?: { label: string; href: string; index?: string }[];
+  headerCtaText?: string;
+  headerCtaHref?: string;
+  availabilityStatus?: string;
+  availabilityMessage?: string;
+  locationTimeText?: string;
+
+  // Homepage Hero CMS
   heroHeadline: string;
+  heroHeadlineLine2?: string;
+  heroHighlightedWords?: string;
+  heroTitle?: string;
+  heroSubtitle?: string;
   heroSupportingCopy: string;
+  heroIntroSecondary?: string;
+  heroLocationLabel?: string;
+  heroPrimaryCtaText?: string;
+  heroPrimaryCtaHref?: string;
+  heroSecondaryCtaText?: string;
+  heroSecondaryCtaHref?: string;
+  heroBgImage?: string;
+  heroProfileImage?: string;
+  heroMonogramVisible?: boolean;
+  heroMonogramUrl?: string;
+  heroAnimationEnabled?: boolean;
+
+  // About CMS
+  aboutSectionLabel?: string;
   aboutHeadline?: string;
   aboutIntro: string;
   aboutPhilosophy: string;
@@ -147,6 +187,8 @@ export interface SiteSettings {
   profilePhotoAlt?: string;
   experienceYears?: string;
   achievementsSummary?: string;
+  experienceHighlights?: string[];
+  achievementHighlights?: string[];
   resumeUrl?: string;
   resumeLabel?: string;
   resumeVisible?: boolean;
@@ -154,6 +196,8 @@ export interface SiteSettings {
   educationInstitution: string;
   educationYear: string;
   educationAggregate: string;
+
+  // Footer CMS
   footerAppearance?: 'light' | 'dark';
   footerLogoLightUrl?: string;
   footerLogoDarkUrl?: string;
@@ -161,9 +205,18 @@ export interface SiteSettings {
   footerBrandStatement?: string;
   footerNavVisible?: boolean;
   footerCopyright?: string;
+  footerLocation?: string;
+
+  // Call to Action
   ctaHeadline?: string;
   ctaSupporting?: string;
   ctaAvailability?: string;
+
+  // Theme & SEO
+  defaultTheme?: 'light' | 'dark';
+  primaryBrandColor?: string;
+  defaultSeoTitle?: string;
+  defaultSeoDescription?: string;
 }
 
 export interface ClientLogo {

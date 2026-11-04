@@ -3,6 +3,9 @@ import { revalidatePath } from 'next/cache';
 import { createClient } from '@/lib/supabase/client';
 import { ClientLogo } from '@/lib/types';
 
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
+
 const UUID_REGEX = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
 export async function GET() {

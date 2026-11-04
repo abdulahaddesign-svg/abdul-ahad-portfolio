@@ -81,11 +81,48 @@ export const SITE_SETTINGS: SiteSettings = {
   tagline: "Designed with intent. Made to matter.",
   email: "abdulahad.ofcl@gmail.com",
   phone: "+91 9150037005",
+  whatsappNumber: "+91 9150037005",
   location: "Coimbatore, Tamil Nadu, India",
   behanceUrl: "https://www.behance.net/abdulahad438",
   linkedinUrl: "https://www.linkedin.com/in/abdulahadj",
-  heroHeadline: "Design that makes businesses stand out.",
-  heroSupportingCopy: "Thoughtful visual identities, digital experiences and motion-led content built with purpose and precision.",
+
+  // Header & Navigation CMS
+  headerLogoLightUrl: "/brand/logo-wordmark-clean-light.png",
+  headerLogoDarkUrl: "/brand/logo-wordmark-clean-dark.png",
+  logoAltText: "Abdul Ahad J — Creative Designer",
+  headerNavLinks: [
+    { label: "Work", href: "/work", index: "01" },
+    { label: "About", href: "/about", index: "02" },
+    { label: "Services", href: "/services", index: "03" },
+    { label: "Contact", href: "/contact", index: "04" },
+  ],
+  headerCtaText: "Initiate Brief",
+  headerCtaHref: "/contact",
+  availabilityStatus: "Available for New Projects",
+  availabilityMessage: "Available for select brand identity, product design and creative retainer engagements.",
+  locationTimeText: "Coimbatore, IN",
+
+  // Homepage Hero CMS
+  heroHeadline: "ABDUL AHAD",
+  heroHeadlineLine2: "",
+  heroHighlightedWords: "",
+  heroTitle: "CREATIVE DESIGNER & DIGITAL CREATIVE PARTNER",
+  heroSubtitle: "Design that makes businesses stand out.",
+  heroSupportingCopy: "I create thoughtful visual identities, digital experiences, and motion-led content for brands that want to stand out.",
+  heroIntroSecondary: "Combining visual design, typography, and human-centered design thinking to deliver precise creative solutions that command attention and build credibility.",
+  heroLocationLabel: "Coimbatore, Tamil Nadu, India",
+  heroPrimaryCtaText: "Initiate Brief",
+  heroPrimaryCtaHref: "/contact",
+  heroSecondaryCtaText: "View Selected Work",
+  heroSecondaryCtaHref: "/work",
+  heroBgImage: "",
+  heroProfileImage: "",
+  heroMonogramVisible: true,
+  heroMonogramUrl: "/brand/logo-monogram-light.png",
+  heroAnimationEnabled: true,
+
+  // About CMS
+  aboutSectionLabel: "BIOGRAPHY & CAPABILITIES",
   aboutHeadline: "I create visual experiences that make ideas matter.",
   aboutIntro: "Abdul Ahad J is a creative designer based in Coimbatore, India, with 3+ years of experience in graphic design, visual branding and digital creative production.",
   aboutPhilosophy: "Design is not decorative styling; it is clear thinking made visible. I combine visual harmony, typographic discipline, and strategic intent to craft brand experiences that command attention, build credibility, and inspire action.",
@@ -95,6 +132,16 @@ export const SITE_SETTINGS: SiteSettings = {
   profilePhotoAlt: "Abdul Ahad J — Creative Designer & Visual Specialist",
   experienceYears: "3+ Years",
   achievementsSummary: "Best Employee of the Year 2025 at eClerx · 50+ Freelance Clients",
+  experienceHighlights: [
+    "3+ Years of multidisciplinary design experience across enterprise, SaaS, and boutique brands",
+    "Best Employee of the Year 2025 at eClerx for high-retention creative delivery",
+    "50+ Successful freelance client projects delivered globally"
+  ],
+  achievementHighlights: [
+    "Best Employee of the Year 2025 (eClerx)",
+    "Reztro Table Ordering UI/UX with 40% reduced order friction",
+    "50+ Global Brand Identity Deliveries"
+  ],
   resumeUrl: "/resume/abdul-ahad-resume.pdf",
   resumeLabel: "PDF · Updated Resume",
   resumeVisible: true,
@@ -102,6 +149,8 @@ export const SITE_SETTINGS: SiteSettings = {
   educationInstitution: "Government Arts College (Autonomous), Coimbatore",
   educationYear: "2020 – 2023",
   educationAggregate: "80% Aggregate",
+
+  // Footer CMS
   footerAppearance: "dark",
   footerLogoLightUrl: "/brand/logo-wordmark-clean-light.png",
   footerLogoDarkUrl: "/brand/logo-wordmark-clean-dark.png",
@@ -109,9 +158,18 @@ export const SITE_SETTINGS: SiteSettings = {
   footerBrandStatement: "Abdul Ahad",
   footerNavVisible: true,
   footerCopyright: "Abdul Ahad J. All rights reserved.",
+  footerLocation: "Coimbatore, Tamil Nadu, India",
+
+  // Call to Action
   ctaHeadline: "HAVE A PROJECT\nIN MIND?",
   ctaSupporting: "Let's create something meaningful together.",
   ctaAvailability: "Available for New Projects · Q1 / Q2",
+
+  // Theme & SEO
+  defaultTheme: "dark",
+  primaryBrandColor: "#C4855A",
+  defaultSeoTitle: "Abdul Ahad J — Graphic Designer & Visual Branding Specialist",
+  defaultSeoDescription: "Multidisciplinary creative portfolio of Abdul Ahad J. Brand identity design, UI/UX mobile product design, motion graphics and high-impact digital collateral in Coimbatore, India."
 };
 
 export const BRAND_COLORS = {
@@ -127,9 +185,15 @@ export const EXPERIENCE_DATA: ExperienceItem[] = [
     id: "exp-1",
     company: "Falcon Square Private Limited",
     role: "Graphic Designer & Visual Content Specialist",
+    employmentType: "Full-time",
+    startDate: "May 2025",
+    endDate: "Present",
     period: "May 2025 – Present",
     isCurrent: true,
     location: "Coimbatore, India",
+    description: "Leading visual design and digital creative campaigns for enterprise SaaS products.",
+    companyLogo: "/clients/client-falcon.svg",
+    isVisible: true,
     responsibilities: [
       "Create high-converting posters, banners, social media creatives, digital advertisements, and promotional materials for enterprise and SaaS clients.",
       "Design comprehensive social media content calendars and maintain strict brand consistency across all digital touchpoints.",
@@ -144,9 +208,15 @@ export const EXPERIENCE_DATA: ExperienceItem[] = [
     id: "exp-2",
     company: "eClerx",
     role: "Graphic Designer",
+    employmentType: "Full-time",
+    startDate: "June 2023",
+    endDate: "May 2025",
     period: "June 2023 – May 2025",
     isCurrent: false,
     location: "India",
+    description: "Campaign-ready visual design production for global enterprise brands with high typographic discipline.",
+    companyLogo: "/clients/client-apex.svg",
+    isVisible: true,
     responsibilities: [
       "Produced campaign-ready visual assets for leading global enterprise clients across diverse industries.",
       "Created high-impact posters, flyers, social media creatives, coupons, magazines, brochures, and digital banners.",
@@ -163,9 +233,15 @@ export const EXPERIENCE_DATA: ExperienceItem[] = [
     id: "exp-3",
     company: "Freelance",
     role: "Graphic, UI/UX & Motion Designer",
+    employmentType: "Independent",
+    startDate: "August 2020",
+    endDate: "Present",
     period: "August 2020 – Present",
     isCurrent: true,
     location: "Remote / Coimbatore",
+    description: "Direct brand identity, digital product design and motion consultation for 50+ clients globally.",
+    companyLogo: "/clients/client-reztro.svg",
+    isVisible: true,
     responsibilities: [
       "Delivered end-to-end branding and graphic design solutions for 50+ clients across India and international markets.",
       "Created logos, complete visual identity systems, packaging designs, social media marketing kits, and print materials.",
