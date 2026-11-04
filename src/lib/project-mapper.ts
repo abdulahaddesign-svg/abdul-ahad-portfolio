@@ -52,8 +52,8 @@ export function mapProjectToRow(project: Partial<Project>): Record<string, any> 
   if (project.fullDescription !== undefined) row.full_description = project.fullDescription;
   if (project.sections !== undefined) row.sections = project.sections;
   if (project.clientName !== undefined) row.client_name = project.clientName;
-  if (project.projectYear !== undefined) row.project_year = project.projectYear;
-  if (project.role !== undefined) row.role = project.role;
+  row.project_year = project.projectYear || new Date().getFullYear().toString();
+  row.role = project.role || 'Creative Designer';
   if (project.toolsUsed !== undefined) row.tools_used = project.toolsUsed;
   if (project.challenge !== undefined) row.challenge = project.challenge;
   if (project.approach !== undefined || project.creativeProcess !== undefined) {

@@ -143,7 +143,20 @@ export async function getProjects(options?: {
 
       const { data, error } = await query;
       if (!error && data && data.length > 0) {
-        return data.map(mapDbRowToProject);
+        const dbProjects = data.map(mapDbRowToProject);
+        const dbSlugs = new Set(dbProjects.map(p => p.slug));
+        const missingDefaults = localProjects.filter(p => !dbSlugs.has(p.slug));
+        let merged = [...dbProjects, ...missingDefaults];
+        if (!options?.includeDrafts) {
+          merged = merged.filter(p => p.isPublished);
+        }
+        if (options?.featuredOnly) {
+          merged = merged.filter(p => p.isFeatured);
+        }
+        if (options?.category && options.category !== 'All') {
+          merged = merged.filter(p => p.category.toLowerCase() === options.category?.toLowerCase() || p.categorySlug === options.category);
+        }
+        return merged.sort((a, b) => a.sortOrder - b.sortOrder);
       }
     } catch {
       // Fallback to local
@@ -1222,9 +1235,27 @@ export async function updateSiteSettings(newSettings: Partial<SiteSettings>): Pr
       if (newSettings.defaultSeoTitle !== undefined) dbPayload.default_seo_title = newSettings.defaultSeoTitle;
       if (newSettings.defaultSeoDescription !== undefined) dbPayload.default_seo_description = newSettings.defaultSeoDescription;
 
-      await supabase
-        .from('site_settings')
-        .upsert({ id: 'primary', ...dbPayload });
+      const currentPayload: Record<string, any> = { id: 'primary', ...dbPayload };
+      let maxRetries = 20;
+      while (maxRetries > 0) {
+        const { error } = await supabase
+          .from('site_settings')
+          .upsert(currentPayload);
+
+        if (!error) {
+          break;
+        }
+
+        // If error is caused by a missing column in Supabase, strip it and retry immediately
+        const match = error.message && error.message.match(/Could not find the '([^']+)' column/);
+        if (match && match[1] && currentPayload[match[1]] !== undefined) {
+          delete currentPayload[match[1]];
+          maxRetries--;
+        } else {
+          console.warn('Supabase site_settings upsert error:', error.message);
+          break;
+        }
+      }
     } catch {
       // Fallback
     }

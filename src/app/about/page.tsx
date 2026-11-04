@@ -7,7 +7,8 @@ import { getSiteSettings, getExperience } from '@/lib/data';
 import { Button } from '@/components/ui/Button';
 import { SafeImage } from '@/components/ui/SafeImage';
 
-export const revalidate = 60;
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
 
 export async function generateMetadata(): Promise<Metadata> {
   const settings = await getSiteSettings();

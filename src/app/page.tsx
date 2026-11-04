@@ -8,7 +8,8 @@ import { CapabilitiesSection } from '@/components/home/CapabilitiesSection';
 import { AboutIntroSection } from '@/components/home/AboutIntroSection';
 import { ContactCtaSection } from '@/components/home/ContactCtaSection';
 
-export const revalidate = 60;
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
 
 export default async function HomePage() {
   // Dynamic projects, clients & settings loaded from data layer (Supabase / local store)

@@ -7,6 +7,9 @@ import { ThemeProvider } from '@/components/theme/ThemeProvider';
 import { SITE_SETTINGS } from '@/lib/constants';
 import { getSiteSettings } from '@/lib/data';
 
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
+
 const spaceGrotesk = Space_Grotesk({
   subsets: ['latin'],
   variable: '--font-space-grotesk',

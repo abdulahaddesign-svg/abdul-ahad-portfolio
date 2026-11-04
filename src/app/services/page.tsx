@@ -4,7 +4,8 @@ import { getServices, getSiteSettings } from '@/lib/data';
 import { ServicesClient } from './ServicesClient';
 import { ContactCtaSection } from '@/components/home/ContactCtaSection';
 
-export const revalidate = 60;
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
 
 export const metadata: Metadata = {
   title: 'Creative Services & Design Capabilities — Abdul Ahad',

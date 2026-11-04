@@ -11,7 +11,8 @@ interface ProjectDetailPageProps {
   };
 }
 
-export const revalidate = 60;
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
 
 export async function generateMetadata({ params }: ProjectDetailPageProps): Promise<Metadata> {
   const project = await getProjectBySlug(params.slug);

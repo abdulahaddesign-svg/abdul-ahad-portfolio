@@ -9,7 +9,8 @@ export const metadata: Metadata = {
     'Explore brand identity systems, social media collaterals, mobile-first UI/UX case studies, packaging dielines, and kinetic motion graphics by Abdul Ahad J.',
 };
 
-export const revalidate = 60;
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
 
 export default async function WorkPage() {
   const projects = await getProjects({ includeDrafts: false });
