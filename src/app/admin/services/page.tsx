@@ -18,6 +18,7 @@ import {
 } from 'lucide-react';
 import { ServiceItem } from '@/lib/types';
 import { Button } from '@/components/ui/Button';
+import { uploadMedia } from '@/lib/upload-client';
 
 export default function AdminServicesPage() {
   const [services, setServices] = useState<ServiceItem[]>([]);
@@ -124,13 +125,7 @@ export default function AdminServicesPage() {
     if (type === 'supporting') setUploadingSupporting(true);
 
     try {
-      const formData = new FormData();
-      formData.append('file', file);
-      const res = await fetch('/api/upload', {
-        method: 'POST',
-        body: formData,
-      });
-      const data = await res.json();
+      const data = await uploadMedia(file);
       if (data.url) {
         if (type === 'primary') {
           setEditForm(prev => ({ ...prev, primaryImage: data.url }));
@@ -143,11 +138,12 @@ export default function AdminServicesPage() {
           showNotification('Supporting image added');
         }
       }
-    } catch {
-      alert('Image upload failed');
+    } catch (err: any) {
+      alert(err.message || 'Image upload failed');
     } finally {
       if (type === 'primary') setUploadingPrimary(false);
       if (type === 'supporting') setUploadingSupporting(false);
+      e.target.value = '';
     }
   };
 

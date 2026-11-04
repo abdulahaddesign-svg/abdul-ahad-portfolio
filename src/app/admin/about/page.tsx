@@ -20,6 +20,7 @@ import { SiteSettings } from '@/lib/types';
 import { Input, Textarea } from '@/components/ui/Input';
 import { Button } from '@/components/ui/Button';
 import { SafeImage } from '@/components/ui/SafeImage';
+import { uploadMedia } from '@/lib/upload-client';
 
 export default function AdminAboutPage() {
   const [settings, setSettings] = useState<SiteSettings | null>(null);
@@ -41,22 +42,15 @@ export default function AdminAboutPage() {
 
     setUploadingPhoto(true);
     try {
-      const formData = new FormData();
-      formData.append('file', file);
-      const res = await fetch('/api/upload', {
-        method: 'POST',
-        body: formData,
-      });
-      const data = await res.json();
+      const data = await uploadMedia(file);
       if (data.url) {
         setSettings({ ...settings, profilePhotoUrl: data.url });
-      } else {
-        alert(data.error || 'Photo upload failed');
       }
-    } catch {
-      alert('Upload failed. Please check network connection.');
+    } catch (err: any) {
+      alert(err.message || 'Upload failed. Please check file format.');
     } finally {
       setUploadingPhoto(false);
+      e.target.value = '';
     }
   };
 

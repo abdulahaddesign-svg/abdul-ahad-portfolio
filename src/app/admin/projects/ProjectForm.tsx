@@ -19,6 +19,7 @@ import { saveProject } from '@/lib/data';
 import { slugify } from '@/lib/utils';
 import { Input, Textarea, Select } from '@/components/ui/Input';
 import { Button } from '@/components/ui/Button';
+import { uploadMedia } from '@/lib/upload-client';
 
 const CATEGORIES = [
   { value: 'Branding', label: 'Branding' },
@@ -124,22 +125,16 @@ export function ProjectForm({ initialData }: ProjectFormProps) {
     if (!file) return;
 
     setIsUploading(true);
-    const fd = new FormData();
-    fd.append('file', file);
-
     try {
-      const res = await fetch('/api/upload', {
-        method: 'POST',
-        body: fd,
-      });
-      const data = await res.json();
+      const data = await uploadMedia(file);
       if (data.url) {
         setFormData((prev) => ({ ...prev, coverImage: data.url }));
       }
-    } catch {
-      alert('Upload failed. Please check file format.');
+    } catch (err: any) {
+      alert(err.message || 'Upload failed. Please check file format and size.');
     } finally {
       setIsUploading(false);
+      e.target.value = '';
     }
   };
 
@@ -155,22 +150,16 @@ export function ProjectForm({ initialData }: ProjectFormProps) {
     if (!file) return;
 
     setIsUploading(true);
-    const fd = new FormData();
-    fd.append('file', file);
-
     try {
-      const res = await fetch('/api/upload', {
-        method: 'POST',
-        body: fd,
-      });
-      const data = await res.json();
+      const data = await uploadMedia(file);
       if (data.url) {
         setGalleryUrls((prev) => [...prev, data.url]);
       }
-    } catch {
-      alert('Gallery image upload failed.');
+    } catch (err: any) {
+      alert(err.message || 'Gallery image upload failed.');
     } finally {
       setIsUploading(false);
+      e.target.value = '';
     }
   };
 

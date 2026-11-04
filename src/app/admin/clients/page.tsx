@@ -20,6 +20,7 @@ import {
 import { getClientLogos, saveClientLogo, deleteClientLogo } from '@/lib/data';
 import { ClientLogo } from '@/lib/types';
 import { Button } from '@/components/ui/Button';
+import { uploadMedia } from '@/lib/upload-client';
 
 export default function AdminClientsPage() {
   const [clients, setClients] = useState<ClientLogo[]>([]);
@@ -74,23 +75,16 @@ export default function AdminClientsPage() {
 
     setUploading(true);
     try {
-      const formData = new FormData();
-      formData.append('file', file);
-      const res = await fetch('/api/upload', {
-        method: 'POST',
-        body: formData,
-      });
-      const data = await res.json();
+      const data = await uploadMedia(file);
       if (data.url) {
         setEditForm((prev) => ({ ...prev, logoUrl: data.url }));
         showNotification('Logo image uploaded successfully');
-      } else {
-        alert(data.error || 'Failed to upload logo image');
       }
-    } catch {
-      alert('Upload failed. Please check network connection.');
+    } catch (err: any) {
+      alert(err.message || 'Upload failed. Please check file format.');
     } finally {
       setUploading(false);
+      e.target.value = '';
     }
   };
 

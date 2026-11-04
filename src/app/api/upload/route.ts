@@ -8,10 +8,15 @@ const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10MB limit
 
 const ALLOWED_MIME_TYPES = new Set([
   'image/jpeg',
+  'image/jpg',
   'image/png',
   'image/webp',
   'image/svg+xml',
   'image/gif',
+  'image/avif',
+  'image/bmp',
+  'image/x-icon',
+  'image/vnd.microsoft.icon',
   'application/pdf',
 ]);
 
@@ -22,6 +27,9 @@ const ALLOWED_EXTENSIONS = new Set([
   'webp',
   'svg',
   'gif',
+  'avif',
+  'bmp',
+  'ico',
   'pdf',
 ]);
 

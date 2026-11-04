@@ -19,6 +19,7 @@ import { SiteSettings } from '@/lib/types';
 import { Input, Textarea } from '@/components/ui/Input';
 import { Button } from '@/components/ui/Button';
 import { SafeImage } from '@/components/ui/SafeImage';
+import { uploadMedia } from '@/lib/upload-client';
 
 export default function AdminHomepageCMS() {
   const [settings, setSettings] = useState<SiteSettings | null>(null);
@@ -41,20 +42,12 @@ export default function AdminHomepageCMS() {
     else setUploadingProfile(true);
 
     try {
-      const formData = new FormData();
-      formData.append('file', file);
-      const res = await fetch('/api/upload', {
-        method: 'POST',
-        body: formData,
-      });
-      const data = await res.json();
+      const data = await uploadMedia(file);
       if (data.url) {
         setSettings({ ...settings, [field]: data.url });
-      } else {
-        alert(data.error || 'Upload failed');
       }
-    } catch {
-      alert('Upload failed. Please check network.');
+    } catch (err: any) {
+      alert(err.message || 'Upload failed. Please check file format.');
     } finally {
       setUploadingBg(false);
       setUploadingProfile(false);
