@@ -399,6 +399,17 @@ export async function duplicateProject(id: string): Promise<Project | null> {
 }
 
 export async function getInquiries(): Promise<Inquiry[]> {
+  if (typeof window !== 'undefined') {
+    try {
+      const res = await fetch('/api/inquiries');
+      if (res.ok) {
+        return await res.json();
+      }
+    } catch {
+      // Fallback
+    }
+  }
+
   const supabase = createClient();
   if (supabase) {
     try {
@@ -406,7 +417,19 @@ export async function getInquiries(): Promise<Inquiry[]> {
         .from('inquiries')
         .select('*')
         .order('created_at', { ascending: false });
-      if (!error && data) return data as Inquiry[];
+      if (!error && data) {
+        return data.map((d: any) => ({
+          id: d.id,
+          name: d.name,
+          email: d.email,
+          company: d.company || '',
+          serviceRequired: d.service_required || d.serviceRequired || 'Graphic Design & Visual Branding',
+          budgetRange: d.budget_range || d.budgetRange || 'Flexible',
+          details: d.details || '',
+          status: (d.status as 'new' | 'contacted' | 'archived') || 'new',
+          createdAt: d.created_at || d.createdAt || new Date().toISOString(),
+        }));
+      }
     } catch {
       // Fallback
     }
@@ -423,7 +446,7 @@ export async function submitInquiry(inquiry: Omit<Inquiry, 'id' | 'createdAt' | 
 
   if (supabase) {
     try {
-      const { error } = await supabase
+      const { data, error } = await supabase
         .from('inquiries')
         .insert({
           name: inquiry.name,
@@ -433,18 +456,25 @@ export async function submitInquiry(inquiry: Omit<Inquiry, 'id' | 'createdAt' | 
           budget_range: inquiry.budgetRange,
           details: inquiry.details,
           status: 'new',
-        });
+        })
+        .select()
+        .single();
 
-      if (!error) {
+      if (!error && data) {
         return {
-          ...inquiry,
-          id: `inq-${Date.now()}`,
-          status: 'new',
-          createdAt: now,
+          id: data.id,
+          name: data.name,
+          email: data.email,
+          company: data.company,
+          serviceRequired: data.service_required,
+          budgetRange: data.budget_range,
+          details: data.details,
+          status: data.status,
+          createdAt: data.created_at,
         };
       }
-    } catch {
-      // Fallback
+    } catch (err) {
+      console.warn('Supabase insert inquiry failed:', err);
     }
   }
 
@@ -459,6 +489,23 @@ export async function submitInquiry(inquiry: Omit<Inquiry, 'id' | 'createdAt' | 
 }
 
 export async function updateInquiryStatus(id: string, status: 'new' | 'contacted' | 'archived'): Promise<boolean> {
+  if (typeof window !== 'undefined') {
+    try {
+      const res = await fetch('/api/inquiries', {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id, status }),
+      });
+      if (res.ok) {
+        const inq = localInquiries.find(i => i.id === id);
+        if (inq) inq.status = status;
+        return true;
+      }
+    } catch {
+      // Fallback
+    }
+  }
+
   const supabase = createClient();
   if (supabase) {
     try {
@@ -481,6 +528,20 @@ export async function updateInquiryStatus(id: string, status: 'new' | 'contacted
 }
 
 export async function deleteInquiry(id: string): Promise<boolean> {
+  if (typeof window !== 'undefined') {
+    try {
+      const res = await fetch(`/api/inquiries?id=${encodeURIComponent(id)}`, {
+        method: 'DELETE',
+      });
+      if (res.ok) {
+        localInquiries = localInquiries.filter(i => i.id !== id);
+        return true;
+      }
+    } catch {
+      // Fallback
+    }
+  }
+
   const supabase = createClient();
   if (supabase) {
     try {
@@ -830,8 +891,7 @@ export async function updateSiteSettings(newSettings: Partial<SiteSettings>): Pr
 
       await supabase
         .from('site_settings')
-        .update(dbPayload)
-        .eq('id', 'primary');
+        .upsert({ id: 'primary', ...dbPayload });
     } catch {
       // Fallback
     }

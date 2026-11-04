@@ -6,19 +6,22 @@ import Image, { ImageProps } from 'next/image';
 interface SafeImageProps extends Omit<ImageProps, 'src'> {
   src: string | undefined | null;
   fallback?: string;
+  fallbackSrc?: string;
 }
 
 export function SafeImage({
   src,
   fallback = '/projects/freelance/branding-cover.svg',
+  fallbackSrc,
   alt,
   ...props
 }: SafeImageProps) {
-  const [currentSrc, setCurrentSrc] = useState<string>(src || fallback);
+  const actualFallback = fallbackSrc || fallback;
+  const [currentSrc, setCurrentSrc] = useState<string>(src || actualFallback);
 
   useEffect(() => {
-    setCurrentSrc(src || fallback);
-  }, [src, fallback]);
+    setCurrentSrc(src || actualFallback);
+  }, [src, actualFallback]);
 
   const isDataOrSvg =
     typeof currentSrc === 'string' &&
@@ -33,8 +36,8 @@ export function SafeImage({
       src={currentSrc}
       unoptimized={props.unoptimized !== undefined ? props.unoptimized : isDataOrSvg}
       onError={() => {
-        if (currentSrc !== fallback) {
-          setCurrentSrc(fallback);
+        if (currentSrc !== actualFallback) {
+          setCurrentSrc(actualFallback);
         }
       }}
     />

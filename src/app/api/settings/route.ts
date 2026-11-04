@@ -13,7 +13,13 @@ export async function POST(req: NextRequest) {
     const updated = await updateSiteSettings(body);
     revalidatePath('/');
     revalidatePath('/about');
+    revalidatePath('/services');
+    revalidatePath('/contact');
     revalidatePath('/resume');
+    revalidatePath('/admin/settings');
+    revalidatePath('/admin/about');
+    revalidatePath('/admin/content');
+    revalidatePath('/admin/resume');
     return NextResponse.json(updated);
   } catch (err: unknown) {
     const message = err instanceof Error ? err.message : 'Failed to update settings';

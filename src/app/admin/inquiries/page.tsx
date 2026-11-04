@@ -16,6 +16,7 @@ import { getInquiries, updateInquiryStatus, deleteInquiry } from '@/lib/data';
 import { Inquiry } from '@/lib/types';
 import { Badge } from '@/components/ui/Badge';
 import { formatDate } from '@/lib/utils';
+import { createClient } from '@/lib/supabase/client';
 
 export default function AdminInquiriesPage() {
   const [inquiries, setInquiries] = useState<Inquiry[]>([]);
@@ -34,6 +35,24 @@ export default function AdminInquiriesPage() {
 
   useEffect(() => {
     fetchInquiries();
+
+    const supabase = createClient();
+    if (!supabase) return;
+
+    const channel = supabase
+      .channel('realtime:admin_inquiries')
+      .on(
+        'postgres_changes',
+        { event: '*', schema: 'public', table: 'inquiries' },
+        () => {
+          fetchInquiries();
+        }
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
   }, []);
 
   const handleStatusChange = async (id: string, status: 'new' | 'contacted' | 'archived') => {

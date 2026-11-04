@@ -5,6 +5,7 @@ import Image from 'next/image';
 import { ArrowDown, ArrowUpRight, Award, GraduationCap, MapPin, Mail, Phone, ExternalLink } from 'lucide-react';
 import { getSiteSettings, getExperience } from '@/lib/data';
 import { Button } from '@/components/ui/Button';
+import { SafeImage } from '@/components/ui/SafeImage';
 
 export const revalidate = 60;
 
@@ -56,8 +57,9 @@ export default async function AboutPage() {
           {/* Left Column: Portrait & Quick Metadata (5 Columns) */}
           <div className="lg:col-span-5 space-y-6">
             <div className="relative w-full aspect-[4/5] bg-charcoal-900 border border-charcoal/20 overflow-hidden">
-              <Image
+              <SafeImage
                 src={photoUrl}
+                fallbackSrc="/profile/abdul-ahad.jpg"
                 alt={photoAlt}
                 fill
                 priority

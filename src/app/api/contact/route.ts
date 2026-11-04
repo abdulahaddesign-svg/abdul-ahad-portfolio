@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { revalidatePath } from 'next/cache';
 import { submitInquiry } from '@/lib/data';
 
 export async function POST(req: NextRequest) {
@@ -30,6 +31,9 @@ export async function POST(req: NextRequest) {
       budgetRange: budgetRange || 'Flexible',
       details: details.trim(),
     });
+
+    revalidatePath('/admin/inquiries');
+    revalidatePath('/admin');
 
     return NextResponse.json({ success: true, inquiry: newInquiry }, { status: 201 });
   } catch (err: unknown) {

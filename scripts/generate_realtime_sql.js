@@ -33,6 +33,15 @@ drop policy if exists "Allow update to site settings" on public.site_settings;
 drop policy if exists "Allow all on site_settings" on public.site_settings;
 create policy "Allow all on site_settings" on public.site_settings for all using (true) with check (true);
 
+drop policy if exists "Public can insert inquiries" on public.inquiries;
+drop policy if exists "Public can submit inquiries" on public.inquiries;
+drop policy if exists "Admins view and manage inquiries" on public.inquiries;
+drop policy if exists "Admins can view inquiries" on public.inquiries;
+drop policy if exists "Admins can update inquiries" on public.inquiries;
+drop policy if exists "Admins can delete inquiries" on public.inquiries;
+drop policy if exists "Allow all on inquiries" on public.inquiries;
+create policy "Allow all on inquiries" on public.inquiries for all using (true) with check (true);
+
 -- 2. UNLOCK MEDIA STORAGE UPLOADS (DROP ALL VARIANTS FIRST TO AVOID DUPLICATE ERRORS)
 insert into storage.buckets (id, name, public)
 values ('portfolio-media', 'portfolio-media', true)
@@ -83,6 +92,12 @@ end $$;
 do $$
 begin
   alter publication supabase_realtime add table public.site_settings;
+exception when others then null;
+end $$;
+
+do $$
+begin
+  alter publication supabase_realtime add table public.inquiries;
 exception when others then null;
 end $$;
 
