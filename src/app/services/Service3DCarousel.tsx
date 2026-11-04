@@ -1,9 +1,9 @@
 'use client';
 
 import React, { useState, useEffect, useRef } from 'react';
-import Image from 'next/image';
 import { useReducedMotion } from 'framer-motion';
 import { ServiceItem } from '@/lib/types';
+import { SafeImage } from '@/components/ui/SafeImage';
 
 interface Service3DCarouselProps {
   services: ServiceItem[];
@@ -168,8 +168,9 @@ export function Service3DCarousel({ services, onSelectService }: Service3DCarous
               >
                 {/* Visual Artwork Showcase */}
                 <div className="relative w-full h-[68%] bg-charcoal-950 overflow-hidden">
-                  <Image
+                  <SafeImage
                     src={service.primaryImage || '/projects/freelance/branding-cover.svg'}
+                    fallback="/projects/freelance/branding-cover.svg"
                     alt={service.title}
                     fill
                     sizes="280px"

@@ -1,20 +1,54 @@
 'use client';
 
 import React, { useState, useEffect, useRef } from 'react';
-import Image from 'next/image';
 import Link from 'next/link';
 import { motion, useScroll, useTransform, useReducedMotion } from 'framer-motion';
 import { ArrowUpRight, ArrowDown, Sparkles, CheckCircle2 } from 'lucide-react';
 import { ServiceItem } from '@/lib/types';
 import { Service3DCarousel } from './Service3DCarousel';
+import { SafeImage } from '@/components/ui/SafeImage';
+import { createClient } from '@/lib/supabase/client';
 
 interface ServicesClientProps {
   services: ServiceItem[];
 }
 
 export function ServicesClient({ services }: ServicesClientProps) {
+  const [serviceList, setServiceList] = useState<ServiceItem[]>(services);
   const [activeSlug, setActiveSlug] = useState<string>(services[0]?.slug || '');
   const prefersReduced = useReducedMotion();
+
+  useEffect(() => {
+    setServiceList(services);
+
+    const supabase = createClient();
+    if (!supabase) return;
+
+    const channel = supabase
+      .channel('realtime:services_client')
+      .on(
+        'postgres_changes',
+        { event: '*', schema: 'public', table: 'services' },
+        async () => {
+          try {
+            const res = await fetch('/api/services?all=true');
+            if (res.ok) {
+              const fresh = await res.json();
+              if (Array.isArray(fresh) && fresh.length > 0) {
+                setServiceList(fresh);
+              }
+            }
+          } catch {
+            // Keep current
+          }
+        }
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, [services]);
 
   // Scroll spy to highlight current service in navigation
   useEffect(() => {
@@ -181,7 +215,7 @@ export function ServicesClient({ services }: ServicesClientProps) {
       {/* 3. DEDICATED EDITORIAL SERVICE SECTIONS                   */}
       {/* ========================================================= */}
       <div id="services-catalog" className="divide-y divide-charcoal/15">
-        {services.map((srv, index) => (
+        {serviceList.map((srv, index) => (
           <ServicePresentationSection
             key={srv.id}
             service={srv}
@@ -334,8 +368,9 @@ function ServicePresentationSection({
               transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
               className="relative aspect-[16/10] w-full bg-charcoal-900 border border-charcoal/20 overflow-hidden shadow-2xl group"
             >
-              <Image
+              <SafeImage
                 src={service.primaryImage || '/projects/freelance/branding-cover.svg'}
+                fallback="/projects/freelance/branding-cover.svg"
                 alt={`${service.title} primary showcase`}
                 fill
                 sizes="(max-width: 1024px) 100vw, 60vw"
@@ -362,8 +397,9 @@ function ServicePresentationSection({
                   isEven ? '-left-4 sm:-left-8' : '-right-4 sm:-right-8'
                 }`}
               >
-                <Image
+                <SafeImage
                   src={service.supportingImages[0]}
+                  fallback="/projects/falcon/falcon-cover.svg"
                   alt={`${service.title} supporting collateral`}
                   fill
                   sizes="280px"
@@ -386,8 +422,9 @@ function ServicePresentationSection({
                   isEven ? '-right-4 sm:-right-6' : '-left-4 sm:-left-6'
                 }`}
               >
-                <Image
+                <SafeImage
                   src={service.supportingImages[1]}
+                  fallback="/projects/reztro/reztro-brand.svg"
                   alt={`${service.title} supplementary view`}
                   fill
                   sizes="220px"

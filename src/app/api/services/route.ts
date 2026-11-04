@@ -1,4 +1,5 @@
 import { NextResponse } from 'next/server';
+import { revalidatePath } from 'next/cache';
 import { getServices, createService, updateService, deleteService } from '@/lib/data';
 
 export async function GET(request: Request) {
@@ -12,6 +13,9 @@ export async function POST(request: Request) {
   try {
     const body = await request.json();
     const newService = await createService(body);
+    revalidatePath('/services');
+    revalidatePath('/');
+    revalidatePath('/admin/services');
     return NextResponse.json(newService, { status: 201 });
   } catch (error: any) {
     return NextResponse.json({ error: error.message || 'Failed to create service' }, { status: 500 });
@@ -25,6 +29,9 @@ export async function PUT(request: Request) {
       return NextResponse.json({ error: 'Service ID is required' }, { status: 400 });
     }
     const updated = await updateService(body);
+    revalidatePath('/services');
+    revalidatePath('/');
+    revalidatePath('/admin/services');
     return NextResponse.json(updated);
   } catch (error: any) {
     return NextResponse.json({ error: error.message || 'Failed to update service' }, { status: 500 });
@@ -39,6 +46,9 @@ export async function DELETE(request: Request) {
       return NextResponse.json({ error: 'Service ID is required' }, { status: 400 });
     }
     const success = await deleteService(id);
+    revalidatePath('/services');
+    revalidatePath('/');
+    revalidatePath('/admin/services');
     return NextResponse.json({ success });
   } catch (error: any) {
     return NextResponse.json({ error: error.message || 'Failed to delete service' }, { status: 500 });

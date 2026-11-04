@@ -1,5 +1,5 @@
 -- ==============================================================================
--- CMS REAL-TIME SYNC & DATABASE FULL ACCESS
+-- CMS REAL-TIME SYNC, DATABASE PERMISSIONS & COMPLETE SEED DATA
 -- Run this in your Supabase SQL Editor:
 -- https://supabase.com/dashboard/project/kptxbhhiucgdfqutxwjj/sql
 -- ==============================================================================
@@ -27,10 +27,11 @@ create policy "Allow all on project_categories" on public.project_categories for
 
 drop policy if exists "Public can view site settings" on public.site_settings;
 drop policy if exists "Admins manage site settings" on public.site_settings;
+drop policy if exists "Allow update to site settings" on public.site_settings;
 drop policy if exists "Allow all on site_settings" on public.site_settings;
 create policy "Allow all on site_settings" on public.site_settings for all using (true) with check (true);
 
--- 2. UNLOCK MEDIA STORAGE UPLOADS
+-- 2. UNLOCK MEDIA STORAGE UPLOADS (DROP ALL VARIANTS FIRST TO AVOID DUPLICATE ERRORS)
 insert into storage.buckets (id, name, public)
 values ('portfolio-media', 'portfolio-media', true)
 on conflict (id) do update set public = true;
@@ -38,14 +39,27 @@ on conflict (id) do update set public = true;
 drop policy if exists "Public Access to portfolio-media" on storage.objects;
 drop policy if exists "Admin upload access to portfolio-media" on storage.objects;
 drop policy if exists "Admin update access to portfolio-media" on storage.objects;
+drop policy if exists "Admin delete access to portfolio-media" on storage.objects;
 drop policy if exists "Allow upload to portfolio-media" on storage.objects;
 drop policy if exists "Allow update to portfolio-media" on storage.objects;
+drop policy if exists "Allow delete from portfolio-media" on storage.objects;
 
 create policy "Public Access to portfolio-media" on storage.objects for select using (bucket_id = 'portfolio-media');
 create policy "Allow upload to portfolio-media" on storage.objects for insert with check (bucket_id = 'portfolio-media');
 create policy "Allow update to portfolio-media" on storage.objects for update using (bucket_id = 'portfolio-media');
+create policy "Allow delete from portfolio-media" on storage.objects for delete using (bucket_id = 'portfolio-media');
 
--- 3. ENABLE SUPABASE REALTIME ON ALL PORTFOLIO TABLES
+-- 3. ENSURE RICH SERVICES COLUMNS EXIST
+alter table public.services add column if not exists is_primary boolean default false;
+alter table public.services add column if not exists tagline text default '';
+alter table public.services add column if not exists primary_image text default '';
+alter table public.services add column if not exists supporting_images text[] default '{}';
+alter table public.services add column if not exists typical_projects text[] default '{}';
+alter table public.services add column if not exists creative_process jsonb default '[]'::jsonb;
+alter table public.services add column if not exists cta_text text default 'Initiate Brief';
+alter table public.services add column if not exists cta_href text default '/contact';
+
+-- 4. ENABLE SUPABASE REALTIME ON ALL PORTFOLIO TABLES
 do $$
 begin
   alter publication supabase_realtime add table public.projects;
@@ -70,7 +84,132 @@ begin
 exception when others then null;
 end $$;
 
--- 4. SEED INITIAL PORTFOLIO PROJECTS
+-- 5. SEED ALL 6 SERVICES INTO SUPABASE
+insert into public.services (
+  slug, title, is_primary, tagline, short_summary, description,
+  deliverables, typical_projects, primary_image, image_url, supporting_images,
+  cta_text, cta_href, sort_order, is_published
+) values
+(
+  'graphic-design-visual-branding',
+  'Graphic Design & Visual Branding',
+  true,
+  'Posters, Advertising Creatives, Social Media & Tangible Packaging Dielines',
+  'Conceptual wordmarks, brand style guides, marketing collateral, packaging, and high-impact visual design systems.',
+  'A strategic approach to visual branding that unites logos, color theory, typography, and marketing assets into cohesive identities. From single promotional posters to multi-channel advertising campaigns, every deliverable is crafted with intent and precision.',
+  ARRAY['Logo System & Wordmark Variations', 'Brand Guidelines & Design Tokens', 'Packaging & Print Production Files', 'Marketing Collateral Suite', 'Social Media Templates (Figma / PSD)', 'Advertising Banner Formats (1:1, 9:16, 16:9)'],
+  ARRAY['End-to-end brand identity launches for startups', 'Visual refresh & rebrand for scaling businesses', 'Quarterly marketing campaign creative suites'],
+  '/projects/packaging/packaging-cover.svg',
+  '/projects/packaging/packaging-cover.svg',
+  ARRAY['/projects/falcon/falcon-posters.svg', '/projects/social/social-cover.svg'],
+  'Commission Visual Branding',
+  '/contact?service=graphic-design',
+  1,
+  true
+),
+(
+  'brand-identity-design',
+  'Brand Identity Design',
+  false,
+  'Distinctive Logos, Typography Standards & Cohesive Visual Systems',
+  'Memorable logos, monograms, symbol marks, and complete brand identity design systems.',
+  'Creating distinctive visual identities built on conceptual rigor and typographic distinction. Each mark is engineered to scale seamlessly from a 16px favicon to giant outdoor billboards with mathematical precision.',
+  ARRAY['Primary, secondary & responsive logo suite', 'Monograms, emblem marks & crests', 'Brand color formulas (RGB, CMYK, Pantone)', 'Typographic hierarchy & pairing guidelines', 'Comprehensive brand guidelines book (PDF)', 'Real-world application mockups & stationery'],
+  ARRAY['Early-stage venture & startup brand launches', 'Boutique studio & luxury hospitality marks', 'Brand refresh & modernization overhauls'],
+  '/projects/freelance/branding-cover.svg',
+  '/projects/freelance/branding-cover.svg',
+  ARRAY['/projects/falcon/falcon-cover.svg', '/projects/reztro/reztro-brand.svg'],
+  'Design Brand Identity',
+  '/contact?service=brand-identity',
+  2,
+  true
+),
+(
+  'ui-ux-design',
+  'UI/UX Design',
+  false,
+  'Human-Centered Mobile & Desktop Digital Product Interfaces',
+  'Figma component libraries, responsive web apps, mobile applications, and frictionless user flows.',
+  'Digital product interfaces rooted in cognitive psychology and human-centered design principles. From wireframing frictionless user flows to architecting multi-state component design systems in Figma.',
+  ARRAY['Interactive Figma prototypes with smart animations', 'Responsive mobile-first web designs (375px to 1920px)', 'Component design systems with auto-layout & variants', 'User journey maps & cognitive friction audits', 'Handoff-ready developer specifications (tokens, spacing, assets)', 'Accessibility-compliant color & contrast standards (WCAG AAA)'],
+  ARRAY['SaaS dashboard & web app experiences', 'Restaurant & retail self-order flows (e.g., Reztro)', 'Marketing website design with high conversion rates'],
+  '/projects/reztro/reztro-cover.svg',
+  '/projects/reztro/reztro-cover.svg',
+  ARRAY['/projects/reztro/reztro-mobile-flow.svg', '/projects/reztro/reztro-admin.svg'],
+  'Design Product UI/UX',
+  '/contact?service=ui-ux',
+  3,
+  true
+),
+(
+  'motion-graphics',
+  'Motion Graphics',
+  false,
+  'Kinetic Typography, 2D Animation & High-Energy Social Content',
+  'Animated logos, promo reels, kinetic typography, and motion design for social and ads.',
+  'Bringing static brand elements to life with purposeful motion design. Smooth easings, rhythmic timing, and brand-consistent choreography engineered to capture viewer attention within the first 1.5 seconds.',
+  ARRAY['Animated logo reveals & stingers (4K / Alpha transparency)', 'Kinetic typography promo reels (9:16 vertical for Reels/TikTok)', 'Lottie animation files for web & mobile apps (JSON)', 'Social media video ad templates (MOGRTs)', 'UI micro-interaction & feature walkthrough animations', 'Lower thirds, title cards & YouTube branding packages'],
+  ARRAY['Product launch teaser reels on Instagram & LinkedIn', 'App UI feature demonstration videos', 'Brand animated ident for digital campaigns'],
+  '/projects/motion/motion-cover.svg',
+  '/projects/motion/motion-cover.svg',
+  ARRAY['/projects/motion/motion-frames.svg'],
+  'Create Motion Content',
+  '/contact?service=motion',
+  4,
+  true
+),
+(
+  'video-editing',
+  'Video Editing',
+  false,
+  'High-Retention Cuts, Dynamic Pacing & Color-Graded Visual Narratives',
+  'Commercial video editing, dynamic cuts, color grading, sound design, and vertical reels.',
+  'End-to-end post-production engineered for modern attention spans. Combining rhythmic audio synchronization, dynamic pacing, custom sound design, and color grading into compelling visual narratives.',
+  ARRAY['High-retention short-form video edits (Reels, Shorts, TikTok)', 'YouTube long-form video editing with visual retention hooks', 'Commercial brand promo & testimonial video editing', 'Audio mastering, noise reduction & sound effects design (SFX)', 'Cinematic color grading & LUT application', 'Dynamic subtitle animation & kinetic text highlights'],
+  ARRAY['Brand storytelling & documentary-style company profiles', 'High-volume social content creator partnerships', 'Product commercial & digital advertising spots'],
+  '/projects/eclerx/eclerx-cover.svg',
+  '/projects/eclerx/eclerx-cover.svg',
+  ARRAY['/projects/motion/motion-frames.svg'],
+  'Book Video Editing',
+  '/contact?service=video-editing',
+  5,
+  true
+),
+(
+  'web-app-design',
+  'Web & App Design',
+  false,
+  'Conversion-Focused Web Architecture & Production-Ready Frontends',
+  'Landing page architecture, responsive web design, interactive prototypes, and web typography.',
+  'Bridging strategic design and technical execution. Clean layouts, deliberate typographic pacing, and performance-first considerations that convert visitors into clients.',
+  ARRAY['High-converting landing page designs', 'Multi-page corporate website architectures', 'Mobile responsive layouts (iOS & Android guidelines)', 'Interactive web prototypes in Figma', 'Asset exports (SVG, WebP, 2x PNG)', 'Frontend design-token systems (Tailwind CSS ready)'],
+  ARRAY['Freelancer & agency portfolio websites', 'Tech startup marketing sites & waitlist pages', 'Creative studio digital showcases'],
+  '/projects/web/hero-collection-cover.svg',
+  '/projects/web/hero-collection-cover.svg',
+  ARRAY['/projects/web/hero-collection-grid.svg'],
+  'Build Website / App',
+  '/contact?service=web-app',
+  6,
+  true
+)
+on conflict (slug) do update set
+  title = excluded.title,
+  is_primary = excluded.is_primary,
+  tagline = excluded.tagline,
+  short_summary = excluded.short_summary,
+  description = excluded.description,
+  deliverables = excluded.deliverables,
+  typical_projects = excluded.typical_projects,
+  primary_image = excluded.primary_image,
+  image_url = excluded.image_url,
+  supporting_images = excluded.supporting_images,
+  cta_text = excluded.cta_text,
+  cta_href = excluded.cta_href,
+  sort_order = excluded.sort_order,
+  is_published = excluded.is_published,
+  updated_at = timezone('utc'::text, now());
+
+-- 6. SEED ALL 9 PROJECTS INTO SUPABASE
 insert into public.projects (
   slug, title, category, category_slug, short_description, full_description,
   client_name, project_year, role, tools_used, challenge, creative_process,

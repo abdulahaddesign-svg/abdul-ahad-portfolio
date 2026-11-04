@@ -519,8 +519,8 @@ export async function getServices(includeUnpublished = false): Promise<ServiceIt
           deliverables: row.deliverables ?? [],
           typicalProjects: row.typical_projects ?? [],
           creativeProcess: row.creative_process ?? [],
-          primaryImage: row.primary_image || '/projects/freelance/branding-cover.svg',
-          supportingImages: row.supporting_images ?? [],
+          primaryImage: row.primary_image || row.image_url || '/projects/freelance/branding-cover.svg',
+          supportingImages: Array.isArray(row.supporting_images) ? row.supporting_images : (Array.isArray(row.capabilities) ? row.capabilities : []),
           ctaText: row.cta_text || 'Initiate Brief',
           ctaHref: row.cta_href || '/contact',
           sortOrder: row.sort_order ?? 0,
@@ -551,33 +551,39 @@ export async function getServiceBySlug(slug: string): Promise<ServiceItem | null
 
 export async function createService(service: Omit<ServiceItem, 'id'>): Promise<ServiceItem> {
   const newId = `srv-${Date.now()}`;
+  const now = new Date().toISOString();
   const newService: ServiceItem = {
     ...service,
     id: newId,
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString(),
+    createdAt: now,
+    updatedAt: now,
   };
 
   const supabase = createClient();
   if (supabase) {
     try {
-      await supabase.from('services').insert({
+      const row: Record<string, any> = {
         title: newService.title,
         slug: newService.slug,
-        is_primary: newService.isPrimary,
-        tagline: newService.tagline,
-        short_summary: newService.shortSummary,
-        description: newService.description,
-        deliverables: newService.deliverables,
-        typical_projects: newService.typicalProjects,
-        creative_process: newService.creativeProcess,
-        primary_image: newService.primaryImage,
-        supporting_images: newService.supportingImages,
-        cta_text: newService.ctaText,
-        cta_href: newService.ctaHref,
-        sort_order: newService.sortOrder,
-        is_published: newService.isPublished,
-      });
+        short_summary: newService.shortSummary || '',
+        description: newService.description || '',
+        deliverables: newService.deliverables || [],
+        image_url: newService.primaryImage || '',
+        primary_image: newService.primaryImage || '',
+        supporting_images: newService.supportingImages || [],
+        is_primary: newService.isPrimary ?? false,
+        tagline: newService.tagline || '',
+        typical_projects: newService.typicalProjects || [],
+        creative_process: newService.creativeProcess || [],
+        cta_text: newService.ctaText || 'Initiate Brief',
+        cta_href: newService.ctaHref || '/contact',
+        sort_order: newService.sortOrder ?? 1,
+        is_published: newService.isPublished ?? true,
+        created_at: now,
+        updated_at: now,
+      };
+
+      await supabase.from('services').insert(row);
     } catch {
       // Fallback
     }
@@ -590,55 +596,111 @@ export async function createService(service: Omit<ServiceItem, 'id'>): Promise<S
 export async function updateService(
   service: Partial<ServiceItem> & { id: string }
 ): Promise<ServiceItem | null> {
-  const idx = localServices.findIndex(s => s.id === service.id);
+  const idx = localServices.findIndex(s => s.id === service.id || s.slug === service.slug);
+  const now = new Date().toISOString();
   if (idx !== -1) {
     localServices[idx] = {
       ...localServices[idx],
       ...service,
-      updatedAt: new Date().toISOString(),
+      updatedAt: now,
     };
   }
 
   const supabase = createClient();
   if (supabase) {
     try {
-      await supabase
-        .from('services')
-        .update({
+      const isUuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(service.id);
+      const row: Record<string, any> = {
+        updated_at: now,
+      };
+      if (service.title !== undefined) row.title = service.title;
+      if (service.slug !== undefined) row.slug = service.slug;
+      if (service.isPrimary !== undefined) row.is_primary = service.isPrimary;
+      if (service.tagline !== undefined) row.tagline = service.tagline;
+      if (service.shortSummary !== undefined) row.short_summary = service.shortSummary;
+      if (service.description !== undefined) row.description = service.description;
+      if (service.deliverables !== undefined) row.deliverables = service.deliverables;
+      if (service.typicalProjects !== undefined) row.typical_projects = service.typicalProjects;
+      if (service.creativeProcess !== undefined) row.creative_process = service.creativeProcess;
+      if (service.primaryImage !== undefined) {
+        row.primary_image = service.primaryImage;
+        row.image_url = service.primaryImage;
+      }
+      if (service.supportingImages !== undefined) row.supporting_images = service.supportingImages;
+      if (service.ctaText !== undefined) row.cta_text = service.ctaText;
+      if (service.ctaHref !== undefined) row.cta_href = service.ctaHref;
+      if (service.sortOrder !== undefined) row.sort_order = service.sortOrder;
+      if (service.isPublished !== undefined) row.is_published = service.isPublished;
+
+      // 1. Try updating by UUID if valid
+      let updated = false;
+      if (isUuid) {
+        const { data, error } = await supabase
+          .from('services')
+          .update(row)
+          .eq('id', service.id)
+          .select()
+          .maybeSingle();
+        if (!error && data) updated = true;
+      }
+
+      // 2. Otherwise update by slug
+      if (!updated && service.slug) {
+        const { data, error } = await supabase
+          .from('services')
+          .update(row)
+          .eq('slug', service.slug)
+          .select()
+          .maybeSingle();
+        if (!error && data) updated = true;
+      }
+
+      // 3. If service does not exist in Supabase yet, insert it!
+      if (!updated && service.title && service.slug) {
+        await supabase.from('services').insert({
           title: service.title,
           slug: service.slug,
-          is_primary: service.isPrimary,
-          tagline: service.tagline,
-          short_summary: service.shortSummary,
-          description: service.description,
-          deliverables: service.deliverables,
-          typical_projects: service.typicalProjects,
-          creative_process: service.creativeProcess,
-          primary_image: service.primaryImage,
-          supporting_images: service.supportingImages,
-          cta_text: service.ctaText,
-          cta_href: service.ctaHref,
-          sort_order: service.sortOrder,
-          is_published: service.isPublished,
-          updated_at: new Date().toISOString(),
-        })
-        .eq('id', service.id);
+          short_summary: service.shortSummary || '',
+          description: service.description || '',
+          deliverables: service.deliverables || [],
+          image_url: service.primaryImage || '',
+          primary_image: service.primaryImage || '',
+          supporting_images: service.supportingImages || [],
+          is_primary: service.isPrimary ?? false,
+          tagline: service.tagline || '',
+          typical_projects: service.typicalProjects || [],
+          creative_process: service.creativeProcess || [],
+          cta_text: service.ctaText || 'Initiate Brief',
+          cta_href: service.ctaHref || '/contact',
+          sort_order: service.sortOrder ?? 1,
+          is_published: service.isPublished ?? true,
+          created_at: now,
+          updated_at: now,
+        });
+      }
     } catch {
       // Fallback
     }
   }
 
-  return localServices.find(s => s.id === service.id) || null;
+  return localServices.find(s => s.id === service.id || s.slug === service.slug) || null;
 }
 
 export async function deleteService(id: string): Promise<boolean> {
   const initialLen = localServices.length;
-  localServices = localServices.filter(s => s.id !== id);
+  localServices = localServices.filter(s => s.id !== id && s.slug !== id);
 
   const supabase = createClient();
   if (supabase) {
     try {
-      await supabase.from('services').delete().eq('id', id);
+      const isUuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(id);
+      let query = supabase.from('services').delete();
+      if (isUuid) {
+        query = query.eq('id', id);
+      } else {
+        query = query.or(`slug.eq.${id},title.eq.${id}`);
+      }
+      await query;
     } catch {
       // Fallback
     }
@@ -799,6 +861,28 @@ export async function getClientLogos(includeHidden = false): Promise<ClientLogo[
 }
 
 export async function saveClientLogo(client: Partial<ClientLogo> & { id?: string }): Promise<ClientLogo> {
+  if (typeof window !== 'undefined') {
+    try {
+      const res = await fetch('/api/clients', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(client),
+      });
+      if (res.ok) {
+        const saved = await res.json();
+        const idx = localClients.findIndex((c) => c.id === saved.id || c.name === saved.name);
+        if (idx !== -1) {
+          localClients[idx] = { ...localClients[idx], ...saved };
+        } else {
+          localClients.push(saved);
+        }
+        return saved;
+      }
+    } catch {
+      // Fallback
+    }
+  }
+
   const supabase = createClient();
   const now = new Date().toISOString();
 
@@ -884,11 +968,29 @@ export async function saveClientLogo(client: Partial<ClientLogo> & { id?: string
 }
 
 export async function deleteClientLogo(id: string): Promise<boolean> {
+  if (typeof window !== 'undefined') {
+    try {
+      await fetch(`/api/clients?id=${encodeURIComponent(id)}`, { method: 'DELETE' });
+    } catch {
+      // Fallback
+    }
+  }
+
   const supabase = createClient();
   if (supabase) {
     try {
-      const { error } = await supabase.from('clients').delete().eq('id', id);
-      if (!error) return true;
+      const isUuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(id);
+      let query = supabase.from('clients').delete();
+      if (isUuid) {
+        query = query.eq('id', id);
+      } else {
+        query = query.eq('name', id);
+      }
+      const { error } = await query;
+      if (!error) {
+        localClients = localClients.filter((c) => c.id !== id);
+        return true;
+      }
     } catch {
       // Fallback
     }
