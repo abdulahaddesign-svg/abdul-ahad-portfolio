@@ -1206,8 +1206,7 @@ export async function getSiteSettings(): Promise<SiteSettings> {
 }
 
 export async function updateSiteSettings(newSettings: Partial<SiteSettings>): Promise<SiteSettings> {
-  localSettings = { ...localSettings, ...newSettings };
-
+  // 1. If executing in the browser, pass through the server API route
   if (typeof window !== 'undefined') {
     const res = await fetch('/api/settings', {
       method: 'POST',
@@ -1218,134 +1217,87 @@ export async function updateSiteSettings(newSettings: Partial<SiteSettings>): Pr
       const err = await res.json().catch(() => ({}));
       throw new Error(err.error || `Failed to save settings: ${res.statusText}`);
     }
-    const data = await res.json();
-    localSettings = { ...localSettings, ...data };
+    const verifiedData = await res.json();
+    localSettings = { ...localSettings, ...verifiedData };
+    return verifiedData;
+  }
+
+  // 2. Server-side persistence directly to Supabase
+  const supabase = createClient();
+  if (!supabase) {
+    localSettings = { ...localSettings, ...newSettings };
     return localSettings;
   }
 
-  const supabase = createClient();
-  if (supabase) {
+  // Retrieve current about_bio to preserve extended JSON metadata
+  let metaToStore: Record<string, any> = {};
+  const { data: setRow } = await supabase
+    .from('site_settings')
+    .select('about_bio')
+    .eq('id', 'primary')
+    .maybeSingle();
+
+  if (setRow?.about_bio && typeof setRow.about_bio === 'string' && setRow.about_bio.startsWith('{')) {
     try {
-      const dbPayload: Record<string, any> = {
-        updated_at: new Date().toISOString(),
-      };
-      if (newSettings.name !== undefined) dbPayload.name = newSettings.name;
-      if (newSettings.title !== undefined) dbPayload.title = newSettings.title;
-      if (newSettings.tagline !== undefined) dbPayload.tagline = newSettings.tagline;
-      if (newSettings.email !== undefined) dbPayload.email = newSettings.email;
-      if (newSettings.phone !== undefined) dbPayload.phone = newSettings.phone;
-      if (newSettings.whatsappNumber !== undefined) dbPayload.whatsapp_number = newSettings.whatsappNumber;
-      if (newSettings.location !== undefined) dbPayload.location = newSettings.location;
-      if (newSettings.behanceUrl !== undefined) dbPayload.behance_url = newSettings.behanceUrl;
-      if (newSettings.linkedinUrl !== undefined) dbPayload.linkedin_url = newSettings.linkedinUrl;
-      if (newSettings.instagramUrl !== undefined) dbPayload.instagram_url = newSettings.instagramUrl;
-      if (newSettings.dribbbleUrl !== undefined) dbPayload.dribbble_url = newSettings.dribbbleUrl;
-
-      // Header
-      if (newSettings.headerLogoLightUrl !== undefined) dbPayload.header_logo_light_url = newSettings.headerLogoLightUrl;
-      if (newSettings.headerLogoDarkUrl !== undefined) dbPayload.header_logo_dark_url = newSettings.headerLogoDarkUrl;
-      if (newSettings.logoAltText !== undefined) dbPayload.logo_alt_text = newSettings.logoAltText;
-      if (newSettings.headerNavLinks !== undefined) dbPayload.header_nav_links = newSettings.headerNavLinks;
-      if (newSettings.headerCtaText !== undefined) dbPayload.header_cta_text = newSettings.headerCtaText;
-      if (newSettings.headerCtaHref !== undefined) dbPayload.header_cta_href = newSettings.headerCtaHref;
-      if (newSettings.availabilityStatus !== undefined) dbPayload.availability_status = newSettings.availabilityStatus;
-      if (newSettings.availabilityMessage !== undefined) dbPayload.availability_message = newSettings.availabilityMessage;
-      if (newSettings.locationTimeText !== undefined) dbPayload.location_time_text = newSettings.locationTimeText;
-
-      // Hero
-      if (newSettings.heroHeadline !== undefined) dbPayload.hero_headline = newSettings.heroHeadline;
-      if (newSettings.heroHeadlineLine2 !== undefined) dbPayload.hero_headline_line2 = newSettings.heroHeadlineLine2;
-      if (newSettings.heroHighlightedWords !== undefined) dbPayload.hero_highlighted_words = newSettings.heroHighlightedWords;
-      if (newSettings.heroTitle !== undefined) dbPayload.hero_title = newSettings.heroTitle;
-      if (newSettings.heroSubtitle !== undefined) dbPayload.hero_subtitle = newSettings.heroSubtitle;
-      if (newSettings.heroSupportingCopy !== undefined) dbPayload.hero_supporting_copy = newSettings.heroSupportingCopy;
-      if (newSettings.heroIntroSecondary !== undefined) dbPayload.hero_intro_secondary = newSettings.heroIntroSecondary;
-      if (newSettings.heroLocationLabel !== undefined) dbPayload.hero_location_label = newSettings.heroLocationLabel;
-      if (newSettings.heroPrimaryCtaText !== undefined) dbPayload.hero_primary_cta_text = newSettings.heroPrimaryCtaText;
-      if (newSettings.heroPrimaryCtaHref !== undefined) dbPayload.hero_primary_cta_href = newSettings.heroPrimaryCtaHref;
-      if (newSettings.heroSecondaryCtaText !== undefined) dbPayload.hero_secondary_cta_text = newSettings.heroSecondaryCtaText;
-      if (newSettings.heroSecondaryCtaHref !== undefined) dbPayload.hero_secondary_cta_href = newSettings.heroSecondaryCtaHref;
-      if (newSettings.heroBgImage !== undefined) dbPayload.hero_bg_image = newSettings.heroBgImage;
-      if (newSettings.heroProfileImage !== undefined) dbPayload.hero_profile_image = newSettings.heroProfileImage;
-      if (newSettings.heroMonogramVisible !== undefined) dbPayload.hero_monogram_visible = newSettings.heroMonogramVisible;
-      if (newSettings.heroMonogramUrl !== undefined) dbPayload.hero_monogram_url = newSettings.heroMonogramUrl;
-      if (newSettings.heroAnimationEnabled !== undefined) dbPayload.hero_animation_enabled = newSettings.heroAnimationEnabled;
-
-      // About
-      if (newSettings.aboutSectionLabel !== undefined) dbPayload.about_section_label = newSettings.aboutSectionLabel;
-      if (newSettings.aboutHeadline !== undefined) dbPayload.about_headline = newSettings.aboutHeadline;
-      if (newSettings.aboutIntro !== undefined) dbPayload.about_intro = newSettings.aboutIntro;
-      if (newSettings.aboutPhilosophy !== undefined) dbPayload.about_philosophy = newSettings.aboutPhilosophy;
-      if (newSettings.aboutDescription !== undefined) dbPayload.about_description = newSettings.aboutDescription;
-      if (newSettings.profilePhotoUrl !== undefined) dbPayload.profile_photo_url = newSettings.profilePhotoUrl;
-      if (newSettings.profilePhotoAlt !== undefined) dbPayload.profile_photo_alt = newSettings.profilePhotoAlt;
-      if (newSettings.experienceYears !== undefined) dbPayload.experience_years = newSettings.experienceYears;
-      if (newSettings.achievementsSummary !== undefined) dbPayload.achievements_summary = newSettings.achievementsSummary;
-      if (newSettings.experienceHighlights !== undefined) dbPayload.experience_highlights = newSettings.experienceHighlights;
-      if (newSettings.achievementHighlights !== undefined) dbPayload.achievement_highlights = newSettings.achievementHighlights;
-      if (newSettings.resumeUrl !== undefined) dbPayload.resume_url = newSettings.resumeUrl;
-      if (newSettings.resumeLabel !== undefined) dbPayload.resume_label = newSettings.resumeLabel;
-      if (newSettings.resumeVisible !== undefined) dbPayload.resume_visible = newSettings.resumeVisible;
-      if (newSettings.educationDegree !== undefined) dbPayload.education_degree = newSettings.educationDegree;
-      if (newSettings.educationInstitution !== undefined) dbPayload.education_institution = newSettings.educationInstitution;
-      if (newSettings.educationYear !== undefined) dbPayload.education_year = newSettings.educationYear;
-      if (newSettings.educationAggregate !== undefined) dbPayload.education_aggregate = newSettings.educationAggregate;
-
-      // Footer
-      if (newSettings.footerAppearance !== undefined) dbPayload.footer_appearance = newSettings.footerAppearance;
-      if (newSettings.footerLogoLightUrl !== undefined) dbPayload.footer_logo_light_url = newSettings.footerLogoLightUrl;
-      if (newSettings.footerLogoDarkUrl !== undefined) dbPayload.footer_logo_dark_url = newSettings.footerLogoDarkUrl;
-      if (newSettings.footerDescription !== undefined) dbPayload.footer_description = newSettings.footerDescription;
-      if (newSettings.footerBrandStatement !== undefined) dbPayload.footer_brand_statement = newSettings.footerBrandStatement;
-      if (newSettings.footerNavVisible !== undefined) dbPayload.footer_nav_visible = newSettings.footerNavVisible;
-      if (newSettings.footerCopyright !== undefined) dbPayload.footer_copyright = newSettings.footerCopyright;
-      if (newSettings.footerLocation !== undefined) dbPayload.footer_location = newSettings.footerLocation;
-
-      // Theme & SEO
-      if (newSettings.defaultTheme !== undefined) dbPayload.default_theme = newSettings.defaultTheme;
-      if (newSettings.primaryBrandColor !== undefined) dbPayload.primary_brand_color = newSettings.primaryBrandColor;
-      if (newSettings.defaultSeoTitle !== undefined) dbPayload.default_seo_title = newSettings.defaultSeoTitle;
-      if (newSettings.defaultSeoDescription !== undefined) dbPayload.default_seo_description = newSettings.defaultSeoDescription;
-
-      // Bundle all extended fields safely in about_bio
-      const metaToStore: Record<string, any> = {};
-      const { data: setRow } = await supabase.from('site_settings').select('about_bio').eq('id', 'primary').maybeSingle();
-      if (setRow?.about_bio && typeof setRow.about_bio === 'string' && setRow.about_bio.startsWith('{')) {
-        try {
-          Object.assign(metaToStore, JSON.parse(setRow.about_bio));
-        } catch {
-          // ignore
-        }
-      }
-      Object.assign(metaToStore, newSettings);
-      dbPayload.about_bio = JSON.stringify(metaToStore);
-
-      const currentPayload: Record<string, any> = { id: 'primary', ...dbPayload };
-      let maxRetries = 25;
-      while (maxRetries > 0) {
-        const { error } = await supabase
-          .from('site_settings')
-          .upsert(currentPayload);
-
-        if (!error) {
-          break;
-        }
-
-        // If error is caused by a missing column in Supabase, strip it and retry immediately
-        const match = error.message && error.message.match(/Could not find the '([^']+)' column/);
-        if (match && match[1] && currentPayload[match[1]] !== undefined) {
-          delete currentPayload[match[1]];
-          maxRetries--;
-        } else {
-          console.warn('Supabase site_settings upsert error:', error.message);
-          break;
-        }
-      }
+      metaToStore = JSON.parse(setRow.about_bio);
     } catch {
-      // Fallback
+      // ignore
     }
   }
-  return localSettings;
+
+  // Merge new settings into JSON metadata
+  Object.assign(metaToStore, newSettings);
+
+  // Map ONLY fields that exist as real columns in public.site_settings
+  const dbPayload: Record<string, any> = {
+    id: 'primary',
+    about_bio: JSON.stringify(metaToStore),
+    updated_at: new Date().toISOString(),
+  };
+
+  if (newSettings.name !== undefined) dbPayload.name = newSettings.name;
+  if (newSettings.title !== undefined) dbPayload.title = newSettings.title;
+  if (newSettings.heroTitle !== undefined && !newSettings.title) dbPayload.title = newSettings.heroTitle;
+  if (newSettings.tagline !== undefined) dbPayload.tagline = newSettings.tagline;
+  if (newSettings.email !== undefined) dbPayload.email = newSettings.email;
+  if (newSettings.phone !== undefined) dbPayload.phone = newSettings.phone;
+  if (newSettings.location !== undefined) dbPayload.location = newSettings.location;
+  if (newSettings.behanceUrl !== undefined) dbPayload.behance_url = newSettings.behanceUrl;
+  if (newSettings.linkedinUrl !== undefined) dbPayload.linkedin_url = newSettings.linkedinUrl;
+  if (newSettings.heroHeadline !== undefined) dbPayload.hero_headline = newSettings.heroHeadline;
+  if (newSettings.heroSupportingCopy !== undefined) dbPayload.hero_supporting_copy = newSettings.heroSupportingCopy;
+  if (newSettings.aboutHeadline !== undefined) dbPayload.about_headline = newSettings.aboutHeadline;
+  if (newSettings.aboutIntro !== undefined) dbPayload.about_intro = newSettings.aboutIntro;
+  if (newSettings.aboutPhilosophy !== undefined) dbPayload.about_philosophy = newSettings.aboutPhilosophy;
+  if (newSettings.aboutDescription !== undefined) dbPayload.about_description = newSettings.aboutDescription;
+  if (newSettings.profilePhotoUrl !== undefined) dbPayload.profile_photo_url = newSettings.profilePhotoUrl;
+  if (newSettings.resumeUrl !== undefined) dbPayload.resume_url = newSettings.resumeUrl;
+  if (newSettings.resumeLabel !== undefined) dbPayload.resume_label = newSettings.resumeLabel;
+  if (newSettings.resumeVisible !== undefined) dbPayload.resume_visible = newSettings.resumeVisible;
+  if (newSettings.educationDegree !== undefined) dbPayload.education_degree = newSettings.educationDegree;
+  if (newSettings.educationInstitution !== undefined) dbPayload.education_institution = newSettings.educationInstitution;
+  if (newSettings.educationYear !== undefined) dbPayload.education_year = newSettings.educationYear;
+  if (newSettings.educationAggregate !== undefined) dbPayload.education_aggregate = newSettings.educationAggregate;
+  if (newSettings.footerAppearance !== undefined) dbPayload.footer_appearance = newSettings.footerAppearance;
+  if (newSettings.footerLogoLightUrl !== undefined) dbPayload.footer_logo_light_url = newSettings.footerLogoLightUrl;
+  if (newSettings.footerLogoDarkUrl !== undefined) dbPayload.footer_logo_dark_url = newSettings.footerLogoDarkUrl;
+  if (newSettings.footerDescription !== undefined) dbPayload.footer_description = newSettings.footerDescription;
+  if (newSettings.footerCopyright !== undefined) dbPayload.footer_copyright = newSettings.footerCopyright;
+
+  // Perform database write
+  const { error: upsertError } = await supabase
+    .from('site_settings')
+    .upsert(dbPayload);
+
+  if (upsertError) {
+    console.error('Supabase site_settings upsert error:', upsertError.message);
+    throw new Error(`Database error saving settings: ${upsertError.message}`);
+  }
+
+  // 3. Read back verified saved record directly from database
+  const verifiedSettings = await getSiteSettings();
+  localSettings = { ...verifiedSettings };
+  return verifiedSettings;
 }
 
 export async function getClientLogos(includeHidden = false): Promise<ClientLogo[]> {

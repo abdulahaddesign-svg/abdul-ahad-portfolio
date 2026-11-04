@@ -69,7 +69,8 @@ export default function AdminHomepageCMS() {
     setIsSuccess(false);
 
     try {
-      await updateSiteSettings(settings);
+      const saved = await updateSiteSettings(settings);
+      setSettings(saved);
       setIsSuccess(true);
       setTimeout(() => setIsSuccess(false), 3000);
     } catch (err: any) {
@@ -168,7 +169,7 @@ export default function AdminHomepageCMS() {
           </label>
           <Input
             value={settings.heroTitle || settings.title || ''}
-            onChange={(e) => setSettings({ ...settings, heroTitle: e.target.value })}
+            onChange={(e) => setSettings({ ...settings, heroTitle: e.target.value, title: e.target.value })}
             placeholder="CREATIVE DESIGNER & DIGITAL CREATIVE PARTNER"
             required
           />

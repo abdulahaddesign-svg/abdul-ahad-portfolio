@@ -91,7 +91,8 @@ export default function AdminHeaderFooterCMS() {
     setIsSuccess(false);
 
     try {
-      await updateSiteSettings(settings);
+      const saved = await updateSiteSettings(settings);
+      setSettings(saved);
       setIsSuccess(true);
       setTimeout(() => setIsSuccess(false), 3000);
     } catch (err: any) {
