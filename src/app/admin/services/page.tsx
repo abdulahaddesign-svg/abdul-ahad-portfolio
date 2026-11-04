@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import Image from 'next/image';
+import { SafeImage } from '@/components/ui/SafeImage';
 import { 
   Layers, 
   Plus, 
@@ -270,11 +270,12 @@ export default function AdminServicesPage() {
 
                 {srv.primaryImage && (
                   <div className="relative w-20 h-14 bg-charcoal-900 border border-charcoal/20 overflow-hidden shrink-0">
-                    <Image
+                    <SafeImage
                       src={srv.primaryImage}
                       alt={srv.title}
                       fill
                       className="object-cover"
+                      fallback="/projects/freelance/branding-cover.svg"
                     />
                   </div>
                 )}
@@ -478,11 +479,12 @@ export default function AdminServicesPage() {
                 <div className="flex flex-col sm:flex-row items-start gap-4">
                   {editForm.primaryImage ? (
                     <div className="relative w-40 h-28 bg-charcoal-900 border border-charcoal/20 overflow-hidden shrink-0">
-                      <Image
+                      <SafeImage
                         src={editForm.primaryImage}
                         alt="Primary service"
                         fill
                         className="object-cover"
+                        fallback="/projects/freelance/branding-cover.svg"
                       />
                     </div>
                   ) : (
@@ -523,7 +525,13 @@ export default function AdminServicesPage() {
                 <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
                   {(editForm.supportingImages || []).map((img, idx) => (
                     <div key={idx} className="relative aspect-[4/3] bg-charcoal-900 border border-charcoal/20 group overflow-hidden">
-                      <Image src={img} alt={`Supporting ${idx}`} fill className="object-cover" />
+                      <SafeImage
+                        src={img}
+                        alt={`Supporting ${idx}`}
+                        fill
+                        className="object-cover"
+                        fallback="/projects/freelance/branding-cover.svg"
+                      />
                       <button
                         type="button"
                         onClick={() => handleRemoveSupportingImage(idx)}

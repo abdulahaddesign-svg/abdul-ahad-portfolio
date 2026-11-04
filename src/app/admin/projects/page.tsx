@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
-import Image from 'next/image';
+import { SafeImage } from '@/components/ui/SafeImage';
 import { 
   PlusCircle, 
   Edit3, 
@@ -151,11 +151,12 @@ export default function AdminProjectsListPage() {
                   {/* Thumbnail Cover */}
                   <td className="p-4">
                     <div className="relative w-16 h-10 bg-charcoal overflow-hidden border border-charcoal/20 shrink-0">
-                      <Image
+                      <SafeImage
                         src={p.coverImage}
                         alt={p.title}
                         fill
                         className="object-cover"
+                        fallback="/projects/freelance/branding-cover.svg"
                       />
                     </div>
                   </td>

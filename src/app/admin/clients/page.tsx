@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import Image from 'next/image';
+import { SafeImage } from '@/components/ui/SafeImage';
 import { 
   Building2, 
   Plus, 
@@ -233,12 +233,13 @@ export default function AdminClientsPage() {
                   {/* Logo Preview */}
                   <td className="py-3 px-4">
                     <div className="w-24 h-10 relative bg-ivory border border-charcoal/10 flex items-center justify-center p-1.5">
-                      <Image
+                      <SafeImage
                         src={client.logoUrl}
                         alt={client.name}
                         width={90}
                         height={32}
                         className="max-h-7 w-auto object-contain"
+                        fallback="/clients/eclerx.svg"
                       />
                     </div>
                   </td>
@@ -377,12 +378,13 @@ export default function AdminClientsPage() {
                 {editForm.logoUrl && (
                   <div className="mt-2 p-2 bg-white border border-charcoal/10 inline-flex items-center gap-3">
                     <span className="text-[10px] uppercase font-bold text-charcoal-400">Preview:</span>
-                    <Image
+                    <SafeImage
                       src={editForm.logoUrl}
                       alt="Logo preview"
                       width={80}
                       height={24}
                       className="max-h-6 w-auto object-contain"
+                      fallback="/clients/eclerx.svg"
                     />
                   </div>
                 )}

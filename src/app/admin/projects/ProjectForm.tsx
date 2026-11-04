@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import Image from 'next/image';
+import { SafeImage } from '@/components/ui/SafeImage';
 import { 
   Save, 
   ArrowLeft, 
@@ -531,11 +531,12 @@ export function ProjectForm({ initialData }: ProjectFormProps) {
                 <div className="flex flex-col sm:flex-row gap-4 items-start">
                   <div className="relative w-48 aspect-[16/10] bg-charcoal border border-charcoal/20 overflow-hidden shrink-0">
                     {formData.coverImage ? (
-                      <Image
+                      <SafeImage
                         src={formData.coverImage}
                         alt="Cover Preview"
                         fill
                         className="object-cover"
+                        fallback="/projects/freelance/branding-cover.svg"
                       />
                     ) : (
                       <div className="w-full h-full flex items-center justify-center text-xs text-charcoal-400">
@@ -610,7 +611,13 @@ export function ProjectForm({ initialData }: ProjectFormProps) {
                         key={idx}
                         className="relative aspect-[16/10] bg-charcoal border border-charcoal/20 group overflow-hidden"
                       >
-                        <Image src={url} alt={`Gallery ${idx + 1}`} fill className="object-cover" />
+                        <SafeImage
+                          src={url}
+                          alt={`Gallery ${idx + 1}`}
+                          fill
+                          className="object-cover"
+                          fallback="/projects/freelance/branding-cover.svg"
+                        />
                         
                         {/* Quick Action Overlay: Reorder & Delete */}
                         <div className="absolute inset-0 bg-charcoal/70 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-between p-2">

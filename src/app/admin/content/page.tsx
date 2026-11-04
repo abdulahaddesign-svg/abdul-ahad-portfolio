@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import Image from 'next/image';
+import { SafeImage } from '@/components/ui/SafeImage';
 import { 
   Save, 
   CheckCircle2, 
@@ -217,11 +217,12 @@ export default function AdminContentPage() {
             {settings.profilePhotoUrl && (
               <div className="p-3 bg-ivory border border-charcoal/10 flex items-center gap-4">
                 <div className="relative w-16 h-20 bg-charcoal shrink-0 border border-charcoal/20 overflow-hidden">
-                  <Image
+                  <SafeImage
                     src={settings.profilePhotoUrl}
                     alt="Current portrait"
                     fill
                     className="object-cover"
+                    fallback="/about/portrait.jpg"
                   />
                 </div>
                 <div className="text-xs space-y-1">

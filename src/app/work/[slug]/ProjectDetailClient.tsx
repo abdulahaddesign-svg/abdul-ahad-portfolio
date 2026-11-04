@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import Image from 'next/image';
+import { SafeImage } from '@/components/ui/SafeImage';
 import Link from 'next/link';
 import { motion, useReducedMotion } from 'framer-motion';
 import { 
@@ -194,13 +194,14 @@ export function ProjectDetailClient({ project, nextProject }: ProjectDetailClien
           className="py-12 sm:py-16"
         >
           <div className="relative aspect-[16/9] lg:aspect-[21/10] w-full bg-charcoal-900 border border-charcoal/20 overflow-hidden shadow-2xl">
-            <Image
+            <SafeImage
               src={project.coverImage}
               alt={project.title}
               fill
               priority
               sizes="(max-width: 1820px) 100vw, 1820px"
               className="object-cover"
+              fallback="/projects/freelance/branding-cover.svg"
             />
           </div>
         </motion.div>
@@ -259,12 +260,13 @@ export function ProjectDetailClient({ project, nextProject }: ProjectDetailClien
                   transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
                   className="relative aspect-[16/10] w-full bg-charcoal-900 border border-charcoal/20 overflow-hidden shadow-2xl"
                 >
-                  <Image
+                  <SafeImage
                     src={imgUrl}
                     alt={`${project.title} - Plate ${idx + 1}`}
                     fill
                     sizes="(max-width: 1820px) 100vw, 1820px"
                     className="object-cover"
+                    fallback="/projects/freelance/branding-cover.svg"
                   />
                   <div className="absolute top-4 left-4 px-3 py-1 bg-charcoal/80 backdrop-blur-sm border border-ivory/10 text-[11px] font-mono text-ivory uppercase tracking-widest">
                     Plate 0{idx + 1}
@@ -359,12 +361,13 @@ export function ProjectDetailClient({ project, nextProject }: ProjectDetailClien
 
             <Link href={`/work/${nextProject.slug}`} className="block relative group overflow-hidden">
               <div className="relative aspect-[21/9] sm:aspect-[24/9] w-full bg-charcoal-900 border border-charcoal/20 overflow-hidden">
-                <Image
+                <SafeImage
                   src={nextProject.coverImage}
                   alt={nextProject.title}
                   fill
                   sizes="(max-width: 1820px) 100vw, 1820px"
                   className="object-cover transition-transform duration-700 ease-out group-hover:scale-105"
+                  fallback="/projects/freelance/branding-cover.svg"
                 />
                 <div className="absolute inset-0 bg-charcoal/20 group-hover:bg-transparent transition-colors duration-300" />
               </div>

@@ -2,7 +2,7 @@
 
 import React from 'react';
 import Link from 'next/link';
-import Image from 'next/image';
+import { SafeImage } from './SafeImage';
 import { motion } from 'framer-motion';
 import { ArrowUpRight } from 'lucide-react';
 import { Project } from '@/lib/types';
@@ -32,13 +32,14 @@ export function ProjectCard({ project, featured = false }: ProjectCardProps) {
       >
         <Link href={`/work/${project.slug}`} tabIndex={-1} aria-hidden="true">
           <div className="relative w-full h-full transition-transform duration-700 ease-out group-hover:scale-[1.03]">
-            <Image
+            <SafeImage
               src={project.coverImage}
               alt={project.title}
               fill
               sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
               className="object-cover transition-opacity duration-300"
               priority={featured}
+              fallback="/projects/freelance/branding-cover.svg"
             />
             {/* Subtle Gradient Overlay */}
             <div className="absolute inset-0 bg-gradient-to-t from-charcoal-950/80 via-transparent to-transparent opacity-40 group-hover:opacity-20 transition-opacity duration-300" />

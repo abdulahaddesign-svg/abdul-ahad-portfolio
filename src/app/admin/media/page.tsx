@@ -1,9 +1,10 @@
 'use client';
 
 import React, { useState } from 'react';
-import Image from 'next/image';
+import { SafeImage } from '@/components/ui/SafeImage';
 import { Upload, Copy, Check, Trash2, ExternalLink } from 'lucide-react';
 import { Button } from '@/components/ui/Button';
+import { uploadMedia } from '@/lib/upload-client';
 
 const INITIAL_MEDIA = [
   { id: 'm1', name: 'Reztro Cover', url: '/projects/reztro/reztro-cover.svg', size: '12 KB' },
@@ -29,15 +30,8 @@ export default function AdminMediaPage() {
     if (!file) return;
 
     setIsUploading(true);
-    const fd = new FormData();
-    fd.append('file', file);
-
     try {
-      const res = await fetch('/api/upload', {
-        method: 'POST',
-        body: fd,
-      });
-      const data = await res.json();
+      const data = await uploadMedia(file);
       if (data.url) {
         const newItem = {
           id: `m-${Date.now()}`,
@@ -47,10 +41,11 @@ export default function AdminMediaPage() {
         };
         setMediaItems([newItem, ...mediaItems]);
       }
-    } catch {
-      alert('Failed to upload media asset.');
+    } catch (err: any) {
+      alert(err.message || 'Failed to upload media asset.');
     } finally {
       setIsUploading(false);
+      e.target.value = '';
     }
   };
 
@@ -111,11 +106,12 @@ export default function AdminMediaPage() {
           >
             {/* Visual Thumbnail */}
             <div className="relative aspect-[16/10] bg-charcoal-900 overflow-hidden">
-              <Image
+              <SafeImage
                 src={item.url}
                 alt={item.name}
                 fill
                 className="object-cover group-hover:scale-105 transition-transform duration-300"
+                fallback="/projects/freelance/branding-cover.svg"
               />
             </div>
 
