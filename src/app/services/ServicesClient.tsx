@@ -54,7 +54,7 @@ export function ServicesClient({ services }: ServicesClientProps) {
   useEffect(() => {
     const handleScroll = () => {
       const scrollPosition = window.scrollY + 240;
-      for (const srv of services) {
+      for (const srv of serviceList) {
         const el = document.getElementById(srv.slug);
         if (el) {
           const top = el.offsetTop;
@@ -69,7 +69,7 @@ export function ServicesClient({ services }: ServicesClientProps) {
 
     window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
-  }, [services]);
+  }, [serviceList]);
 
   const scrollToService = (slug: string) => {
     const el = document.getElementById(slug);

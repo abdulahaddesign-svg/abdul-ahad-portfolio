@@ -499,6 +499,8 @@ let localServices: ServiceItem[] = [...SERVICES_DATA];
 
 export async function getServices(includeUnpublished = false): Promise<ServiceItem[]> {
   const supabase = createClient();
+  let dbServices: ServiceItem[] = [];
+
   if (supabase) {
     try {
       let query = supabase
@@ -508,7 +510,7 @@ export async function getServices(includeUnpublished = false): Promise<ServiceIt
 
       const { data, error } = await query;
       if (!error && data && data.length > 0) {
-        return data.map((row: any) => ({
+        dbServices = data.map((row: any) => ({
           id: row.id,
           title: row.title,
           slug: row.slug,
@@ -520,7 +522,9 @@ export async function getServices(includeUnpublished = false): Promise<ServiceIt
           typicalProjects: row.typical_projects ?? [],
           creativeProcess: row.creative_process ?? [],
           primaryImage: row.primary_image || row.image_url || '/projects/freelance/branding-cover.svg',
-          supportingImages: Array.isArray(row.supporting_images) ? row.supporting_images : (Array.isArray(row.capabilities) ? row.capabilities : []),
+          supportingImages: Array.isArray(row.supporting_images) && row.supporting_images.length > 0 
+            ? row.supporting_images 
+            : (Array.isArray(row.capabilities) ? row.capabilities : ['/projects/social/social-cover.svg', '/projects/apparel/apparel-cover.svg']),
           ctaText: row.cta_text || 'Initiate Brief',
           ctaHref: row.cta_href || '/contact',
           sortOrder: row.sort_order ?? 0,
@@ -532,6 +536,13 @@ export async function getServices(includeUnpublished = false): Promise<ServiceIt
     } catch {
       // Fallback to local
     }
+  }
+
+  // If Supabase returned items, merge any missing defaults so that all 6 services are always present
+  if (dbServices.length > 0) {
+    const dbSlugs = new Set(dbServices.map(s => s.slug));
+    const missingDefaults = localServices.filter(s => !dbSlugs.has(s.slug) && (includeUnpublished || s.isPublished !== false));
+    return [...dbServices, ...missingDefaults].sort((a, b) => a.sortOrder - b.sortOrder);
   }
 
   return [...localServices]
