@@ -38,8 +38,9 @@ export function AboutIntroSection({ settings }: AboutIntroSectionProps) {
 
   return (
     <section
+      id="about"
       ref={containerRef}
-      className="py-24 sm:py-36 bg-ivory text-charcoal border-b border-charcoal/15 select-none"
+      className="py-24 sm:py-36 bg-ivory text-charcoal dark:bg-charcoal dark:text-ivory border-b border-charcoal/15 dark:border-ivory/15 select-none transition-colors duration-300"
     >
       <div className="max-w-[1820px] mx-auto px-4 sm:px-8 lg:px-12">
         {/* Section Header Line */}

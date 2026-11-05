@@ -28,7 +28,10 @@ const PROCESS_STEPS = [
 
 export function CreativeProcessSection() {
   return (
-    <section className="py-24 sm:py-36 bg-ivory text-charcoal border-b border-charcoal/15">
+    <section
+      id="process"
+      className="py-24 sm:py-36 bg-ivory text-charcoal dark:bg-charcoal dark:text-ivory border-b border-charcoal/15 dark:border-ivory/15 select-none transition-colors duration-300"
+    >
       <div className="max-w-[1600px] mx-auto px-6 sm:px-12">
         {/* Header */}
         <div className="max-w-3xl mb-16 sm:mb-24">
