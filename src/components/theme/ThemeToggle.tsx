@@ -11,12 +11,17 @@ interface ThemeToggleProps {
 }
 
 export function ThemeToggle({ className = '', showLabel = false }: ThemeToggleProps) {
-  const { resolvedTheme, toggleTheme } = useTheme();
+  const { resolvedTheme, toggleTheme, allowDarkTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
     setMounted(true);
   }, []);
+
+  // When admin setting "Allow Dark Theme" is OFF, hide the toggle completely
+  if (!allowDarkTheme) {
+    return null;
+  }
 
   const isDark = mounted ? resolvedTheme === 'dark' : false;
 
@@ -50,7 +55,7 @@ export function ThemeToggle({ className = '', showLabel = false }: ThemeTogglePr
               key="sun"
               initial={{ rotate: 90, opacity: 0, scale: 0.6 }}
               animate={{ rotate: 0, opacity: 1, scale: 1 }}
-              exit={{ rotate: -90, opacity: 0, scale: 0.6 }}
+              exit={{ rotate: 90, opacity: 0, scale: 0.6 }}
               transition={{ duration: 0.22, ease: 'easeOut' }}
               className="flex items-center justify-center text-copper"
             >

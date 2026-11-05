@@ -6,6 +6,7 @@ import { ArrowDown, ArrowUpRight, Award, GraduationCap, MapPin, Mail, Phone, Ext
 import { getSiteSettings, getExperience } from '@/lib/data';
 import { Button } from '@/components/ui/Button';
 import { SafeImage } from '@/components/ui/SafeImage';
+import { ToolsSection } from '@/components/home/ToolsSection';
 
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
@@ -263,6 +264,15 @@ export default async function AboutPage() {
             ))}
           </div>
         </div>
+
+        {/* Tools I Use Section */}
+        <ToolsSection
+          tools={settings.toolsList}
+          sectionLabel="TECHNICAL ARSENAL"
+          headline="Tools I Use Daily"
+          subheadline="Software suite utilized across brand identity systems, marketing collateral, UI/UX screens, and kinetic motion."
+          className="border-b-0 px-0 pt-20 pb-0"
+        />
 
         {/* Bottom CTA Block (Editorial, Zero Box Cards) */}
         <div className="pt-20 flex flex-col sm:flex-row sm:items-center justify-between gap-8">

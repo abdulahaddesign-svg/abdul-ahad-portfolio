@@ -55,6 +55,26 @@
   h1, h2, h3, h4, .font-display {
     font-feature-settings: "cv02", "cv03", "cv04", "cv11";
   }
+
+  /* Accessible focus indicators (WCAG AA) */
+  a:focus-visible,
+  button:focus-visible,
+  input:focus-visible,
+  textarea:focus-visible,
+  select:focus-visible {
+    outline: 2px solid #C4855A;
+    outline-offset: 2px;
+  }
+}
+
+/* Global respect for reduced motion preference */
+@media (prefers-reduced-motion: reduce) {
+  *, ::before, ::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }
 
 /* Horizontal continuous scroll strip hiding standard bars */

@@ -11,11 +11,17 @@ import {
   Eye, 
   ArrowUpRight, 
   ArrowDown, 
+  ArrowUp,
   Sliders,
+  Layers,
+  Wrench,
+  Plus,
+  Trash2,
   Image as ImageIcon
 } from 'lucide-react';
 import { getSiteSettings, updateSiteSettings } from '@/lib/data';
-import { SiteSettings } from '@/lib/types';
+import { SiteSettings, ToolItem } from '@/lib/types';
+import { DEFAULT_TOOLS, DEFAULT_HOMEPAGE_ORDER } from '@/lib/constants';
 import { Input, Textarea } from '@/components/ui/Input';
 import { Button } from '@/components/ui/Button';
 import { SafeImage } from '@/components/ui/SafeImage';
@@ -73,6 +79,70 @@ export default function AdminHomepageCMS() {
     }
   };
 
+  const sectionMeta: Record<string, { label: string; desc: string }> = {
+    hero: { label: 'Hero (Opening)', desc: 'Large headline, professional title & primary CTA buttons' },
+    clients: { label: 'Our Clients', desc: '3 kinetic scroll-linked rows of client logos' },
+    about: { label: 'About Me', desc: 'Editorial portrait, biography & resume download' },
+    tools: { label: 'Tools I Use', desc: 'Software arsenal (Photoshop, Illustrator, Figma, etc.)' },
+    motion: { label: 'Featured in Motion', desc: 'Horizontal moving project strip cards' },
+    deliver: { label: 'What I Deliver', desc: 'Core capabilities & scope breakdown' },
+    'selected-works': { label: 'Selected Works', desc: '3x3 editorial curated project showcase' },
+    process: { label: 'Creative Process', desc: 'Workflow & rigor 4-step framework' },
+    contact: { label: 'Project Inquiry CTA', desc: 'Direct brief form & channel coordinates' },
+  };
+
+  const currentOrder =
+    settings && Array.isArray(settings.homepageSectionOrder) && settings.homepageSectionOrder.length > 0
+      ? settings.homepageSectionOrder
+      : DEFAULT_HOMEPAGE_ORDER;
+
+  const currentTools =
+    settings && Array.isArray(settings.toolsList) && settings.toolsList.length > 0
+      ? settings.toolsList
+      : DEFAULT_TOOLS;
+
+  const handleMoveSection = (index: number, direction: 'up' | 'down') => {
+    if (!settings) return;
+    const target = direction === 'up' ? index - 1 : index + 1;
+    if (target < 0 || target >= currentOrder.length) return;
+    const newOrder = [...currentOrder];
+    const [moved] = newOrder.splice(index, 1);
+    newOrder.splice(target, 0, moved);
+    setSettings({ ...settings, homepageSectionOrder: newOrder });
+  };
+
+  const handleResetSectionOrder = () => {
+    if (!settings) return;
+    setSettings({ ...settings, homepageSectionOrder: [...DEFAULT_HOMEPAGE_ORDER] });
+  };
+
+  const handleUpdateTool = (index: number, field: keyof ToolItem, value: any) => {
+    if (!settings) return;
+    const updated = [...currentTools];
+    updated[index] = { ...updated[index], [field]: value };
+    setSettings({ ...settings, toolsList: updated });
+  };
+
+  const handleAddTool = () => {
+    if (!settings) return;
+    const newTool: ToolItem = {
+      id: `tool-${Date.now()}`,
+      name: 'New Tool',
+      category: 'Design Tool',
+      monogram: 'NT',
+      accentColor: '#C4855A',
+      sortOrder: currentTools.length + 1,
+      isVisible: true,
+    };
+    setSettings({ ...settings, toolsList: [...currentTools, newTool] });
+  };
+
+  const handleRemoveTool = (index: number) => {
+    if (!settings) return;
+    const updated = currentTools.filter((_, i) => i !== index);
+    setSettings({ ...settings, toolsList: updated });
+  };
+
   if (!settings) {
     return (
       <div className="py-24 text-center">
@@ -94,18 +164,19 @@ export default function AdminHomepageCMS() {
           </span>
           <h1 className="font-display font-extrabold text-3xl text-charcoal tracking-tight flex items-center gap-3">
             <Home className="w-7 h-7 text-copper" />
-            Homepage Hero Management
+            Homepage Management
           </h1>
           <p className="text-xs text-charcoal-600 mt-1">
-            Manage your opening headline, subtitle, professional credentials, call-to-actions, and background monogram.
+            Manage your opening headline, subtitle, section sequence, software arsenal, and background assets.
           </p>
         </div>
 
         <div className="flex items-center gap-3">
           {isSuccess && (
-            <span className="inline-flex items-center gap-1.5 text-xs font-sans font-bold text-sage bg-sage/10 px-3 py-1.5 border border-sage/30">
-              <CheckCircle2 className="w-4 h-4 text-sage" /> Saved to Production!
-            </span>
+            <div className="flex items-center gap-1.5 text-xs font-sans font-bold text-copper animate-fade-in">
+              <CheckCircle2 className="w-4 h-4" />
+              <span>Published Live</span>
+            </div>
           )}
           <Button
             type="submit"
@@ -113,267 +184,354 @@ export default function AdminHomepageCMS() {
             size="md"
             isLoading={isSaving}
             icon={<Save className="w-4 h-4" />}
-            onClick={(e) => handleSave(e)}
           >
             Save Changes
           </Button>
         </div>
       </div>
 
-      {/* Section 1: Main Typography Headlines */}
-      <div className="p-6 sm:p-8 bg-ivory border border-charcoal/15 space-y-6">
-        <div className="flex items-center gap-2 pb-4 border-b border-charcoal/10">
+      {/* 1. Primary Typography & Headlines */}
+      <div className="p-6 bg-white border border-charcoal/15 space-y-6">
+        <h2 className="font-display font-bold text-lg text-charcoal pb-3 border-b border-charcoal/10 flex items-center gap-2">
           <Sparkles className="w-4 h-4 text-copper" />
-          <h2 className="font-display font-bold text-lg text-charcoal">
-            Primary Typography &amp; Headlines
-          </h2>
-        </div>
+          Primary Typography &amp; Headlines
+        </h2>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-          <div className="space-y-1">
-            <label className="text-xs font-sans font-bold uppercase tracking-wider text-charcoal">
-              Main Headline (Line 1)
-            </label>
-            <Input
-              value={settings.heroHeadline || ''}
-              onChange={(e) => setSettings({ ...settings, heroHeadline: e.target.value })}
-              placeholder="e.g. ABDUL AHAD"
-              required
-            />
-            <p className="text-[11px] text-charcoal-500">Displays in giant oversized Space Grotesk font.</p>
-          </div>
-
-          <div className="space-y-1">
-            <label className="text-xs font-sans font-bold uppercase tracking-wider text-charcoal">
-              Headline Line 2 (Optional Accent Line)
-            </label>
-            <Input
-              value={settings.heroHeadlineLine2 || ''}
-              onChange={(e) => setSettings({ ...settings, heroHeadlineLine2: e.target.value })}
-              placeholder="e.g. DESIGN STUDIO"
-            />
-            <p className="text-[11px] text-charcoal-500">Renders in burnt copper accent directly below Line 1.</p>
-          </div>
-        </div>
-
-        <div className="space-y-1">
-          <label className="text-xs font-sans font-bold uppercase tracking-wider text-charcoal">
-            Professional Title / Capability Subtitle
-          </label>
           <Input
-            value={settings.heroTitle || settings.title || ''}
-            onChange={(e) => setSettings({ ...settings, heroTitle: e.target.value, title: e.target.value })}
-            placeholder="CREATIVE DESIGNER & DIGITAL CREATIVE PARTNER"
-            required
+            label="Main Headline (Line 1)"
+            value={settings.heroHeadline || ''}
+            onChange={(e) => setSettings({ ...settings, heroHeadline: e.target.value })}
+            placeholder="Designer that makes businesses stand out."
+            helperText="Displays in giant oversized Space Grotesk font."
+          />
+          <Input
+            label="Headline Line 2 (Optional Accent Line)"
+            value={settings.heroHeadlineLine2 || ''}
+            onChange={(e) => setSettings({ ...settings, heroHeadlineLine2: e.target.value })}
+            placeholder="e.g. DESIGN STUDIO"
+            helperText="Renders in burnt copper accent directly below Line 1."
           />
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-          <div className="space-y-1">
-            <label className="text-xs font-sans font-bold uppercase tracking-wider text-charcoal">
-              Location Label
-            </label>
-            <Input
-              value={settings.heroLocationLabel || settings.location || ''}
-              onChange={(e) => setSettings({ ...settings, heroLocationLabel: e.target.value })}
-              placeholder="Coimbatore, Tamil Nadu, India"
-            />
-          </div>
+        <Input
+          label="Professional Title / Capability Subtitle"
+          value={settings.heroSubtitle || settings.heroTitle || ''}
+          onChange={(e) => setSettings({ ...settings, heroSubtitle: e.target.value, heroTitle: e.target.value })}
+          placeholder="CREATIVE DESIGNER & DIGITAL CREATIVE PARTNER"
+        />
 
-          <div className="space-y-1">
-            <label className="text-xs font-sans font-bold uppercase tracking-wider text-charcoal">
-              Highlighted Keywords
-            </label>
-            <Input
-              value={settings.heroHighlightedWords || ''}
-              onChange={(e) => setSettings({ ...settings, heroHighlightedWords: e.target.value })}
-              placeholder="Branding, UI/UX, Motion"
-            />
-          </div>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+          <Input
+            label="Location Label"
+            value={settings.heroLocationLabel || settings.location || ''}
+            onChange={(e) => setSettings({ ...settings, heroLocationLabel: e.target.value })}
+            placeholder="Coimbatore, Tamil Nadu, India"
+          />
+          <Input
+            label="Highlighted Keywords"
+            value={settings.heroHighlightedWords || ''}
+            onChange={(e) => setSettings({ ...settings, heroHighlightedWords: e.target.value })}
+            placeholder="Branding, UI/UX, Motion"
+          />
         </div>
       </div>
 
-      {/* Section 2: Narrative Introduction Copy */}
-      <div className="p-6 sm:p-8 bg-ivory border border-charcoal/15 space-y-6">
-        <h2 className="font-display font-bold text-lg text-charcoal pb-4 border-b border-charcoal/10">
+      {/* 2. Narrative Introduction */}
+      <div className="p-6 bg-white border border-charcoal/15 space-y-6">
+        <h2 className="font-display font-bold text-lg text-charcoal pb-3 border-b border-charcoal/10">
           Hero Narrative Introduction
         </h2>
 
-        <div className="space-y-1">
-          <label className="text-xs font-sans font-bold uppercase tracking-wider text-charcoal">
-            Primary Introduction Paragraph
-          </label>
-          <Textarea
-            rows={3}
-            value={settings.heroSupportingCopy || ''}
-            onChange={(e) => setSettings({ ...settings, heroSupportingCopy: e.target.value })}
-            placeholder="I create thoughtful visual identities, digital experiences, and motion-led content for brands that want to stand out."
-          />
-          <p className="text-[11px] text-charcoal-500">High-contrast, prominent leading text (22px).</p>
-        </div>
+        <Textarea
+          label="Primary Introduction Paragraph"
+          rows={3}
+          value={settings.heroSupportingCopy || ''}
+          onChange={(e) => setSettings({ ...settings, heroSupportingCopy: e.target.value })}
+          helperText="High contrast, prominent leading text (22px)."
+        />
 
-        <div className="space-y-1">
-          <label className="text-xs font-sans font-bold uppercase tracking-wider text-charcoal">
-            Secondary Supporting Description
-          </label>
-          <Textarea
-            rows={3}
-            value={settings.heroIntroSecondary || ''}
-            onChange={(e) => setSettings({ ...settings, heroIntroSecondary: e.target.value })}
-            placeholder="Combining visual design, typography, and human-centered design thinking to deliver precise creative solutions..."
-          />
-        </div>
+        <Textarea
+          label="Secondary Introduction Narrative"
+          rows={3}
+          value={settings.heroIntroSecondary || ''}
+          onChange={(e) => setSettings({ ...settings, heroIntroSecondary: e.target.value })}
+          helperText="Supporting explanatory paragraph (15px)."
+        />
       </div>
 
-      {/* Section 3: Call-to-Actions (Buttons) */}
-      <div className="p-6 sm:p-8 bg-ivory border border-charcoal/15 space-y-6">
-        <h2 className="font-display font-bold text-lg text-charcoal pb-4 border-b border-charcoal/10">
-          Hero Action CTAs
+      {/* 3. Call-To-Action Destinations */}
+      <div className="p-6 bg-white border border-charcoal/15 space-y-6">
+        <h2 className="font-display font-bold text-lg text-charcoal pb-3 border-b border-charcoal/10 flex items-center gap-2">
+          <ArrowUpRight className="w-4 h-4 text-copper" />
+          Call-To-Action Destinations
         </h2>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-          <div className="space-y-3 p-4 border border-charcoal/10 bg-charcoal-50/50">
-            <span className="text-xs font-sans font-bold uppercase tracking-wider text-copper block">
-              Primary Button (Solid Dark)
-            </span>
-            <div>
-              <label className="text-[11px] font-sans font-semibold text-charcoal-700">Button Label</label>
-              <Input
-                value={settings.heroPrimaryCtaText || 'Explore My Work'}
-                onChange={(e) => setSettings({ ...settings, heroPrimaryCtaText: e.target.value })}
-              />
-            </div>
-            <div>
-              <label className="text-[11px] font-sans font-semibold text-charcoal-700">Destination Link / Anchor</label>
-              <Input
-                value={settings.heroPrimaryCtaHref || '#portfolio-strip'}
-                onChange={(e) => setSettings({ ...settings, heroPrimaryCtaHref: e.target.value })}
-              />
-            </div>
-          </div>
+          <Input
+            label="Primary CTA Button Label"
+            value={settings.heroPrimaryCtaText || 'Initiate Brief'}
+            onChange={(e) => setSettings({ ...settings, heroPrimaryCtaText: e.target.value })}
+          />
+          <Input
+            label="Primary CTA Destination Link"
+            value={settings.heroPrimaryCtaHref || '/contact'}
+            onChange={(e) => setSettings({ ...settings, heroPrimaryCtaHref: e.target.value })}
+          />
+        </div>
 
-          <div className="space-y-3 p-4 border border-charcoal/10 bg-charcoal-50/50">
-            <span className="text-xs font-sans font-bold uppercase tracking-wider text-charcoal block">
-              Secondary Button (Bordered Outlined)
-            </span>
-            <div>
-              <label className="text-[11px] font-sans font-semibold text-charcoal-700">Button Label</label>
-              <Input
-                value={settings.heroSecondaryCtaText || 'Start a Project'}
-                onChange={(e) => setSettings({ ...settings, heroSecondaryCtaText: e.target.value })}
-              />
-            </div>
-            <div>
-              <label className="text-[11px] font-sans font-semibold text-charcoal-700">Destination Link</label>
-              <Input
-                value={settings.heroSecondaryCtaHref || '/contact'}
-                onChange={(e) => setSettings({ ...settings, heroSecondaryCtaHref: e.target.value })}
-              />
-            </div>
-          </div>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+          <Input
+            label="Secondary CTA Button Label"
+            value={settings.heroSecondaryCtaText || 'View Selected Work'}
+            onChange={(e) => setSettings({ ...settings, heroSecondaryCtaText: e.target.value })}
+          />
+          <Input
+            label="Secondary CTA Destination Link"
+            value={settings.heroSecondaryCtaHref || '/work'}
+            onChange={(e) => setSettings({ ...settings, heroSecondaryCtaHref: e.target.value })}
+          />
         </div>
       </div>
 
-      {/* Section 4: Visuals & Watermark Monogram */}
-      <div className="p-6 sm:p-8 bg-ivory border border-charcoal/15 space-y-6">
-        <h2 className="font-display font-bold text-lg text-charcoal pb-4 border-b border-charcoal/10">
-          Visual Assets &amp; Motion Controls
+      {/* 4. Visual Backgrounds & Animation */}
+      <div className="p-6 bg-white border border-charcoal/15 space-y-6">
+        <h2 className="font-display font-bold text-lg text-charcoal pb-3 border-b border-charcoal/10 flex items-center gap-2">
+          <ImageIcon className="w-4 h-4 text-copper" />
+          Visual Backgrounds &amp; Monogram
         </h2>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-8 items-start">
-          {/* Monogram Watermark */}
-          <div className="space-y-3">
-            <label className="text-xs font-sans font-bold uppercase tracking-wider text-charcoal block">
-              Hero Monogram Watermark
-            </label>
-            <div className="flex items-center gap-3">
-              <label className="flex items-center gap-2 cursor-pointer">
-                <input
-                  type="checkbox"
-                  checked={settings.heroMonogramVisible !== false}
-                  onChange={(e) => setSettings({ ...settings, heroMonogramVisible: e.target.checked })}
-                  className="rounded border-charcoal/30 text-copper focus:ring-copper"
-                />
-                <span className="text-xs font-sans font-semibold text-charcoal">
-                  Display subtle monogram watermark in background
-                </span>
-              </label>
-            </div>
-
-            <div className="relative w-36 h-28 border border-charcoal/20 bg-charcoal/5 flex items-center justify-center p-2">
-              <SafeImage
-                src={settings.heroMonogramUrl || '/brand/logo-monogram-light.png'}
-                alt="Monogram"
-                width={120}
-                height={80}
-                className="max-h-full object-contain"
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+          {/* Monogram settings */}
+          <div className="space-y-4">
+            <label className="flex items-center gap-3 cursor-pointer">
+              <input
+                type="checkbox"
+                checked={settings.heroMonogramVisible !== false}
+                onChange={(e) => setSettings({ ...settings, heroMonogramVisible: e.target.checked })}
+                className="rounded border-charcoal/30 text-copper focus:ring-copper"
               />
-            </div>
+              <span className="text-xs font-sans font-bold text-charcoal">
+                Display Oversized Background Monogram (&quot;a&quot;)
+              </span>
+            </label>
 
             <Input
-              value={settings.heroMonogramUrl || ''}
+              label="Monogram Asset URL"
+              value={settings.heroMonogramUrl || '/brand/logo-monogram-light.png'}
               onChange={(e) => setSettings({ ...settings, heroMonogramUrl: e.target.value })}
               placeholder="/brand/logo-monogram-light.png"
             />
           </div>
 
-          {/* Hero Background Texture */}
-          <div className="space-y-3">
-            <label className="text-xs font-sans font-bold uppercase tracking-wider text-charcoal block">
-              Optional Background Overlay Image
+          {/* Staggered animation toggle */}
+          <div className="space-y-4">
+            <label className="flex items-center gap-3 cursor-pointer">
+              <input
+                type="checkbox"
+                checked={settings.heroAnimationEnabled !== false}
+                onChange={(e) => setSettings({ ...settings, heroAnimationEnabled: e.target.checked })}
+                className="rounded border-charcoal/30 text-copper focus:ring-copper"
+              />
+              <div>
+                <span className="text-xs font-sans font-bold text-charcoal block">
+                  Enable Opening Staggered Animations
+                </span>
+                <span className="text-[11px] text-charcoal-500 block">
+                  Smooth typography entrance &amp; parallax scroll transforms on large displays.
+                </span>
+              </div>
             </label>
-            {settings.heroBgImage ? (
-              <div className="relative w-full aspect-video border border-charcoal/20 overflow-hidden bg-charcoal-900">
-                <SafeImage
-                  src={settings.heroBgImage}
-                  alt="Hero Background"
-                  fill
-                  className="object-cover"
-                />
-                <button
-                  type="button"
-                  onClick={() => setSettings({ ...settings, heroBgImage: '' })}
-                  className="absolute top-2 right-2 px-2 py-1 bg-red-600 text-white text-[10px] font-bold uppercase"
-                >
-                  Remove
-                </button>
-              </div>
-            ) : (
-              <div className="p-6 border-2 border-dashed border-charcoal/20 text-center space-y-2">
-                <ImageIcon className="w-6 h-6 text-charcoal-400 mx-auto" />
-                <p className="text-xs text-charcoal-500">No background image active (uses clean ivory aesthetic)</p>
-                <label className="inline-block px-3 py-1.5 bg-charcoal text-ivory text-xs font-bold uppercase tracking-wider cursor-pointer hover:bg-copper">
-                  {uploadingBg ? 'Uploading...' : 'Upload Background'}
-                  <input
-                    type="file"
-                    accept="image/*"
-                    className="hidden"
-                    onChange={(e) => e.target.files?.[0] && handleFileUpload(e.target.files[0], 'heroBgImage')}
-                  />
-                </label>
-              </div>
-            )}
           </div>
         </div>
+      </div>
 
-        {/* Animation toggle */}
-        <div className="pt-4 border-t border-charcoal/10">
-          <label className="flex items-center gap-3 cursor-pointer">
-            <input
-              type="checkbox"
-              checked={settings.heroAnimationEnabled !== false}
-              onChange={(e) => setSettings({ ...settings, heroAnimationEnabled: e.target.checked })}
-              className="rounded border-charcoal/30 text-copper focus:ring-copper"
-            />
-            <div>
-              <span className="text-xs font-sans font-bold text-charcoal block">
-                Enable Opening Staggered Animations
-              </span>
-              <span className="text-[11px] text-charcoal-500 block">
-                Smooth typography entrance &amp; parallax scroll transforms on large displays.
-              </span>
+      {/* 5. HOMEPAGE SECTION SEQUENCE & ORDER CONTROL */}
+      <div className="p-6 bg-white border border-charcoal/15 space-y-6">
+        <div className="flex items-center justify-between pb-3 border-b border-charcoal/10">
+          <div className="flex items-center gap-2">
+            <Layers className="w-4 h-4 text-copper" />
+            <h2 className="font-display font-bold text-lg text-charcoal">
+              Homepage Section Sequence &amp; Reorder
+            </h2>
+          </div>
+          <button
+            type="button"
+            onClick={handleResetSectionOrder}
+            className="text-[11px] font-sans font-bold uppercase tracking-wider text-copper hover:underline"
+          >
+            Reset to Default Sequence
+          </button>
+        </div>
+
+        <p className="text-xs text-charcoal-600 font-sans">
+          Rearrange the order of sections on the live homepage. Use Move Up/Down to shift positions.
+        </p>
+
+        <div className="space-y-2">
+          {currentOrder.map((secId, idx) => {
+            const meta = sectionMeta[secId] || { label: secId, desc: 'Homepage section' };
+            return (
+              <div
+                key={secId}
+                className="flex items-center justify-between p-3.5 bg-ivory/60 border border-charcoal/15 hover:border-copper transition-colors"
+              >
+                <div className="flex items-center gap-3">
+                  <span className="w-7 h-7 bg-charcoal text-ivory flex items-center justify-center font-mono font-bold text-xs">
+                    0{idx + 1}
+                  </span>
+                  <div>
+                    <h4 className="font-display font-bold text-sm text-charcoal">
+                      {meta.label}
+                    </h4>
+                    <p className="text-[11px] font-sans text-charcoal-500">
+                      {meta.desc}
+                    </p>
+                  </div>
+                </div>
+
+                <div className="flex items-center gap-1">
+                  <button
+                    type="button"
+                    disabled={idx === 0}
+                    onClick={() => handleMoveSection(idx, 'up')}
+                    className="p-1.5 border border-charcoal/20 bg-white hover:border-copper hover:text-copper disabled:opacity-30 text-charcoal transition-colors"
+                    title="Move section up"
+                  >
+                    <ArrowUp className="w-3.5 h-3.5" />
+                  </button>
+                  <button
+                    type="button"
+                    disabled={idx === currentOrder.length - 1}
+                    onClick={() => handleMoveSection(idx, 'down')}
+                    className="p-1.5 border border-charcoal/20 bg-white hover:border-copper hover:text-copper disabled:opacity-30 text-charcoal transition-colors"
+                    title="Move section down"
+                  >
+                    <ArrowDown className="w-3.5 h-3.5" />
+                  </button>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+
+      {/* 6. TOOLS I USE SOFTWARE ARSENAL */}
+      <div className="p-6 bg-white border border-charcoal/15 space-y-6">
+        <div className="flex items-center justify-between pb-3 border-b border-charcoal/10">
+          <div className="flex items-center gap-2">
+            <Wrench className="w-4 h-4 text-copper" />
+            <h2 className="font-display font-bold text-lg text-charcoal">
+              &quot;Tools I Use&quot; Software Arsenal
+            </h2>
+          </div>
+          <button
+            type="button"
+            onClick={handleAddTool}
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-charcoal text-ivory text-xs font-sans font-bold uppercase tracking-wider hover:bg-copper transition-colors"
+          >
+            <Plus className="w-3 h-3" />
+            <span>Add Tool</span>
+          </button>
+        </div>
+
+        <p className="text-xs text-charcoal-600 font-sans">
+          Manage applications shown in the &quot;Tools I Use&quot; section on both Homepage and About page.
+        </p>
+
+        <div className="space-y-3">
+          {currentTools.map((tool, idx) => (
+            <div
+              key={tool.id || idx}
+              className="p-4 bg-ivory/60 border border-charcoal/15 grid grid-cols-1 sm:grid-cols-12 gap-3 items-center"
+            >
+              <div className="sm:col-span-1 flex items-center justify-center">
+                <div
+                  className="w-10 h-10 border border-charcoal/20 flex items-center justify-center font-bold text-sm bg-white"
+                  style={{ color: tool.accentColor || '#C4855A' }}
+                >
+                  {tool.monogram || 'TL'}
+                </div>
+              </div>
+
+              <div className="sm:col-span-3">
+                <label className="text-[10px] font-sans font-bold uppercase text-charcoal-500 block mb-1">
+                  Tool Name
+                </label>
+                <input
+                  type="text"
+                  value={tool.name}
+                  onChange={(e) => handleUpdateTool(idx, 'name', e.target.value)}
+                  className="w-full px-2.5 py-1.5 bg-white border border-charcoal/20 text-xs font-sans font-semibold focus:border-copper outline-none"
+                />
+              </div>
+
+              <div className="sm:col-span-3">
+                <label className="text-[10px] font-sans font-bold uppercase text-charcoal-500 block mb-1">
+                  Category / Discipline
+                </label>
+                <input
+                  type="text"
+                  value={tool.category}
+                  onChange={(e) => handleUpdateTool(idx, 'category', e.target.value)}
+                  className="w-full px-2.5 py-1.5 bg-white border border-charcoal/20 text-xs font-sans focus:border-copper outline-none"
+                />
+              </div>
+
+              <div className="sm:col-span-2">
+                <label className="text-[10px] font-sans font-bold uppercase text-charcoal-500 block mb-1">
+                  Monogram (2-3 Chars)
+                </label>
+                <input
+                  type="text"
+                  maxLength={4}
+                  value={tool.monogram}
+                  onChange={(e) => handleUpdateTool(idx, 'monogram', e.target.value)}
+                  className="w-full px-2.5 py-1.5 bg-white border border-charcoal/20 text-xs font-mono font-bold focus:border-copper outline-none text-center uppercase"
+                />
+              </div>
+
+              <div className="sm:col-span-2">
+                <label className="text-[10px] font-sans font-bold uppercase text-charcoal-500 block mb-1">
+                  Accent Color
+                </label>
+                <div className="flex items-center gap-1.5">
+                  <input
+                    type="color"
+                    value={tool.accentColor || '#C4855A'}
+                    onChange={(e) => handleUpdateTool(idx, 'accentColor', e.target.value)}
+                    className="w-7 h-7 p-0.5 border border-charcoal/20 bg-white cursor-pointer"
+                  />
+                  <input
+                    type="text"
+                    value={tool.accentColor || '#C4855A'}
+                    onChange={(e) => handleUpdateTool(idx, 'accentColor', e.target.value)}
+                    className="w-full px-1.5 py-1.5 bg-white border border-charcoal/20 text-[11px] font-mono focus:border-copper outline-none"
+                  />
+                </div>
+              </div>
+
+              <div className="sm:col-span-1 flex items-center justify-end gap-2">
+                <label className="flex items-center gap-1 text-[11px] font-sans text-charcoal cursor-pointer">
+                  <input
+                    type="checkbox"
+                    checked={tool.isVisible !== false}
+                    onChange={(e) => handleUpdateTool(idx, 'isVisible', e.target.checked)}
+                    className="rounded border-charcoal/30 text-copper focus:ring-copper"
+                  />
+                  <span>Show</span>
+                </label>
+                <button
+                  type="button"
+                  onClick={() => handleRemoveTool(idx)}
+                  className="p-1.5 text-red-600 hover:bg-red-50 transition-colors"
+                  title="Remove tool"
+                >
+                  <Trash2 className="w-3.5 h-3.5" />
+                </button>
+              </div>
             </div>
-          </label>
+          ))}
         </div>
       </div>
 
@@ -386,7 +544,7 @@ export default function AdminHomepageCMS() {
             className="text-xs font-sans text-charcoal-300 hover:text-copper flex items-center gap-1"
           >
             <span>Preview Live Homepage</span>
-            <ExternalLink className="w-3.5 h-3.5" />
+            <ArrowUpRight className="w-3.5 h-3.5" />
           </Link>
         </div>
 
@@ -401,15 +559,5 @@ export default function AdminHomepageCMS() {
         </Button>
       </div>
     </form>
-  );
-}
-
-function ExternalLink(props: any) {
-  return (
-    <svg {...props} width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-      <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
-      <polyline points="15 3 21 3 21 9"></polyline>
-      <line x1="10" y1="14" x2="21" y2="3"></line>
-    </svg>
   );
 }

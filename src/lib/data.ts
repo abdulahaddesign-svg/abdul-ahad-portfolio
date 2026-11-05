@@ -1192,10 +1192,15 @@ export async function getSiteSettings(): Promise<SiteSettings> {
           footerLocation: data.footer_location ?? meta.footerLocation ?? localSettings.footerLocation,
 
           // Theme & SEO
-          defaultTheme: data.default_theme ?? meta.defaultTheme ?? localSettings.defaultTheme,
+          allowDarkTheme: meta.allowDarkTheme !== undefined ? Boolean(meta.allowDarkTheme) : (localSettings.allowDarkTheme ?? false),
+          defaultTheme: (data.default_theme ?? meta.defaultTheme ?? localSettings.defaultTheme ?? 'light') as 'light' | 'dark',
           primaryBrandColor: data.primary_brand_color ?? meta.primaryBrandColor ?? localSettings.primaryBrandColor,
           defaultSeoTitle: data.default_seo_title ?? meta.defaultSeoTitle ?? localSettings.defaultSeoTitle,
           defaultSeoDescription: data.default_seo_description ?? meta.defaultSeoDescription ?? localSettings.defaultSeoDescription,
+
+          // Tools & Homepage CMS
+          toolsList: Array.isArray(meta.toolsList) && meta.toolsList.length > 0 ? meta.toolsList : localSettings.toolsList,
+          homepageSectionOrder: Array.isArray(meta.homepageSectionOrder) && meta.homepageSectionOrder.length > 0 ? meta.homepageSectionOrder : localSettings.homepageSectionOrder,
         };
       }
     } catch {

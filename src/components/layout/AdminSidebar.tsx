@@ -24,6 +24,7 @@ import {
 } from 'lucide-react';
 import { Logo } from '@/components/brand/Logo';
 import { logoutAdmin } from '@/lib/auth';
+import { ThemeToggle } from '@/components/theme/ThemeToggle';
 
 const NAV_SECTIONS = [
   { label: 'Dashboard', href: '/admin', icon: LayoutDashboard },
@@ -98,6 +99,7 @@ export function AdminSidebar() {
 
       {/* Footer System Actions */}
       <div className="p-4 border-t border-charcoal-800 space-y-2">
+        <ThemeToggle showLabel className="w-full justify-between mb-1" />
         <Link
           href="/"
           target="_blank"

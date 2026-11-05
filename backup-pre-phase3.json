@@ -1,0 +1,581 @@
+{
+  "timestamp": "2026-11-05T15:39:30.781Z",
+  "settings": {
+    "name": "Abdul Ahad J",
+    "title": "Creative Designer & Digital Creative Partner",
+    "tagline": "Designed with intent. Made to matter.",
+    "email": "abdulahad.design@gmail.com",
+    "phone": "+91 9150037005",
+    "whatsappNumber": "+91 9150037005",
+    "location": "Coimbatore, Tamil Nadu, India",
+    "behanceUrl": "https://www.behance.net/abdulahad438",
+    "linkedinUrl": "https://www.linkedin.com/in/abdulahadj",
+    "headerLogoLightUrl": "/brand/logo-wordmark-clean-light.png",
+    "headerLogoDarkUrl": "/brand/logo-wordmark-clean-dark.png",
+    "logoAltText": "Abdul Ahad J — Creative Designer",
+    "headerNavLinks": [
+      {
+        "label": "Work",
+        "href": "/work",
+        "index": "01"
+      },
+      {
+        "label": "About",
+        "href": "/about",
+        "index": "02"
+      },
+      {
+        "label": "Services",
+        "href": "/services",
+        "index": "03"
+      },
+      {
+        "label": "Contact",
+        "href": "/contact",
+        "index": "04"
+      }
+    ],
+    "headerCtaText": "Initiate Brief",
+    "headerCtaHref": "/contact",
+    "availabilityStatus": "Available for New Projects",
+    "availabilityMessage": "Available for select brand identity, product design and creative retainer engagements.",
+    "locationTimeText": "Coimbatore, IN",
+    "heroHeadline": "Designer that makes businesses stand out.",
+    "heroHeadlineLine2": "",
+    "heroHighlightedWords": "",
+    "heroTitle": "Creative Designer & Digital Creative Partner",
+    "heroSubtitle": "Testing dynamic JSON persistence in Supabase",
+    "heroSupportingCopy": "Thoughtful visual identities, digital experiences and motion-led content built with purpose and precision.",
+    "heroIntroSecondary": "Combining visual design, typography, and human-centered design thinking to deliver precise creative solutions that command attention and build credibility.",
+    "heroLocationLabel": "Coimbatore · Remote Worldwide",
+    "heroPrimaryCtaText": "Initiate Brief",
+    "heroPrimaryCtaHref": "/contact",
+    "heroSecondaryCtaText": "View Selected Work",
+    "heroSecondaryCtaHref": "/work",
+    "heroBgImage": "",
+    "heroProfileImage": "",
+    "heroMonogramVisible": true,
+    "heroMonogramUrl": "/brand/logo-monogram-light.png",
+    "heroAnimationEnabled": true,
+    "aboutSectionLabel": "BIOGRAPHY & CAPABILITIES",
+    "aboutHeadline": "I create visual experiences that make ideas matter.",
+    "aboutIntro": "Abdul Ahad J is a creative designer based in Coimbatore, India, with 3+ years of experience in graphic design, visual branding and digital creative production.",
+    "aboutPhilosophy": "Design is not decorative styling; it is clear thinking made visible. I combine visual harmony, typographic discipline, and strategic intent to craft brand experiences that command attention, build credibility, and inspire action.",
+    "aboutDescription": "He has worked across enterprise, SaaS and freelance projects, creating visual identities, marketing creatives, digital experiences and motion-led content. He has served 50+ freelance clients and received the Best Employee of the Year award at eClerx in 2025.",
+    "aboutBio": "He has worked across enterprise, SaaS and freelance projects, creating visual identities, marketing creatives, digital experiences and motion-led content. He has served 50+ freelance clients and received the Best Employee of the Year award at eClerx in 2025.",
+    "profilePhotoUrl": "https://kptxbhhiucgdfqutxwjj.supabase.co/storage/v1/object/public/portfolio-media/uploads/1793805910535-m4baefc.jpg",
+    "profilePhotoAlt": "Abdul Ahad J — Creative Designer & Visual Specialist",
+    "experienceYears": "3+ Years",
+    "achievementsSummary": "Best Employee of the Year 2025 at eClerx · 50+ Freelance Clients",
+    "experienceHighlights": [
+      "3+ Years of multidisciplinary design experience across enterprise, SaaS, and boutique brands",
+      "Best Employee of the Year 2025 at eClerx for high-retention creative delivery",
+      "50+ Successful freelance client projects delivered globally"
+    ],
+    "achievementHighlights": [
+      "Best Employee of the Year 2025 (eClerx)",
+      "Reztro Table Ordering UI/UX with 40% reduced order friction",
+      "50+ Global Brand Identity Deliveries"
+    ],
+    "resumeUrl": "/resume/abdul-ahad-resume.pdf",
+    "resumeLabel": "PDF · Updated Resume",
+    "resumeVisible": true,
+    "educationDegree": "Bachelor of Science in Computer Science",
+    "educationInstitution": "Government Arts College (Autonomous), Coimbatore",
+    "educationYear": "2020 – 2023",
+    "educationAggregate": "80% Aggregate",
+    "footerAppearance": "dark",
+    "footerLogoLightUrl": "/brand/logo-wordmark-clean-light.png",
+    "footerLogoDarkUrl": "/brand/logo-wordmark-clean-dark.png",
+    "footerDescription": "Independent creative designer specializing in visual branding, digital experiences, motion and creative systems. Based in Coimbatore, India.",
+    "footerBrandStatement": "Abdul Ahad",
+    "footerNavVisible": true,
+    "footerCopyright": "Abdul Ahad J. All rights reserved.",
+    "footerLocation": "Coimbatore, Tamil Nadu, India",
+    "ctaHeadline": "HAVE A PROJECT\nIN MIND?",
+    "ctaSupporting": "Let's create something meaningful together.",
+    "ctaAvailability": "Available for New Projects · Q1 / Q2",
+    "defaultTheme": "light",
+    "primaryBrandColor": "#C4855A",
+    "defaultSeoTitle": "Abdul Ahad J — Graphic Designer & Visual Branding Specialist",
+    "defaultSeoDescription": "Multidisciplinary creative portfolio of Abdul Ahad J. Brand identity design, UI/UX mobile product design, motion graphics and high-impact digital collateral in Coimbatore, India."
+  },
+  "projects": [
+    {
+      "id": "f336c353-43a7-4021-8e38-db408299c806",
+      "slug": "test",
+      "title": "Test",
+      "category": "Graphic Design",
+      "categorySlug": "graphic-design",
+      "shortDescription": "Test",
+      "fullDescription": "",
+      "sections": [
+        {
+          "id": "sec-1793776960866-1",
+          "body": "",
+          "heading": "Project Overview"
+        }
+      ],
+      "clientName": "",
+      "projectYear": "2026",
+      "role": "Graphic Designer",
+      "toolsUsed": [
+        "Adobe Illustrator",
+        "Photoshop"
+      ],
+      "challenge": "",
+      "approach": "",
+      "creativeProcess": "",
+      "solution": "",
+      "results": [],
+      "coverImage": "https://kptxbhhiucgdfqutxwjj.supabase.co/storage/v1/object/public/portfolio-media/uploads/1793777024720-fze7rdv.png",
+      "gallery": [
+        "/projects/reztro/reztro-cover.svg"
+      ],
+      "videoUrl": "",
+      "liveWebsiteUrl": "",
+      "appStoreUrl": "",
+      "playStoreUrl": "",
+      "externalLinkLabel": "",
+      "isFeatured": false,
+      "isPublished": true,
+      "sortOrder": 1,
+      "seoTitle": "Test",
+      "seoDescription": "Test",
+      "socialShareImage": "",
+      "createdAt": "2026-11-04T07:22:56.003+00:00",
+      "updatedAt": "2026-11-04T07:23:53.083+00:00"
+    },
+    {
+      "id": "26d5145f-18db-41a1-b9f6-7dba242761cf",
+      "slug": "falcon-square",
+      "title": "Falcon Square Identity & Brand Experience",
+      "category": "Brand Identity",
+      "categorySlug": "brand-identity",
+      "shortDescription": "Comprehensive brand identity and visual language system engineered for Falcon Square.",
+      "fullDescription": "Complete visual branding suite uniting logos, typography, color architecture, and marketing assets.",
+      "sections": [
+        {
+          "id": "sec-overview",
+          "body": "Complete visual branding suite uniting logos, typography, color architecture, and marketing assets.",
+          "heading": "Project Overview"
+        }
+      ],
+      "clientName": "",
+      "projectYear": "2025",
+      "role": "Creative Designer",
+      "toolsUsed": [],
+      "challenge": "",
+      "approach": "",
+      "creativeProcess": "",
+      "solution": "",
+      "results": [],
+      "coverImage": "/projects/falcon/falcon-cover.svg",
+      "gallery": [
+        "/projects/falcon/falcon-cover.svg",
+        "/projects/falcon/falcon-posters.svg"
+      ],
+      "videoUrl": "",
+      "liveWebsiteUrl": "",
+      "appStoreUrl": "",
+      "playStoreUrl": "",
+      "externalLinkLabel": "",
+      "isFeatured": true,
+      "isPublished": true,
+      "sortOrder": 1,
+      "seoTitle": "Falcon Square Identity & Brand Experience",
+      "seoDescription": "Comprehensive brand identity and visual language system engineered for Falcon Square.",
+      "socialShareImage": "",
+      "createdAt": "2026-11-04T10:56:49.965072+00:00",
+      "updatedAt": "2026-11-04T15:27:11.956+00:00"
+    }
+  ],
+  "clients": [
+    {
+      "id": "f6b1e227-e97d-4447-84b8-53874934b74b",
+      "name": "Reztro Dining Tech",
+      "logoUrl": "https://kptxbhhiucgdfqutxwjj.supabase.co/storage/v1/object/public/portfolio-media/uploads/1793784118523-ct1ibk5.png",
+      "websiteUrl": "https://reztro.tech",
+      "sortOrder": 1,
+      "isVisible": true,
+      "createdAt": "2026-11-04T09:21:42.822+00:00"
+    }
+  ],
+  "services": [
+    {
+      "id": "684e10f0-ced3-495c-b3ed-851384adffd3",
+      "title": "Graphic Design & Visual Branding",
+      "slug": "graphic-design-visual-branding",
+      "isPrimary": true,
+      "tagline": "Posters, Advertising Creatives, Social Media & Tangible Packaging Dielines",
+      "shortSummary": "Comprehensive visual branding, brand identity systems, and high-impact graphic design that position your business with authority.",
+      "description": "The core foundation of Abdul Ahad's creative practice. Developing cohesive visual languages that communicate your unique market positioning, command attention in crowded feeds, and maintain unmistakable consistency across digital and print mediums.",
+      "deliverables": [
+        "Custom posters & campaign collaterals",
+        "High-engagement social media creative sets",
+        "Conversion-focused ad banners & flyers",
+        "Packaging boxes, labels & dielines",
+        "Editorial publications & sales pitch decks",
+        "Vector iconography & brand assets"
+      ],
+      "typicalProjects": [
+        "Retail product box & label packaging",
+        "Multi-channel paid acquisition ad suites",
+        "Monthly social media creative retainers",
+        "Corporate event & conference promotional assets"
+      ],
+      "creativeProcess": [
+        {
+          "step": "01",
+          "title": "Brand Discovery & Audit",
+          "description": "Analyzing competitive landscape, target audience, and strategic objectives."
+        },
+        {
+          "step": "02",
+          "title": "Visual Direction & Moodboarding",
+          "description": "Exploring typographic themes, chromatic palettes, and design styles."
+        },
+        {
+          "step": "03",
+          "title": "Design Execution & Refinement",
+          "description": "Crafting identity marks, grid systems, and functional applications."
+        },
+        {
+          "step": "04",
+          "title": "Guidelines & Production Handoff",
+          "description": "Packaging master vector files, typography rules, and usage specifications."
+        }
+      ],
+      "primaryImage": "/projects/packaging/packaging-cover.svg",
+      "supportingImages": [
+        "/projects/social/social-cover.svg",
+        "/projects/apparel/apparel-cover.svg"
+      ],
+      "ctaText": "Initiate Branding Brief",
+      "ctaHref": "/contact?service=graphic-design",
+      "sortOrder": 1,
+      "isPublished": true,
+      "createdAt": "2026-11-04T09:23:38.41+00:00",
+      "updatedAt": "2026-11-04T09:23:38.41+00:00"
+    },
+    {
+      "id": "8be3c2f1-22e0-40fc-9439-00b1f7a8ec9e",
+      "title": "Brand Identity Design",
+      "slug": "brand-identity-design",
+      "isPrimary": false,
+      "tagline": "Distinctive Logos, Typography Standards & Cohesive Visual Systems",
+      "shortSummary": "Memorable logos, monograms, symbol marks, and complete brand identity design systems.",
+      "description": "Creating distinctive visual identities built on conceptual rigor and typographic distinction. Each mark is engineered to scale seamlessly from a 16px favicon to giant outdoor billboards with mathematical precision.",
+      "deliverables": [
+        "Primary, secondary & responsive logo suite",
+        "Monograms, emblem marks & crests",
+        "Brand color formulas (RGB, CMYK, Pantone)",
+        "Typographic hierarchy & pairing guidelines",
+        "Comprehensive brand guidelines book (PDF)",
+        "Real-world application mockups & stationery"
+      ],
+      "typicalProjects": [
+        "Early-stage venture & startup brand launches",
+        "Boutique studio & luxury hospitality marks",
+        "Brand refresh & modernization overhauls"
+      ],
+      "creativeProcess": [
+        {
+          "step": "01",
+          "title": "Conceptual Sketching",
+          "description": "Iterative exploration of geometric and organic concepts."
+        },
+        {
+          "step": "02",
+          "title": "Vector Precision",
+          "description": "Refining geometry, curve continuity, and optical balance."
+        },
+        {
+          "step": "03",
+          "title": "Contextual Testing",
+          "description": "Validating across light, dark, color, and monochrome substrates."
+        }
+      ],
+      "primaryImage": "https://kptxbhhiucgdfqutxwjj.supabase.co/storage/v1/object/public/portfolio-media/uploads/1793783941092-hdfbcvb.jpg",
+      "supportingImages": [
+        "/projects/falcon/falcon-cover.svg",
+        "/projects/reztro/reztro-brand.svg"
+      ],
+      "ctaText": "Design Brand Identity",
+      "ctaHref": "/contact?service=brand-identity",
+      "sortOrder": 2,
+      "isPublished": true,
+      "createdAt": "2026-11-04T09:19:05.297+00:00",
+      "updatedAt": "2026-11-04T09:19:05.297+00:00"
+    },
+    {
+      "id": "979a4168-ad89-4164-9fbc-2e68058edb2f",
+      "title": "UI/UX Design",
+      "slug": "ui-ux-design",
+      "isPrimary": false,
+      "tagline": "Human-Centered Mobile & Desktop Digital Product Interfaces",
+      "shortSummary": "Mobile-first digital products, design systems, and intuitive customer-facing interfaces.",
+      "description": "Digital product interfaces rooted in cognitive psychology and human-centered design principles. From wireframing frictionless user flows to architecting multi-state component design systems in Figma.",
+      "deliverables": [
+        "Mobile app UX/UI design (iOS & Android)",
+        "Scalable Figma design systems & component libraries",
+        "Wireframing, user persona & journey mapping",
+        "High-fidelity interactive click-through prototypes",
+        "Micro-interaction states & responsive grid constraints",
+        "Developer handoff documentation & tokens"
+      ],
+      "typicalProjects": [
+        "Reztro Table Ordering Platform (-40% wait times)",
+        "SaaS analytics dashboards & administrative portals",
+        "Consumer mobile iOS & Android applications"
+      ],
+      "creativeProcess": [
+        {
+          "step": "01",
+          "title": "Research & Journey Mapping",
+          "description": "Identifying user friction points and key milestones."
+        },
+        {
+          "step": "02",
+          "title": "Wireframes & Prototyping",
+          "description": "Iterative low-fidelity layouts validated with stakeholders."
+        },
+        {
+          "step": "03",
+          "title": "High-Fidelity Interface",
+          "description": "Crafting the visual layer with responsive constraints."
+        }
+      ],
+      "primaryImage": "https://kptxbhhiucgdfqutxwjj.supabase.co/storage/v1/object/public/portfolio-media/uploads/1793784646812-m3dyrwk.jpg",
+      "supportingImages": [
+        "/projects/reztro/reztro-mobile-flow.svg",
+        "/projects/reztro/reztro-admin.svg"
+      ],
+      "ctaText": "Discuss UI/UX Project",
+      "ctaHref": "/contact?service=ui-ux",
+      "sortOrder": 3,
+      "isPublished": true,
+      "createdAt": "2026-11-04T09:23:39.388+00:00",
+      "updatedAt": "2026-11-04T09:31:48.632+00:00"
+    },
+    {
+      "id": "6dd3925c-026e-401c-a0d7-580e9c0d24ba",
+      "title": "Motion Graphics",
+      "slug": "motion-graphics",
+      "isPrimary": false,
+      "tagline": "Kinetic Typography, 2D Animation, Logo Stings & Micro-Interactions",
+      "shortSummary": "Dynamic 2D animation, logo stings, UI micro-interactions, and kinetic typography.",
+      "description": "Bringing static brand elements to life with purposeful motion design. Smooth easings, rhythmic timing, and brand-consistent choreography engineered to capture viewer attention within the first 1.5 seconds.",
+      "deliverables": [
+        "Animated brand logo reveals & stings",
+        "Kinetic typography sequences & campaign teasers",
+        "UI micro-interactions & Lottie vector animations",
+        "Broadcast lower-thirds & title motion graphics",
+        "Product feature explainer motion walkthroughs"
+      ],
+      "typicalProjects": [
+        "Brand identity launch animated stings",
+        "Product feature social announcement teasers",
+        "High-converting video advertising graphics"
+      ],
+      "creativeProcess": [
+        {
+          "step": "01",
+          "title": "Storyboard & Timing",
+          "description": "Pacing key frames and motion rhythm."
+        },
+        {
+          "step": "02",
+          "title": "Asset Preparation & Rigging",
+          "description": "Layering vectors for After Effects."
+        },
+        {
+          "step": "03",
+          "title": "Animation & Polishing",
+          "description": "Fine-tuning graph-editor curves and export optimization."
+        }
+      ],
+      "primaryImage": "/projects/motion/motion-cover.svg",
+      "supportingImages": [
+        "/projects/social/social-cover.svg",
+        "/projects/eclerx/eclerx-cover.svg"
+      ],
+      "ctaText": "Commission Motion Work",
+      "ctaHref": "/contact?service=motion-graphics",
+      "sortOrder": 4,
+      "isPublished": true,
+      "createdAt": "2026-11-04T09:23:40.999+00:00",
+      "updatedAt": "2026-11-04T09:23:40.999+00:00"
+    },
+    {
+      "id": "b1ad6d2e-dfbc-4a87-80e6-ed3f8fa0ed2c",
+      "title": "Video Editing",
+      "slug": "video-editing",
+      "isPrimary": false,
+      "tagline": "Paced Short-Form Social Edits, Reels & Cinematic Commercial Cuts",
+      "shortSummary": "Paced video storytelling, promotional social edits, Reels, and product showcase videos.",
+      "description": "End-to-end post-production editing combining tight narrative cuts, cinematic pacing, color grading, audio sweetening, and custom graphic overlays tailored for high retention.",
+      "deliverables": [
+        "Instagram Reels & YouTube Shorts high-retention cuts",
+        "Product showcase & dynamic demo edits",
+        "Corporate event & interview highlight reels",
+        "Color grading & LUT application",
+        "Dynamic animated subtitles & sound design"
+      ],
+      "typicalProjects": [
+        "Viral promotional social video campaigns",
+        "Brand commercial short-form edits",
+        "Founder interview & thought-leadership sequences"
+      ],
+      "creativeProcess": [
+        {
+          "step": "01",
+          "title": "Rough Cut & Story Assembly",
+          "description": "Establishing pacing, narrative arc, and music beat."
+        },
+        {
+          "step": "02",
+          "title": "Visual Polish & Graphics",
+          "description": "Integrating lower-thirds, callouts, and motion assets."
+        },
+        {
+          "step": "03",
+          "title": "Color & Audio Mastering",
+          "description": "Balancing dialogue, ambient audio, and color tones."
+        }
+      ],
+      "primaryImage": "/projects/eclerx/eclerx-cover.svg",
+      "supportingImages": [
+        "/projects/motion/motion-cover.svg",
+        "/projects/falcon/falcon-cover.svg"
+      ],
+      "ctaText": "Book Video Production",
+      "ctaHref": "/contact?service=video-editing",
+      "sortOrder": 5,
+      "isPublished": true,
+      "createdAt": "2026-11-04T09:23:41.966+00:00",
+      "updatedAt": "2026-11-04T09:23:41.966+00:00"
+    },
+    {
+      "id": "55f35aa1-d206-4498-83b1-5cddf1c8ae17",
+      "title": "Web & App Design",
+      "slug": "web-app-design",
+      "isPrimary": false,
+      "tagline": "Responsive Modern Websites, Landing Pages & Accessible Systems",
+      "shortSummary": "Modern responsive website designs, landing page concepts, and digital product layouts.",
+      "description": "Editorial-grade web design balancing bold typography, asymmetric layouts, and conversion-centric UX. Crafted in Figma and architected with modern frontend paradigms in mind.",
+      "deliverables": [
+        "Responsive web page designs (Desktop, Tablet, Mobile)",
+        "High-converting promotional landing pages",
+        "Interactive Figma prototypes & tokens",
+        "Web accessibility & WCAG-compliant design",
+        "Design systems & developer handoff specs"
+      ],
+      "typicalProjects": [
+        "Independent studio & agency portfolio websites",
+        "SaaS and startup conversion landing pages",
+        "Modern e-commerce boutique storefronts"
+      ],
+      "creativeProcess": [
+        {
+          "step": "01",
+          "title": "Content Architecture",
+          "description": "Structuring page sections for logical reading hierarchy."
+        },
+        {
+          "step": "02",
+          "title": "Visual Concepting",
+          "description": "Deploying typography, spacing, and brand elements."
+        },
+        {
+          "step": "03",
+          "title": "Breakpoint Responsive Scaling",
+          "description": "Refining mobile, tablet, and widescreen layouts."
+        }
+      ],
+      "primaryImage": "/projects/web/hero-collection-cover.svg",
+      "supportingImages": [
+        "/projects/reztro/reztro-cover.svg",
+        "/projects/reztro/reztro-mobile-flow.svg"
+      ],
+      "ctaText": "Start Web Collaboration",
+      "ctaHref": "/contact?service=web-app",
+      "sortOrder": 6,
+      "isPublished": true,
+      "createdAt": "2026-11-04T09:23:43.005+00:00",
+      "updatedAt": "2026-11-04T09:23:43.005+00:00"
+    }
+  ],
+  "experience": [
+    {
+      "id": "exp-1",
+      "company": "Falcon Square Private Limited",
+      "role": "Graphic Designer & Visual Content Specialist",
+      "employmentType": "Full-time",
+      "startDate": "May 2025",
+      "endDate": "Present",
+      "period": "May 2025 – Present",
+      "isCurrent": true,
+      "location": "Coimbatore, India",
+      "description": "Leading visual design and digital creative campaigns for enterprise SaaS products.",
+      "companyLogo": "/clients/client-falcon.svg",
+      "isVisible": true,
+      "responsibilities": [
+        "Create high-converting posters, banners, social media creatives, digital advertisements, and promotional materials for enterprise and SaaS clients.",
+        "Design comprehensive social media content calendars and maintain strict brand consistency across all digital touchpoints.",
+        "Create web and mobile UI screens in Figma with design systems and responsive components.",
+        "Produce engaging motion graphics, animated reels, and promotional video edits for multi-channel campaigns.",
+        "Integrate AI creative tools to accelerate ideation and asset production workflows.",
+        "Establish and maintain brand guidelines and visual identity systems for emerging products."
+      ],
+      "sortOrder": 1
+    },
+    {
+      "id": "exp-2",
+      "company": "eClerx",
+      "role": "Graphic Designer",
+      "employmentType": "Full-time",
+      "startDate": "June 2023",
+      "endDate": "May 2025",
+      "period": "June 2023 – May 2025",
+      "isCurrent": false,
+      "location": "India",
+      "description": "Campaign-ready visual design production for global enterprise brands with high typographic discipline.",
+      "companyLogo": "/clients/client-apex.svg",
+      "isVisible": true,
+      "responsibilities": [
+        "Produced campaign-ready visual assets for leading global enterprise clients across diverse industries.",
+        "Created high-impact posters, flyers, social media creatives, coupons, magazines, brochures, and digital banners.",
+        "Increased campaign engagement by 25% through visual design enhancements and strategic typographic hierarchy.",
+        "Designed corporate communication collaterals and executive presentation layouts.",
+        "Collaborated cross-functionally with marketing, product, and account management teams to meet tight production deadlines."
+      ],
+      "achievements": [
+        "Awarded Best Employee of the Year 2025 for design excellence, consistency, and measurable client impact."
+      ],
+      "sortOrder": 2
+    },
+    {
+      "id": "exp-3",
+      "company": "Freelance",
+      "role": "Graphic, UI/UX & Motion Designer",
+      "employmentType": "Independent",
+      "startDate": "August 2020",
+      "endDate": "Present",
+      "period": "August 2020 – Present",
+      "isCurrent": true,
+      "location": "Remote / Coimbatore",
+      "description": "Direct brand identity, digital product design and motion consultation for 50+ clients globally.",
+      "companyLogo": "/clients/client-reztro.svg",
+      "isVisible": true,
+      "responsibilities": [
+        "Delivered end-to-end branding and graphic design solutions for 50+ clients across India and international markets.",
+        "Created logos, complete visual identity systems, packaging designs, social media marketing kits, and print materials.",
+        "Designed responsive landing page mockups, interactive web concepts, and mobile application UI screens in Figma.",
+        "Produced dynamic explainer videos, social media reels, and product demos.",
+        "Created more than 20 hero-section concepts across distinct UI styles exploring typography, layout, and micro-interactions."
+      ],
+      "sortOrder": 3
+    }
+  ]
+}

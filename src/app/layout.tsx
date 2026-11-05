@@ -161,7 +161,7 @@ export default async function RootLayout({
       <head>
         <script
           dangerouslySetInnerHTML={{
-            __html: `(function(){try{var s=localStorage.getItem('portfolio-theme');var d=s==='dark'||(!s&&window.matchMedia('(prefers-color-scheme: dark)').matches);if(d){document.documentElement.classList.add('dark');document.documentElement.style.colorScheme='dark';}else{document.documentElement.classList.remove('dark');document.documentElement.style.colorScheme='light';}}catch(e){}})();`,
+            __html: `(function(){try{var a=${JSON.stringify(Boolean(settings.allowDarkTheme))};var p=localStorage.getItem('theme-preference');if(a&&p==='dark'){document.documentElement.classList.add('dark');document.documentElement.classList.remove('light');document.documentElement.style.colorScheme='dark';}else{document.documentElement.classList.remove('dark');document.documentElement.classList.add('light');document.documentElement.style.colorScheme='light';}}catch(e){}})();`,
           }}
         />
         <script
@@ -170,7 +170,7 @@ export default async function RootLayout({
         />
       </head>
       <body className="flex flex-col min-h-screen bg-ivory text-charcoal dark:bg-charcoal dark:text-ivory transition-colors duration-300">
-        <ThemeProvider>
+        <ThemeProvider allowDarkTheme={Boolean(settings.allowDarkTheme)}>
           <Navbar settings={settings} />
           <main className="flex-1">{children}</main>
           <Footer settings={settings} />

@@ -2,82 +2,81 @@
 
 import React, { createContext, useContext, useEffect, useState } from 'react';
 
-type Theme = 'light' | 'dark' | 'system';
 type ResolvedTheme = 'light' | 'dark';
 
 interface ThemeContextType {
-  theme: Theme;
+  theme: ResolvedTheme;
   resolvedTheme: ResolvedTheme;
-  setTheme: (theme: Theme) => void;
+  allowDarkTheme: boolean;
+  setTheme: (theme: ResolvedTheme) => void;
   toggleTheme: () => void;
 }
 
 const ThemeContext = createContext<ThemeContextType>({
-  theme: 'system',
+  theme: 'light',
   resolvedTheme: 'light',
+  allowDarkTheme: false,
   setTheme: () => {},
   toggleTheme: () => {},
 });
 
-const STORAGE_KEY = 'portfolio-theme';
+const STORAGE_KEY = 'theme-preference';
 
-export function ThemeProvider({ children }: { children: React.ReactNode }) {
-  const [theme, setThemeState] = useState<Theme>('system');
-  const [resolvedTheme, setResolvedTheme] = useState<ResolvedTheme>('light');
+interface ThemeProviderProps {
+  children: React.ReactNode;
+  allowDarkTheme?: boolean;
+}
+
+export function ThemeProvider({ children, allowDarkTheme = false }: ThemeProviderProps) {
+  // Default is strictly Light for both portfolio and admin panel
+  const [themeState, setThemeState] = useState<ResolvedTheme>('light');
   const [mounted, setMounted] = useState(false);
 
-  // Initialize from localStorage or system preference on mount
+  // Initialize theme from storage only if allowDarkTheme is true
   useEffect(() => {
-    try {
-      const stored = localStorage.getItem(STORAGE_KEY) as Theme | null;
-      if (stored && (stored === 'light' || stored === 'dark' || stored === 'system')) {
-        setThemeState(stored);
+    if (!allowDarkTheme) {
+      setThemeState('light');
+      const root = document.documentElement;
+      root.classList.remove('dark');
+      root.classList.add('light');
+      root.style.colorScheme = 'light';
+    } else {
+      try {
+        const stored = localStorage.getItem(STORAGE_KEY);
+        if (stored === 'dark') {
+          setThemeState('dark');
+        } else {
+          // First visit or stored light defaults to light
+          setThemeState('light');
+        }
+      } catch {
+        setThemeState('light');
       }
-    } catch {
-      // localStorage unavailable (sandboxed / incognito)
     }
     setMounted(true);
-  }, []);
+  }, [allowDarkTheme]);
 
-  // Update DOM and resolvedTheme when theme state or system changes
+  // Sync DOM classes whenever themeState or allowDarkTheme changes
   useEffect(() => {
+    if (!mounted) return;
     const root = document.documentElement;
-    const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
 
-    const applyTheme = () => {
-      let resolved: ResolvedTheme = 'light';
-      if (theme === 'system') {
-        resolved = mediaQuery.matches ? 'dark' : 'light';
-      } else {
-        resolved = theme;
-      }
+    if (!allowDarkTheme || themeState === 'light') {
+      root.classList.remove('dark');
+      root.classList.add('light');
+      root.style.colorScheme = 'light';
+    } else {
+      root.classList.add('dark');
+      root.classList.remove('light');
+      root.style.colorScheme = 'dark';
+    }
+  }, [themeState, allowDarkTheme, mounted]);
 
-      setResolvedTheme(resolved);
-
-      if (resolved === 'dark') {
-        root.classList.add('dark');
-        root.classList.remove('light');
-        root.style.colorScheme = 'dark';
-      } else {
-        root.classList.remove('dark');
-        root.classList.add('light');
-        root.style.colorScheme = 'light';
-      }
-    };
-
-    applyTheme();
-
-    const handleSystemChange = () => {
-      if (theme === 'system') {
-        applyTheme();
-      }
-    };
-
-    mediaQuery.addEventListener('change', handleSystemChange);
-    return () => mediaQuery.removeEventListener('change', handleSystemChange);
-  }, [theme]);
-
-  const setTheme = (newTheme: Theme) => {
+  const setTheme = (newTheme: ResolvedTheme) => {
+    if (!allowDarkTheme) {
+      setThemeState('light');
+      return;
+    }
     setThemeState(newTheme);
     try {
       localStorage.setItem(STORAGE_KEY, newTheme);
@@ -87,12 +86,23 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
   };
 
   const toggleTheme = () => {
-    const nextTheme: Theme = resolvedTheme === 'dark' ? 'light' : 'dark';
+    if (!allowDarkTheme) return;
+    const nextTheme: ResolvedTheme = themeState === 'dark' ? 'light' : 'dark';
     setTheme(nextTheme);
   };
 
+  const currentEffectiveTheme: ResolvedTheme = allowDarkTheme ? themeState : 'light';
+
   return (
-    <ThemeContext.Provider value={{ theme, resolvedTheme, setTheme, toggleTheme }}>
+    <ThemeContext.Provider
+      value={{
+        theme: currentEffectiveTheme,
+        resolvedTheme: currentEffectiveTheme,
+        allowDarkTheme,
+        setTheme,
+        toggleTheme,
+      }}
+    >
       {children}
     </ThemeContext.Provider>
   );

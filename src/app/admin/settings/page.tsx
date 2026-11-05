@@ -185,18 +185,29 @@ export default function AdminSettingsPage() {
             />
           </div>
 
-          <div className="space-y-1">
-            <label className="text-xs font-sans font-bold uppercase tracking-wider text-charcoal">
-              Default Theme
+          <div className="space-y-2">
+            <label className="text-xs font-sans font-bold uppercase tracking-wider text-charcoal flex items-center justify-between">
+              <span>Allow Dark Theme</span>
+              <span className={`text-[10px] font-mono px-2 py-0.5 border ${
+                settings.allowDarkTheme
+                  ? 'bg-copper/10 border-copper text-copper font-bold'
+                  : 'bg-charcoal/5 border-charcoal/20 text-charcoal-500'
+              }`}>
+                {settings.allowDarkTheme ? 'TOGGLE ENABLED' : 'STRICT LIGHT ONLY (DEFAULT)'}
+              </span>
             </label>
-            <select
-              value={settings.defaultTheme || 'dark'}
-              onChange={(e) => setSettings({ ...settings, defaultTheme: e.target.value as 'light' | 'dark' })}
-              className="w-full px-3 py-2.5 border border-charcoal/20 bg-white text-xs font-sans font-bold uppercase focus:outline-none focus:border-copper"
-            >
-              <option value="dark">Dark Theme (Charcoal / Ivory Accent)</option>
-              <option value="light">Light Theme (Ivory / Charcoal Accent)</option>
-            </select>
+            <div className="flex items-center gap-3 p-3 bg-white border border-charcoal/20">
+              <input
+                type="checkbox"
+                id="allowDarkTheme"
+                checked={Boolean(settings.allowDarkTheme)}
+                onChange={(e) => setSettings({ ...settings, allowDarkTheme: e.target.checked })}
+                className="w-4 h-4 text-copper border-charcoal/30 rounded-none focus:ring-copper cursor-pointer"
+              />
+              <label htmlFor="allowDarkTheme" className="text-xs font-sans text-charcoal-700 cursor-pointer">
+                <strong>Allow Dark Theme Switcher:</strong> When disabled (OFF), both the portfolio and admin panel are strictly locked to the Light theme, and the theme toggle is hidden everywhere.
+              </label>
+            </div>
           </div>
         </div>
 

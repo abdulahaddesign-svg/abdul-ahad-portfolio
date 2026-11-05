@@ -100,6 +100,17 @@ export interface ServiceItem {
   updatedAt?: string;
 }
 
+export interface ToolItem {
+  id: string;
+  name: string;
+  category: string;
+  monogram: string;
+  accentColor?: string;
+  iconUrl?: string;
+  sortOrder: number;
+  isVisible: boolean;
+}
+
 export interface SkillCategory {
   category: string;
   items: string[];
@@ -213,10 +224,17 @@ export interface SiteSettings {
   ctaAvailability?: string;
 
   // Theme & SEO
+  allowDarkTheme?: boolean;
   defaultTheme?: 'light' | 'dark';
   primaryBrandColor?: string;
   defaultSeoTitle?: string;
   defaultSeoDescription?: string;
+
+  // Tools CMS
+  toolsList?: ToolItem[];
+
+  // Homepage Dynamic Section Order
+  homepageSectionOrder?: string[];
 }
 
 export interface ClientLogo {

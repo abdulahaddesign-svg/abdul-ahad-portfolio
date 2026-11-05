@@ -1,4 +1,64 @@
-import { ExperienceItem, ServiceItem, SkillCategory, Award, SiteSettings, Project, ClientLogo } from './types';
+import { ExperienceItem, ServiceItem, SkillCategory, Award, SiteSettings, Project, ClientLogo, ToolItem } from './types';
+
+export const DEFAULT_TOOLS: ToolItem[] = [
+  {
+    id: 'tool-ps',
+    name: 'Adobe Photoshop',
+    category: 'Raster & Visual Art',
+    monogram: 'Ps',
+    accentColor: '#31A8FF',
+    sortOrder: 1,
+    isVisible: true,
+  },
+  {
+    id: 'tool-ai',
+    name: 'Adobe Illustrator',
+    category: 'Vector & Identity',
+    monogram: 'Ai',
+    accentColor: '#FF9A00',
+    sortOrder: 2,
+    isVisible: true,
+  },
+  {
+    id: 'tool-id',
+    name: 'Adobe InDesign',
+    category: 'Editorial & Print',
+    monogram: 'Id',
+    accentColor: '#FF3366',
+    sortOrder: 3,
+    isVisible: true,
+  },
+  {
+    id: 'tool-ae',
+    name: 'Adobe After Effects',
+    category: 'Motion & Visual Effects',
+    monogram: 'Ae',
+    accentColor: '#9999FF',
+    sortOrder: 4,
+    isVisible: true,
+  },
+  {
+    id: 'tool-figma',
+    name: 'Figma',
+    category: 'UI/UX & Prototyping',
+    monogram: 'Fg',
+    accentColor: '#0ACF83',
+    sortOrder: 5,
+    isVisible: true,
+  },
+];
+
+export const DEFAULT_HOMEPAGE_ORDER: string[] = [
+  'hero',
+  'clients',
+  'about',
+  'tools',
+  'motion',
+  'deliver',
+  'selected-works',
+  'process',
+  'contact',
+];
 
 export const INITIAL_CLIENTS: ClientLogo[] = [
   {
@@ -166,10 +226,15 @@ export const SITE_SETTINGS: SiteSettings = {
   ctaAvailability: "Available for New Projects · Q1 / Q2",
 
   // Theme & SEO
-  defaultTheme: "dark",
+  allowDarkTheme: false,
+  defaultTheme: "light",
   primaryBrandColor: "#C4855A",
   defaultSeoTitle: "Abdul Ahad J — Graphic Designer & Visual Branding Specialist",
-  defaultSeoDescription: "Multidisciplinary creative portfolio of Abdul Ahad J. Brand identity design, UI/UX mobile product design, motion graphics and high-impact digital collateral in Coimbatore, India."
+  defaultSeoDescription: "Multidisciplinary creative portfolio of Abdul Ahad J. Brand identity design, UI/UX mobile product design, motion graphics and high-impact digital collateral in Coimbatore, India.",
+
+  // Tools & Homepage CMS
+  toolsList: DEFAULT_TOOLS,
+  homepageSectionOrder: DEFAULT_HOMEPAGE_ORDER,
 };
 
 export const BRAND_COLORS = {
