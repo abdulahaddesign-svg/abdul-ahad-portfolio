@@ -22,6 +22,7 @@ import { SiteSettings } from '@/lib/types';
 import { Input, Textarea } from '@/components/ui/Input';
 import { Button } from '@/components/ui/Button';
 import { SafeImage } from '@/components/ui/SafeImage';
+import { uploadMedia } from '@/lib/upload-client';
 
 export default function AdminSettingsPage() {
   const [settings, setSettings] = useState<SiteSettings | null>(null);
@@ -49,27 +50,20 @@ export default function AdminSettingsPage() {
     if (variant === 'dark') setUploadingFooterDark(true);
 
     try {
-      const formData = new FormData();
-      formData.append('file', file);
-      const res = await fetch('/api/upload', {
-        method: 'POST',
-        body: formData,
-      });
-      const data = await res.json();
+      const data = await uploadMedia(file);
       if (data.url) {
         if (variant === 'light') {
           setSettings({ ...settings, footerLogoLightUrl: data.url });
         } else {
           setSettings({ ...settings, footerLogoDarkUrl: data.url });
         }
-      } else {
-        alert(data.error || 'Logo upload failed');
       }
-    } catch {
-      alert('Upload failed. Please check network connection.');
+    } catch (err: any) {
+      alert(err.message || 'Logo upload failed. Please check file format and size.');
     } finally {
       if (variant === 'light') setUploadingFooterLight(false);
       if (variant === 'dark') setUploadingFooterDark(false);
+      e.target.value = '';
     }
   };
 

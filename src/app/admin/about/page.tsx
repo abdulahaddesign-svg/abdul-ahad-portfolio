@@ -150,10 +150,10 @@ export default function AdminAboutPage() {
             <div className="flex flex-wrap items-center gap-3">
               <label className="inline-flex items-center gap-2 px-4 py-2 bg-charcoal text-ivory text-xs font-sans font-bold uppercase tracking-wider cursor-pointer hover:bg-copper transition-colors">
                 <Upload className="w-3.5 h-3.5 text-copper" />
-                <span>{uploadingPhoto ? 'Uploading to R2...' : 'Upload New Photo'}</span>
+                <span>{uploadingPhoto ? 'Uploading Portrait...' : 'Upload New Photo'}</span>
                 <input
                   type="file"
-                  accept="image/jpeg,image/png,image/webp"
+                  accept="image/*"
                   onChange={handlePhotoUpload}
                   className="hidden"
                   disabled={uploadingPhoto}

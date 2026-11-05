@@ -486,9 +486,17 @@ export async function submitInquiry(inquiry: Omit<Inquiry, 'id' | 'createdAt' | 
           createdAt: data.created_at,
         };
       }
-    } catch (err) {
-      console.warn('Supabase insert inquiry failed:', err);
+
+      if (error) {
+        console.error('Supabase inquiry insert error:', error);
+        throw new Error(`Database error saving inquiry: ${error.message}`);
+      }
+    } catch (err: any) {
+      console.error('Database inquiry insertion exception:', err);
+      throw err;
     }
+  } else {
+    throw new Error('Supabase client connection not configured.');
   }
 
   const newInq: Inquiry = {
@@ -497,7 +505,6 @@ export async function submitInquiry(inquiry: Omit<Inquiry, 'id' | 'createdAt' | 
     status: 'new',
     createdAt: now,
   };
-  localInquiries.unshift(newInq);
   return newInq;
 }
 
@@ -1263,6 +1270,7 @@ export async function updateSiteSettings(newSettings: Partial<SiteSettings>): Pr
   if (newSettings.name !== undefined) dbPayload.name = newSettings.name;
   if (newSettings.title !== undefined) dbPayload.title = newSettings.title;
   if (newSettings.heroTitle !== undefined && !newSettings.title) dbPayload.title = newSettings.heroTitle;
+  if (newSettings.heroSubtitle !== undefined && !newSettings.title && !newSettings.heroTitle) dbPayload.title = newSettings.heroSubtitle;
   if (newSettings.tagline !== undefined) dbPayload.tagline = newSettings.tagline;
   if (newSettings.email !== undefined) dbPayload.email = newSettings.email;
   if (newSettings.phone !== undefined) dbPayload.phone = newSettings.phone;

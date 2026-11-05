@@ -26,7 +26,29 @@ export default function AdminInquiriesPage() {
   const fetchInquiries = async () => {
     setLoading(true);
     try {
-      const data = await getInquiries();
+      let data = await getInquiries();
+      if (!data || data.length === 0) {
+        const supabase = createClient();
+        if (supabase) {
+          const { data: dbData, error } = await supabase
+            .from('inquiries')
+            .select('*')
+            .order('created_at', { ascending: false });
+          if (!error && dbData && dbData.length > 0) {
+            data = dbData.map((d: any) => ({
+              id: d.id,
+              name: d.name,
+              email: d.email,
+              company: d.company || '',
+              serviceRequired: d.service_required || d.serviceRequired || 'Graphic Design & Visual Branding',
+              budgetRange: d.budget_range || d.budgetRange || 'Flexible',
+              details: d.details || '',
+              status: (d.status as 'new' | 'contacted' | 'archived') || 'new',
+              createdAt: d.created_at || d.createdAt || new Date().toISOString(),
+            }));
+          }
+        }
+      }
       setInquiries(data || []);
       if (data && data.length > 0) {
         setSelectedInquiry(prev => prev ? (data.find(d => d.id === prev.id) || data[0]) : data[0]);
