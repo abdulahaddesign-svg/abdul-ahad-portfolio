@@ -56,51 +56,49 @@ export function AdminSidebar() {
   };
 
   const navContent = (
-    <div className="flex flex-col justify-between h-full">
-      <div>
-        {/* Brand Header */}
-        <div className="p-6 border-b border-charcoal-800">
-          <Logo variant="dark" height={32} />
-          <div className="mt-3 flex items-center justify-between">
-            <span className="text-[10px] font-sans font-bold uppercase tracking-[0.2em] text-copper">
-              Editorial CMS
-            </span>
-            <span className="text-[9px] font-mono px-1.5 py-0.5 border border-charcoal-700 text-charcoal-400">
-              v2.0
-            </span>
-          </div>
+    <div className="flex flex-col h-full overflow-hidden">
+      {/* Brand Header */}
+      <div className="shrink-0 p-6 border-b border-charcoal-800">
+        <Logo variant="dark" height={32} />
+        <div className="mt-3 flex items-center justify-between">
+          <span className="text-[10px] font-sans font-bold uppercase tracking-[0.2em] text-copper">
+            Editorial CMS
+          </span>
+          <span className="text-[9px] font-mono px-1.5 py-0.5 border border-charcoal-700 text-charcoal-400">
+            v2.0
+          </span>
         </div>
-
-        {/* Primary Navigation */}
-        <nav className="p-3 space-y-1 font-sans" aria-label="Admin Navigation">
-          {NAV_SECTIONS.map((item) => {
-            const isActive =
-              item.href === '/admin'
-                ? pathname === '/admin'
-                : pathname.startsWith(item.href);
-            const Icon = item.icon;
-
-            return (
-              <Link
-                key={item.href}
-                href={item.href}
-                onClick={() => setMobileOpen(false)}
-                className={`flex items-center gap-3 px-3 py-2 text-[12px] font-semibold tracking-wide transition-all ${
-                  isActive
-                    ? 'bg-copper text-ivory font-bold'
-                    : 'text-charcoal-300 hover:text-ivory hover:bg-charcoal-800/60'
-                }`}
-              >
-                <Icon className={`w-3.5 h-3.5 shrink-0 ${isActive ? 'text-ivory' : 'text-copper'}`} />
-                <span>{item.label}</span>
-              </Link>
-            );
-          })}
-        </nav>
       </div>
 
-      {/* Footer System Actions */}
-      <div className="p-4 border-t border-charcoal-800 space-y-2">
+      {/* Primary Navigation - smooth scrollable middle section */}
+      <nav className="flex-1 overflow-y-auto p-3 space-y-1 font-sans overscroll-contain" aria-label="Admin Navigation">
+        {NAV_SECTIONS.map((item) => {
+          const isActive =
+            item.href === '/admin'
+              ? pathname === '/admin'
+              : pathname.startsWith(item.href);
+          const Icon = item.icon;
+
+          return (
+            <Link
+              key={item.href}
+              href={item.href}
+              onClick={() => setMobileOpen(false)}
+              className={`flex items-center gap-3 px-3 py-2 text-[12px] font-semibold tracking-wide transition-all ${
+                isActive
+                  ? 'bg-copper text-ivory font-bold'
+                  : 'text-charcoal-300 hover:text-ivory hover:bg-charcoal-800/60'
+              }`}
+            >
+              <Icon className={`w-3.5 h-3.5 shrink-0 ${isActive ? 'text-ivory' : 'text-copper'}`} />
+              <span>{item.label}</span>
+            </Link>
+          );
+        })}
+      </nav>
+
+      {/* Footer System Actions - Fixed / Pinned to Bottom */}
+      <div className="shrink-0 p-4 border-t border-charcoal-800 space-y-2 bg-charcoal">
         <ThemeToggle showLabel className="w-full justify-between mb-1" />
         <Link
           href="/"
@@ -151,7 +149,7 @@ export function AdminSidebar() {
       {/* Mobile Sliding Drawer */}
       {mobileOpen && (
         <div className="lg:hidden fixed inset-0 z-50 bg-black/60 backdrop-blur-sm">
-          <div className="fixed inset-y-0 left-0 w-72 bg-charcoal text-ivory shadow-2xl border-r border-charcoal-800">
+          <div className="fixed inset-y-0 left-0 w-72 bg-charcoal text-ivory shadow-2xl border-r border-charcoal-800 flex flex-col h-full">
             {navContent}
           </div>
           <div
@@ -161,8 +159,8 @@ export function AdminSidebar() {
         </div>
       )}
 
-      {/* Desktop Persistent Left Sidebar */}
-      <aside className="hidden lg:flex flex-col w-64 bg-charcoal text-ivory border-r border-charcoal-800 shrink-0 min-h-screen">
+      {/* Desktop Persistent Left Sidebar - Fixed in viewport */}
+      <aside className="hidden lg:flex flex-col w-64 bg-charcoal text-ivory border-r border-charcoal-800 shrink-0 sticky top-0 h-screen z-30">
         {navContent}
       </aside>
     </>
