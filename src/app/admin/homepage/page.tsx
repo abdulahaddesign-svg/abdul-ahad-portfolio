@@ -14,14 +14,13 @@ import {
   ArrowUp,
   Sliders,
   Layers,
-  Wrench,
   Plus,
   Trash2,
   Image as ImageIcon
 } from 'lucide-react';
 import { getSiteSettings, updateSiteSettings } from '@/lib/data';
-import { SiteSettings, ToolItem, HeroProfessionItem } from '@/lib/types';
-import { DEFAULT_TOOLS, DEFAULT_HOMEPAGE_ORDER, DEFAULT_HERO_PROFESSIONS } from '@/lib/constants';
+import { SiteSettings, HeroProfessionItem } from '@/lib/types';
+import { DEFAULT_HOMEPAGE_ORDER, DEFAULT_HERO_PROFESSIONS } from '@/lib/constants';
 import { Input, Textarea } from '@/components/ui/Input';
 import { Button } from '@/components/ui/Button';
 import { SafeImage } from '@/components/ui/SafeImage';
@@ -96,11 +95,6 @@ export default function AdminHomepageCMS() {
       ? settings.homepageSectionOrder
       : DEFAULT_HOMEPAGE_ORDER;
 
-  const currentTools =
-    settings && Array.isArray(settings.toolsList) && settings.toolsList.length > 0
-      ? settings.toolsList
-      : DEFAULT_TOOLS;
-
   const currentProfessions =
     settings && Array.isArray(settings.heroProfessions) && settings.heroProfessions.length > 0
       ? settings.heroProfessions
@@ -157,33 +151,6 @@ export default function AdminHomepageCMS() {
     setSettings({ ...settings, homepageSectionOrder: [...DEFAULT_HOMEPAGE_ORDER] });
   };
 
-  const handleUpdateTool = (index: number, field: keyof ToolItem, value: any) => {
-    if (!settings) return;
-    const updated = [...currentTools];
-    updated[index] = { ...updated[index], [field]: value };
-    setSettings({ ...settings, toolsList: updated });
-  };
-
-  const handleAddTool = () => {
-    if (!settings) return;
-    const newTool: ToolItem = {
-      id: `tool-${Date.now()}`,
-      name: 'New Tool',
-      category: 'Design Tool',
-      monogram: 'NT',
-      accentColor: '#C4855A',
-      sortOrder: currentTools.length + 1,
-      isVisible: true,
-    };
-    setSettings({ ...settings, toolsList: [...currentTools, newTool] });
-  };
-
-  const handleRemoveTool = (index: number) => {
-    if (!settings) return;
-    const updated = currentTools.filter((_, i) => i !== index);
-    setSettings({ ...settings, toolsList: updated });
-  };
-
   if (!settings) {
     return (
       <div className="py-24 text-center">
@@ -208,7 +175,7 @@ export default function AdminHomepageCMS() {
             Homepage Management
           </h1>
           <p className="text-xs text-charcoal-600 mt-1">
-            Manage your opening headline, subtitle, section sequence, software arsenal, and background assets.
+            Manage your opening headline, subtitle, section sequence, and background assets.
           </p>
         </div>
 
@@ -555,125 +522,6 @@ export default function AdminHomepageCMS() {
               </div>
             );
           })}
-        </div>
-      </div>
-
-      {/* 6. TOOLS I USE SOFTWARE ARSENAL */}
-      <div className="p-6 bg-white border border-charcoal/15 space-y-6">
-        <div className="flex items-center justify-between pb-3 border-b border-charcoal/10">
-          <div className="flex items-center gap-2">
-            <Wrench className="w-4 h-4 text-copper" />
-            <h2 className="font-display font-bold text-lg text-charcoal">
-              &quot;Tools I Use&quot; Software Arsenal
-            </h2>
-          </div>
-          <button
-            type="button"
-            onClick={handleAddTool}
-            className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-charcoal text-ivory text-xs font-sans font-bold uppercase tracking-wider hover:bg-copper transition-colors"
-          >
-            <Plus className="w-3 h-3" />
-            <span>Add Tool</span>
-          </button>
-        </div>
-
-        <p className="text-xs text-charcoal-600 font-sans">
-          Manage applications shown in the &quot;Tools I Use&quot; section on both Homepage and About page.
-        </p>
-
-        <div className="space-y-3">
-          {currentTools.map((tool, idx) => (
-            <div
-              key={tool.id || idx}
-              className="p-4 bg-ivory/60 border border-charcoal/15 grid grid-cols-1 sm:grid-cols-12 gap-3 items-center"
-            >
-              <div className="sm:col-span-1 flex items-center justify-center">
-                <div
-                  className="w-10 h-10 border border-charcoal/20 flex items-center justify-center font-bold text-sm bg-white"
-                  style={{ color: tool.accentColor || '#C4855A' }}
-                >
-                  {tool.monogram || 'TL'}
-                </div>
-              </div>
-
-              <div className="sm:col-span-3">
-                <label className="text-[10px] font-sans font-bold uppercase text-charcoal-500 block mb-1">
-                  Tool Name
-                </label>
-                <input
-                  type="text"
-                  value={tool.name}
-                  onChange={(e) => handleUpdateTool(idx, 'name', e.target.value)}
-                  className="w-full px-2.5 py-1.5 bg-white border border-charcoal/20 text-xs font-sans font-semibold focus:border-copper outline-none"
-                />
-              </div>
-
-              <div className="sm:col-span-3">
-                <label className="text-[10px] font-sans font-bold uppercase text-charcoal-500 block mb-1">
-                  Category / Discipline
-                </label>
-                <input
-                  type="text"
-                  value={tool.category}
-                  onChange={(e) => handleUpdateTool(idx, 'category', e.target.value)}
-                  className="w-full px-2.5 py-1.5 bg-white border border-charcoal/20 text-xs font-sans focus:border-copper outline-none"
-                />
-              </div>
-
-              <div className="sm:col-span-2">
-                <label className="text-[10px] font-sans font-bold uppercase text-charcoal-500 block mb-1">
-                  Monogram (2-3 Chars)
-                </label>
-                <input
-                  type="text"
-                  maxLength={4}
-                  value={tool.monogram}
-                  onChange={(e) => handleUpdateTool(idx, 'monogram', e.target.value)}
-                  className="w-full px-2.5 py-1.5 bg-white border border-charcoal/20 text-xs font-mono font-bold focus:border-copper outline-none text-center uppercase"
-                />
-              </div>
-
-              <div className="sm:col-span-2">
-                <label className="text-[10px] font-sans font-bold uppercase text-charcoal-500 block mb-1">
-                  Accent Color
-                </label>
-                <div className="flex items-center gap-1.5">
-                  <input
-                    type="color"
-                    value={tool.accentColor || '#C4855A'}
-                    onChange={(e) => handleUpdateTool(idx, 'accentColor', e.target.value)}
-                    className="w-7 h-7 p-0.5 border border-charcoal/20 bg-white cursor-pointer"
-                  />
-                  <input
-                    type="text"
-                    value={tool.accentColor || '#C4855A'}
-                    onChange={(e) => handleUpdateTool(idx, 'accentColor', e.target.value)}
-                    className="w-full px-1.5 py-1.5 bg-white border border-charcoal/20 text-[11px] font-mono focus:border-copper outline-none"
-                  />
-                </div>
-              </div>
-
-              <div className="sm:col-span-1 flex items-center justify-end gap-2">
-                <label className="flex items-center gap-1 text-[11px] font-sans text-charcoal cursor-pointer">
-                  <input
-                    type="checkbox"
-                    checked={tool.isVisible !== false}
-                    onChange={(e) => handleUpdateTool(idx, 'isVisible', e.target.checked)}
-                    className="rounded border-charcoal/30 text-copper focus:ring-copper"
-                  />
-                  <span>Show</span>
-                </label>
-                <button
-                  type="button"
-                  onClick={() => handleRemoveTool(idx)}
-                  className="p-1.5 text-red-600 hover:bg-red-50 transition-colors"
-                  title="Remove tool"
-                >
-                  <Trash2 className="w-3.5 h-3.5" />
-                </button>
-              </div>
-            </div>
-          ))}
         </div>
       </div>
 
