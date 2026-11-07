@@ -59,7 +59,7 @@ export function ClientShowcaseSection({ clients }: ClientShowcaseSectionProps) {
       id="clients"
       ref={containerRef}
       aria-label="Clients & Brand Collaborations"
-      className="py-6 sm:py-10 bg-ivory text-charcoal dark:bg-charcoal dark:text-ivory overflow-hidden select-none transition-colors duration-300"
+      className="py-8 sm:py-12 bg-ivory text-charcoal dark:bg-charcoal dark:text-ivory overflow-hidden select-none transition-colors duration-300"
     >
       {shouldReduceMotion ? (
         /* Reduced Motion Fallback: Clean, borderless wrapped grid */
@@ -68,7 +68,7 @@ export function ClientShowcaseSection({ clients }: ClientShowcaseSectionProps) {
             {basePool.map((client, idx) => (
               <div
                 key={`static-${client.id}-${idx}`}
-                className="flex items-center justify-center p-2 opacity-70 hover:opacity-100 transition-opacity duration-300"
+                className="flex items-center justify-center p-2 opacity-100 hover:scale-105 transition-transform duration-300"
               >
                 <div className="relative h-7 sm:h-9 w-28 sm:w-36 flex items-center justify-center">
                   <SafeImage
@@ -85,18 +85,18 @@ export function ClientShowcaseSection({ clients }: ClientShowcaseSectionProps) {
           </div>
         </div>
       ) : (
-        /* 3 Full-Bleed Kinetic Rows: Crisp logos edge-to-edge, increased column spacing, no blur overlays */
-        <div className="space-y-3 sm:space-y-4 overflow-hidden w-full">
+        /* 3 Full-Bleed Kinetic Rows: 100% visible logos, decreased column space, increased row space */
+        <div className="space-y-6 sm:space-y-8 md:space-y-10 overflow-hidden w-full">
           {/* Row 1 */}
           <div className="w-full overflow-hidden">
             <motion.div
               style={{ x: xRow1 }}
-              className="flex items-center gap-12 sm:gap-16 md:gap-24 w-max will-change-transform pl-4"
+              className="flex items-center gap-8 sm:gap-10 md:gap-14 w-max will-change-transform pl-4"
             >
               {row1Items.map((client, idx) => (
                 <div
                   key={`r1-${client.id}-${idx}`}
-                  className="flex items-center justify-center shrink-0 opacity-70 hover:opacity-100 transition-all duration-300 hover:scale-105"
+                  className="flex items-center justify-center shrink-0 opacity-100 transition-transform duration-300 hover:scale-105"
                   title={client.name}
                 >
                   <div className="relative h-6 sm:h-8 md:h-9 w-24 sm:w-32 md:w-40 flex items-center justify-center">
@@ -118,12 +118,12 @@ export function ClientShowcaseSection({ clients }: ClientShowcaseSectionProps) {
           <div className="w-full overflow-hidden">
             <motion.div
               style={{ x: xRow2 }}
-              className="flex items-center gap-12 sm:gap-16 md:gap-24 w-max will-change-transform pl-12"
+              className="flex items-center gap-8 sm:gap-10 md:gap-14 w-max will-change-transform pl-12"
             >
               {row2Items.map((client, idx) => (
                 <div
                   key={`r2-${client.id}-${idx}`}
-                  className="flex items-center justify-center shrink-0 opacity-70 hover:opacity-100 transition-all duration-300 hover:scale-105"
+                  className="flex items-center justify-center shrink-0 opacity-100 transition-transform duration-300 hover:scale-105"
                   title={client.name}
                 >
                   <div className="relative h-6 sm:h-8 md:h-9 w-24 sm:w-32 md:w-40 flex items-center justify-center">
@@ -145,12 +145,12 @@ export function ClientShowcaseSection({ clients }: ClientShowcaseSectionProps) {
           <div className="w-full overflow-hidden">
             <motion.div
               style={{ x: xRow3 }}
-              className="flex items-center gap-12 sm:gap-16 md:gap-24 w-max will-change-transform pl-6"
+              className="flex items-center gap-8 sm:gap-10 md:gap-14 w-max will-change-transform pl-6"
             >
               {row3Items.map((client, idx) => (
                 <div
                   key={`r3-${client.id}-${idx}`}
-                  className="flex items-center justify-center shrink-0 opacity-70 hover:opacity-100 transition-all duration-300 hover:scale-105"
+                  className="flex items-center justify-center shrink-0 opacity-100 transition-transform duration-300 hover:scale-105"
                   title={client.name}
                 >
                   <div className="relative h-6 sm:h-8 md:h-9 w-24 sm:w-32 md:w-40 flex items-center justify-center">
