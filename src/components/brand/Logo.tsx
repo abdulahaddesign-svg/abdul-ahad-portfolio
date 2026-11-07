@@ -9,6 +9,7 @@ interface LogoProps {
   height?: number;
   className?: string;
   showMonogramOnly?: boolean;
+  href?: string;
 }
 
 export function Logo({
@@ -16,13 +17,14 @@ export function Logo({
   height = 40,
   className = '',
   showMonogramOnly = false,
+  href = '/',
 }: LogoProps) {
   if (showMonogramOnly) {
     const monoWidth = Math.round(height * 1.358);
 
     return (
       <Link
-        href="/"
+        href={href}
         className={`group inline-flex items-center select-none focus:outline-none focus-visible:ring-2 focus-visible:ring-copper ${className}`}
         aria-label="Abdul Ahad — Creative Designer"
       >
@@ -64,7 +66,7 @@ export function Logo({
 
   return (
     <Link
-      href="/"
+      href={href}
       className={`group inline-flex items-center select-none focus:outline-none focus-visible:ring-2 focus-visible:ring-copper rounded-sm ${className}`}
       aria-label="Abdul Ahad — Creative Designer & Digital Creative Partner"
     >
