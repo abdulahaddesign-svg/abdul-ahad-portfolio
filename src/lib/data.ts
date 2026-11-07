@@ -6,19 +6,25 @@ import {
   ServiceItem, 
   ExperienceItem, 
   ProjectCategory,
-  ClientLogo
+  ClientLogo,
+  CapabilityCategory,
+  CapabilityTool
 } from './types';
 import { 
   SITE_SETTINGS, 
   INITIAL_PROJECTS, 
   SERVICES_DATA, 
   EXPERIENCE_DATA,
-  INITIAL_CLIENTS
+  INITIAL_CLIENTS,
+  DEFAULT_CAPABILITY_CATEGORIES,
+  DEFAULT_CAPABILITY_TOOLS
 } from './constants';
 
 // In-memory runtime store for development/fallback when Supabase credentials are not yet entered
 let localProjects: Project[] = [...INITIAL_PROJECTS];
 let localClients: ClientLogo[] = [...INITIAL_CLIENTS];
+let localCapabilityCategories: CapabilityCategory[] = [...DEFAULT_CAPABILITY_CATEGORIES];
+let localCapabilityTools: CapabilityTool[] = [...DEFAULT_CAPABILITY_TOOLS];
 let localInquiries: Inquiry[] = [
   {
     id: "inq-sample-1",
@@ -1207,6 +1213,10 @@ export async function getSiteSettings(): Promise<SiteSettings> {
 
           // Tools & Homepage CMS
           toolsList: Array.isArray(meta.toolsList) && meta.toolsList.length > 0 ? meta.toolsList : localSettings.toolsList,
+          toolsHeadline: meta.toolsHeadline || localSettings.toolsHeadline || 'Tools & Capabilities',
+          toolsSubheadline: meta.toolsSubheadline || localSettings.toolsSubheadline || 'A creative toolkit I use to research, design, create and build meaningful digital experiences.',
+          capabilityCategories: Array.isArray(meta.capabilityCategories) && meta.capabilityCategories.length > 0 ? meta.capabilityCategories : localSettings.capabilityCategories,
+          capabilityTools: Array.isArray(meta.capabilityTools) && meta.capabilityTools.length > 0 ? meta.capabilityTools : localSettings.capabilityTools,
           homepageSectionOrder: Array.isArray(meta.homepageSectionOrder) && meta.homepageSectionOrder.length > 0 ? meta.homepageSectionOrder : localSettings.homepageSectionOrder,
         };
       }
@@ -1482,6 +1492,328 @@ export async function deleteClientLogo(id: string): Promise<boolean> {
   }
 
   localClients = localClients.filter((c) => c.id !== id);
+  return true;
+}
+
+// ==============================================================================
+// TOOLS & CAPABILITIES CMS (Dynamic 4-Group Section)
+// ==============================================================================
+
+export async function getCapabilityCategories(includeHidden = false): Promise<CapabilityCategory[]> {
+  const settings = await getSiteSettings();
+  let categories = Array.isArray(settings.capabilityCategories) && settings.capabilityCategories.length > 0
+    ? [...settings.capabilityCategories]
+    : [...localCapabilityCategories];
+
+  let tools = Array.isArray(settings.capabilityTools) && settings.capabilityTools.length > 0
+    ? [...settings.capabilityTools]
+    : [...localCapabilityTools];
+
+  // Try reading from dedicated Supabase tables if populated
+  const supabase = createClient();
+  if (supabase) {
+    try {
+      const { data: dbCats, error: catErr } = await supabase
+        .from('capability_categories')
+        .select('*')
+        .order('display_order', { ascending: true });
+
+      if (!catErr && dbCats && dbCats.length > 0) {
+        categories = dbCats.map((c: any) => ({
+          id: c.id,
+          name: c.name,
+          slug: c.slug,
+          description: c.description || '',
+          position: c.position,
+          displayOrder: c.display_order ?? 0,
+          isVisible: c.is_visible ?? true,
+          createdAt: c.created_at,
+          updatedAt: c.updated_at,
+        }));
+
+        const { data: dbTools, error: toolErr } = await supabase
+          .from('capability_tools')
+          .select('*')
+          .order('display_order', { ascending: true });
+
+        if (!toolErr && dbTools && dbTools.length > 0) {
+          tools = dbTools.map((t: any) => ({
+            id: t.id,
+            categoryId: t.category_id,
+            name: t.name,
+            slug: t.slug,
+            iconUrl: t.icon_url || '',
+            description: t.description || '',
+            websiteUrl: t.website_url || '',
+            altText: t.alt_text || '',
+            isSoftware: t.is_software ?? true,
+            proficiency: t.proficiency || 'Advanced',
+            displayOrder: t.display_order ?? 0,
+            isVisible: t.is_visible ?? true,
+            createdAt: t.created_at,
+            updatedAt: t.updated_at,
+          }));
+        }
+      }
+    } catch {
+      // Fallback to settings / in-memory store
+    }
+  }
+
+  // Filter visibility if required
+  if (!includeHidden) {
+    categories = categories.filter((c) => c.isVisible !== false);
+    tools = tools.filter((t) => t.isVisible !== false);
+  }
+
+  // Attach tools to each category
+  return categories
+    .sort((a, b) => a.displayOrder - b.displayOrder)
+    .map((cat) => ({
+      ...cat,
+      tools: tools
+        .filter((t) => t.categoryId === cat.id)
+        .sort((a, b) => a.displayOrder - b.displayOrder),
+    }));
+}
+
+export async function getCapabilityTools(categoryId?: string, includeHidden = false): Promise<CapabilityTool[]> {
+  const categories = await getCapabilityCategories(includeHidden);
+  let allTools = categories.flatMap((c) => c.tools || []);
+  if (categoryId) {
+    allTools = allTools.filter((t) => t.categoryId === categoryId);
+  }
+  return allTools;
+}
+
+// Internal helper to persist updated categories & tools to Supabase
+async function persistCapabilities(categories: CapabilityCategory[], tools: CapabilityTool[]): Promise<boolean> {
+  localCapabilityCategories = [...categories];
+  localCapabilityTools = [...tools];
+
+  // 1. Dual-write to Supabase site_settings JSON metadata (always guaranteed)
+  try {
+    await updateSiteSettings({
+      capabilityCategories: categories,
+      capabilityTools: tools,
+    });
+  } catch (err) {
+    console.warn('Failed to update capabilities in site_settings:', err);
+  }
+
+  // 2. Try upserting to relational capability tables if created
+  const supabase = createClient();
+  if (supabase) {
+    try {
+      const catRows = categories.map((c) => ({
+        id: c.id,
+        name: c.name,
+        slug: c.slug,
+        description: c.description || '',
+        position: c.position,
+        display_order: c.displayOrder,
+        is_visible: c.isVisible,
+        updated_at: new Date().toISOString(),
+      }));
+
+      await supabase.from('capability_categories').upsert(catRows);
+
+      const toolRows = tools.map((t) => ({
+        id: t.id,
+        category_id: t.categoryId,
+        name: t.name,
+        slug: t.slug,
+        icon_url: t.iconUrl || '',
+        description: t.description || '',
+        website_url: t.websiteUrl || '',
+        alt_text: t.altText || '',
+        is_software: t.isSoftware,
+        proficiency: t.proficiency || 'Advanced',
+        display_order: t.displayOrder,
+        is_visible: t.isVisible,
+        updated_at: new Date().toISOString(),
+      }));
+
+      await supabase.from('capability_tools').upsert(toolRows);
+    } catch {
+      // Ignored if schema not yet created
+    }
+  }
+
+  return true;
+}
+
+export async function createCapabilityCategory(cat: Partial<CapabilityCategory>): Promise<CapabilityCategory> {
+  const categories = await getCapabilityCategories(true);
+  const tools = await getCapabilityTools(undefined, true);
+
+  const newId = cat.id || `cat-${Date.now()}`;
+  const newCat: CapabilityCategory = {
+    id: newId,
+    name: cat.name || 'New Category',
+    slug: cat.slug || `cat-${Date.now()}`,
+    description: cat.description || '',
+    position: cat.position || 'top',
+    displayOrder: cat.displayOrder ?? (categories.length + 1),
+    isVisible: cat.isVisible ?? true,
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
+    tools: [],
+  };
+
+  const updatedCategories = [...categories.map(({ tools, ...c }) => c), newCat];
+  await persistCapabilities(updatedCategories, tools);
+  return newCat;
+}
+
+export async function updateCapabilityCategory(id: string, updates: Partial<CapabilityCategory>): Promise<CapabilityCategory> {
+  const categories = await getCapabilityCategories(true);
+  const tools = await getCapabilityTools(undefined, true);
+
+  const idx = categories.findIndex((c) => c.id === id);
+  if (idx === -1) {
+    throw new Error(`Category with ID ${id} not found`);
+  }
+
+  const updated: CapabilityCategory = {
+    ...categories[idx],
+    ...updates,
+    updatedAt: new Date().toISOString(),
+  };
+
+  categories[idx] = updated;
+  const cleanCategories = categories.map(({ tools, ...c }) => c);
+  await persistCapabilities(cleanCategories, tools);
+  return updated;
+}
+
+export async function deleteCapabilityCategory(id: string): Promise<boolean> {
+  const categories = await getCapabilityCategories(true);
+  const tools = await getCapabilityTools(undefined, true);
+
+  const updatedCategories = categories
+    .filter((c) => c.id !== id)
+    .map(({ tools, ...c }) => c);
+  const updatedTools = tools.filter((t) => t.categoryId !== id);
+
+  await persistCapabilities(updatedCategories, updatedTools);
+
+  // Try DB delete if table exists
+  const supabase = createClient();
+  if (supabase) {
+    try {
+      await supabase.from('capability_categories').delete().eq('id', id);
+    } catch {
+      // ignore
+    }
+  }
+
+  return true;
+}
+
+export async function reorderCapabilityCategories(orderedIds: string[]): Promise<boolean> {
+  const categories = await getCapabilityCategories(true);
+  const tools = await getCapabilityTools(undefined, true);
+
+  const updatedCategories = categories.map((cat) => {
+    const order = orderedIds.indexOf(cat.id);
+    return {
+      ...cat,
+      displayOrder: order !== -1 ? order + 1 : cat.displayOrder,
+    };
+  }).map(({ tools, ...c }) => c);
+
+  await persistCapabilities(updatedCategories, tools);
+  return true;
+}
+
+export async function createCapabilityTool(tool: Partial<CapabilityTool>): Promise<CapabilityTool> {
+  const categories = await getCapabilityCategories(true);
+  const tools = await getCapabilityTools(undefined, true);
+
+  const newId = tool.id || `tool-${Date.now()}`;
+  const newTool: CapabilityTool = {
+    id: newId,
+    categoryId: tool.categoryId || (categories[0]?.id || 'cat-ai'),
+    name: tool.name || 'New Tool',
+    slug: tool.slug || (tool.name || 'tool').toLowerCase().replace(/[^a-z0-9]+/g, '-'),
+    iconUrl: tool.iconUrl || '',
+    description: tool.description || '',
+    websiteUrl: tool.websiteUrl || '',
+    altText: tool.altText || tool.name || '',
+    isSoftware: tool.isSoftware !== false,
+    proficiency: tool.proficiency || 'Advanced',
+    displayOrder: tool.displayOrder ?? (tools.filter((t) => t.categoryId === tool.categoryId).length + 1),
+    isVisible: tool.isVisible ?? true,
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
+  };
+
+  const updatedTools = [...tools, newTool];
+  const cleanCategories = categories.map(({ tools, ...c }) => c);
+  await persistCapabilities(cleanCategories, updatedTools);
+  return newTool;
+}
+
+export async function updateCapabilityTool(id: string, updates: Partial<CapabilityTool>): Promise<CapabilityTool> {
+  const categories = await getCapabilityCategories(true);
+  const tools = await getCapabilityTools(undefined, true);
+
+  const idx = tools.findIndex((t) => t.id === id);
+  if (idx === -1) {
+    throw new Error(`Tool with ID ${id} not found`);
+  }
+
+  const updated: CapabilityTool = {
+    ...tools[idx],
+    ...updates,
+    updatedAt: new Date().toISOString(),
+  };
+
+  tools[idx] = updated;
+  const cleanCategories = categories.map(({ tools, ...c }) => c);
+  await persistCapabilities(cleanCategories, tools);
+  return updated;
+}
+
+export async function deleteCapabilityTool(id: string): Promise<boolean> {
+  const categories = await getCapabilityCategories(true);
+  const tools = await getCapabilityTools(undefined, true);
+
+  const updatedTools = tools.filter((t) => t.id !== id);
+  const cleanCategories = categories.map(({ tools, ...c }) => c);
+  await persistCapabilities(cleanCategories, updatedTools);
+
+  // Try DB delete if table exists
+  const supabase = createClient();
+  if (supabase) {
+    try {
+      await supabase.from('capability_tools').delete().eq('id', id);
+    } catch {
+      // ignore
+    }
+  }
+
+  return true;
+}
+
+export async function reorderCapabilityTools(categoryId: string, orderedIds: string[]): Promise<boolean> {
+  const categories = await getCapabilityCategories(true);
+  const tools = await getCapabilityTools(undefined, true);
+
+  const updatedTools = tools.map((tool) => {
+    if (tool.categoryId === categoryId) {
+      const order = orderedIds.indexOf(tool.id);
+      return {
+        ...tool,
+        displayOrder: order !== -1 ? order + 1 : tool.displayOrder,
+      };
+    }
+    return tool;
+  });
+
+  const cleanCategories = categories.map(({ tools, ...c }) => c);
+  await persistCapabilities(cleanCategories, updatedTools);
   return true;
 }
 

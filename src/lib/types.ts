@@ -111,6 +111,36 @@ export interface ToolItem {
   isVisible: boolean;
 }
 
+export interface CapabilityCategory {
+  id: string;
+  name: string;
+  slug: string;
+  description?: string;
+  position: 'top' | 'left' | 'right' | 'bottom';
+  displayOrder: number;
+  isVisible: boolean;
+  createdAt?: string;
+  updatedAt?: string;
+  tools?: CapabilityTool[];
+}
+
+export interface CapabilityTool {
+  id: string;
+  categoryId: string;
+  name: string;
+  slug: string;
+  iconUrl?: string;
+  description?: string;
+  websiteUrl?: string;
+  altText?: string;
+  isSoftware: boolean;
+  proficiency?: 'Expert' | 'Advanced' | 'Intermediate';
+  displayOrder: number;
+  isVisible: boolean;
+  createdAt?: string;
+  updatedAt?: string;
+}
+
 export interface SkillCategory {
   category: string;
   items: string[];
@@ -232,6 +262,10 @@ export interface SiteSettings {
 
   // Tools CMS
   toolsList?: ToolItem[];
+  toolsHeadline?: string;
+  toolsSubheadline?: string;
+  capabilityCategories?: CapabilityCategory[];
+  capabilityTools?: CapabilityTool[];
 
   // Homepage Dynamic Section Order
   homepageSectionOrder?: string[];

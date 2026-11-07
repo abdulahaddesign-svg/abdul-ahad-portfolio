@@ -1,5 +1,5 @@
 import React from 'react';
-import { getProjects, getClientLogos, getSiteSettings } from '@/lib/data';
+import { getProjects, getClientLogos, getSiteSettings, getCapabilityCategories } from '@/lib/data';
 import { DEFAULT_HOMEPAGE_ORDER } from '@/lib/constants';
 import { Preloader } from '@/components/layout/Preloader';
 import { HeroSection } from '@/components/home/HeroSection';
@@ -16,10 +16,11 @@ export const dynamic = 'force-dynamic';
 export const revalidate = 0;
 
 export default async function HomePage() {
-  const [projects, clients, settings] = await Promise.all([
+  const [projects, clients, settings, capabilityCategories] = await Promise.all([
     getProjects({ includeDrafts: false }),
     getClientLogos(false),
     getSiteSettings(),
+    getCapabilityCategories(false),
   ]);
 
   const sectionOrder =
@@ -36,7 +37,14 @@ export default async function HomePage() {
       case 'about':
         return <AboutIntroSection key="about" settings={settings} />;
       case 'tools':
-        return <ToolsSection key="tools" tools={settings.toolsList} />;
+        return (
+          <ToolsSection
+            key="tools"
+            categories={capabilityCategories}
+            headline={settings.toolsHeadline}
+            subheadline={settings.toolsSubheadline}
+          />
+        );
       case 'motion':
         return <FeaturedMotionSection key="motion" projects={projects} />;
       case 'deliver':

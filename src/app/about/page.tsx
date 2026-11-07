@@ -3,7 +3,7 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import Image from 'next/image';
 import { ArrowDown, ArrowUpRight, Award, GraduationCap, MapPin, Mail, Phone, ExternalLink } from 'lucide-react';
-import { getSiteSettings, getExperience } from '@/lib/data';
+import { getSiteSettings, getExperience, getCapabilityCategories } from '@/lib/data';
 import { Button } from '@/components/ui/Button';
 import { SafeImage } from '@/components/ui/SafeImage';
 import { ToolsSection } from '@/components/home/ToolsSection';
@@ -20,9 +20,10 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function AboutPage() {
-  const [settings, experienceList] = await Promise.all([
+  const [settings, experienceList, capabilityCategories] = await Promise.all([
     getSiteSettings(),
     getExperience(),
+    getCapabilityCategories(false),
   ]);
 
   const headline = settings.aboutHeadline || 'I create visual experiences that make ideas matter.';
@@ -267,10 +268,10 @@ export default async function AboutPage() {
 
         {/* Tools I Use Section */}
         <ToolsSection
-          tools={settings.toolsList}
+          categories={capabilityCategories}
           sectionLabel="TECHNICAL ARSENAL"
-          headline="Tools I Use Daily"
-          subheadline="Software suite utilized across brand identity systems, marketing collateral, UI/UX screens, and kinetic motion."
+          headline={settings.toolsHeadline || "Tools & Capabilities"}
+          subheadline={settings.toolsSubheadline || "Software suite utilized across brand identity systems, marketing collateral, UI/UX screens, and kinetic motion."}
           className="border-b-0 px-0 pt-20 pb-0"
         />
 
