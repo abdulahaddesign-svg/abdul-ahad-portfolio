@@ -161,9 +161,9 @@ export function ToolsSection({
                 onMouseEnter={() => setActiveTool(tool)}
                 onMouseLeave={() => setActiveTool(null)}
                 aria-label={`${tool.name}: ${tool.description || 'Creative tool'}`}
-                className={`relative w-[50px] h-[50px] sm:w-[54px] sm:h-[54px] rounded-full flex items-center justify-center bg-white dark:bg-[#2A2823] border border-charcoal/10 dark:border-ivory/15 shadow-[0_2px_8px_rgba(37,36,31,0.06)] dark:shadow-[0_4px_14px_rgba(0,0,0,0.35)] transition-all duration-300 transform group-hover:scale-108 group-hover:-translate-y-1 focus:outline-none focus-visible:ring-2 focus-visible:ring-copper ${
+                className={`relative w-[50px] h-[50px] sm:w-[54px] sm:h-[54px] rounded-full flex items-center justify-center bg-[#ECE5D8] hover:bg-[#E8DFD0] dark:bg-[#201F1A] dark:hover:bg-[#262520] border border-charcoal/20 dark:border-ivory/20 shadow-[0_2px_8px_rgba(37,36,31,0.06)] dark:shadow-[0_4px_14px_rgba(0,0,0,0.35)] transition-all duration-300 transform group-hover:scale-108 group-hover:-translate-y-1 focus:outline-none focus-visible:ring-2 focus-visible:ring-copper ${
                   isSelected
-                    ? 'scale-110 -translate-y-1 ring-2 ring-copper shadow-lg'
+                    ? 'scale-110 -translate-y-1 ring-2 ring-copper shadow-lg bg-[#FAF7F2] dark:bg-[#1A1915]'
                     : 'group-hover:border-copper/60 dark:group-hover:border-copper/70'
                 }`}
               >
@@ -269,7 +269,7 @@ export function ToolsSection({
                 <motion.div
                   initial={{ opacity: 0, y: 6 }}
                   animate={{ opacity: 1, y: 0 }}
-                  className="mt-4 inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white dark:bg-[#1E1D19] border border-copper/30 shadow-sm text-xs font-sans text-charcoal dark:text-ivory"
+                  className="mt-4 inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#ECE5D8] dark:bg-[#201F1A] border border-copper/30 shadow-sm text-xs font-sans text-charcoal dark:text-ivory"
                 >
                   <span className="w-2 h-2 rounded-full bg-copper" />
                   <span className="font-bold">{activeTool.name}</span>
@@ -333,7 +333,7 @@ export function ToolsSection({
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.4, delay: shouldReduceMotion ? 0 : idx * 0.08 }}
-                className="p-6 rounded-2xl bg-white/40 dark:bg-[#1E1D19]/40 border border-charcoal/10 dark:border-ivory/10 shadow-xs flex flex-col items-center justify-center min-h-[140px]"
+                className="p-6 rounded-2xl bg-[#ECE5D8]/50 dark:bg-[#201F1A]/50 border border-charcoal/10 dark:border-ivory/10 shadow-xs flex flex-col items-center justify-center min-h-[140px]"
               >
                 {renderCategoryGroup(
                   category,
@@ -349,7 +349,7 @@ export function ToolsSection({
             <motion.div
               initial={{ opacity: 0, y: 8 }}
               animate={{ opacity: 1, y: 0 }}
-              className="mt-8 inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white dark:bg-[#1E1D19] border border-copper/30 shadow-sm text-xs font-sans text-charcoal dark:text-ivory"
+              className="mt-8 inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#ECE5D8] dark:bg-[#201F1A] border border-copper/30 shadow-sm text-xs font-sans text-charcoal dark:text-ivory"
             >
               <span className="w-2 h-2 rounded-full bg-copper" />
               <span className="font-bold">{activeTool.name}</span>
