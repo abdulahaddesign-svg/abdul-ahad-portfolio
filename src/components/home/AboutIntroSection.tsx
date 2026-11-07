@@ -40,7 +40,7 @@ export function AboutIntroSection({ settings }: AboutIntroSectionProps) {
     <section
       id="about"
       ref={containerRef}
-      className="pt-20 sm:pt-28 md:pt-32 pb-4 sm:pb-6 md:pb-8 bg-ivory text-charcoal dark:bg-charcoal dark:text-ivory select-none transition-colors duration-300"
+      className="pt-20 sm:pt-28 md:pt-32 pb-10 sm:pb-14 md:pb-16 bg-ivory text-charcoal dark:bg-charcoal dark:text-ivory select-none transition-colors duration-300"
     >
       <div className="max-w-[1820px] mx-auto px-4 sm:px-8 lg:px-12">
         {/* Section Header Line */}
