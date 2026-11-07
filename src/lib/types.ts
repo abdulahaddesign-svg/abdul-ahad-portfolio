@@ -256,6 +256,7 @@ export interface SiteSettings {
   footerLogoDarkUrl?: string;
   footerDescription?: string;
   footerBrandStatement?: string;
+  footerOversizedLogoVisible?: boolean;
   footerNavVisible?: boolean;
   footerCopyright?: string;
   footerLocation?: string;

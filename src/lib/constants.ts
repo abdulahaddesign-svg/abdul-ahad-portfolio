@@ -644,6 +644,7 @@ export const SITE_SETTINGS: SiteSettings = {
   footerLogoDarkUrl: "/brand/logo-wordmark-clean-dark.png",
   footerDescription: "Independent creative designer specializing in visual branding, digital experiences, motion and creative systems. Based in Coimbatore, India.",
   footerBrandStatement: "Abdul Ahad",
+  footerOversizedLogoVisible: false,
   footerNavVisible: true,
   footerCopyright: "Abdul Ahad J. All rights reserved.",
   footerLocation: "Coimbatore, Tamil Nadu, India",

@@ -38,12 +38,13 @@ export function Footer({ settings = SITE_SETTINGS }: FooterProps) {
   const instagram = settings.instagramUrl;
   const dribbble = settings.dribbbleUrl;
   const showNav = settings.footerNavVisible !== false;
+  const showOversizedLogo = settings.footerOversizedLogoVisible === true;
   const copyright = settings.footerCopyright || 'Abdul Ahad J. All rights reserved.';
   const locationText = settings.footerLocation || settings.location || 'Coimbatore, Tamil Nadu, India';
 
   return (
     <footer
-      className={`relative pt-16 sm:pt-24 pb-6 sm:pb-10 overflow-hidden select-none transition-colors duration-300 ${
+      className={`relative pt-16 sm:pt-24 pb-8 sm:pb-12 overflow-hidden select-none transition-colors duration-300 ${
         isDarkMode
           ? 'bg-charcoal text-ivory border-t border-charcoal-800'
           : 'bg-ivory text-charcoal border-t border-charcoal/15'
@@ -231,26 +232,25 @@ export function Footer({ settings = SITE_SETTINGS }: FooterProps) {
       </div>
 
       {/* =========================================================================
-          4. OVERSIZED BRAND LOGO STATEMENT (Replaces Typo with Uploaded Logo Asset)
-          - Bleeds intentionally to the edges
-          - Displays uploaded logo wordmark (Dark or Light variant)
-          - Controlled with overflow-hidden
+          4. OVERSIZED BRAND LOGO STATEMENT (Optional, Controlled via CMS)
           ========================================================================= */}
-      <div className="w-full overflow-hidden select-none pointer-events-none mt-4 sm:mt-8 -mb-2 sm:-mb-4">
-        <div className="max-w-[1820px] mx-auto px-4 sm:px-8 lg:px-12">
-          <div className="relative w-full aspect-[1024/167] opacity-10 transition-opacity duration-300">
-            <SafeImage
-              src={logoUrl}
-              fallback="/brand/logo-wordmark-clean-dark.png"
-              alt={settings.name}
-              fill
-              sizes="(max-width: 1400px) 100vw, 1400px"
-              className="object-contain object-bottom select-none"
-              priority
-            />
+      {showOversizedLogo && (
+        <div className="w-full overflow-hidden select-none pointer-events-none mt-4 sm:mt-8 -mb-2 sm:-mb-4">
+          <div className="max-w-[1820px] mx-auto px-4 sm:px-8 lg:px-12">
+            <div className="relative w-full aspect-[1024/167] opacity-10 transition-opacity duration-300">
+              <SafeImage
+                src={logoUrl}
+                fallback="/brand/logo-wordmark-clean-dark.png"
+                alt={settings.name}
+                fill
+                sizes="(max-width: 1400px) 100vw, 1400px"
+                className="object-contain object-bottom select-none"
+                priority
+              />
+            </div>
           </div>
         </div>
-      </div>
+      )}
     </footer>
   );
 }
