@@ -233,40 +233,27 @@ export default async function AboutPage() {
                   <span className="font-mono text-xs text-charcoal-400 block">
                     0{idx + 1} / {exp.period}
                   </span>
-                  <div className="flex items-center gap-3 my-2">
-                    {exp.companyLogo && (
-                      <div className="w-10 h-10 rounded-lg border border-charcoal/15 dark:border-ivory/15 bg-white dark:bg-charcoal-800 p-1.5 flex items-center justify-center shrink-0 shadow-sm overflow-hidden">
-                        <SafeImage
-                          src={exp.companyLogo}
-                          alt={`${exp.company} Logo`}
-                          width={40}
-                          height={40}
-                          className="max-h-7 max-w-full object-contain"
-                        />
-                      </div>
-                    )}
-                    <div className="flex items-center gap-2 flex-wrap">
-                      {exp.companyUrl ? (
-                        <a
-                          href={exp.companyUrl}
-                          target={exp.companyUrl.startsWith('http') ? '_blank' : undefined}
-                          rel={exp.companyUrl.startsWith('http') ? 'noopener noreferrer' : undefined}
-                          className="inline-flex items-center gap-1.5 group/link"
-                          title={`Visit ${exp.company} website`}
-                        >
-                          <h3 className="font-display font-bold text-2xl text-charcoal group-hover/link:text-copper transition-colors">
-                            {exp.company}
-                          </h3>
-                          <span className="p-1 rounded-full border border-charcoal/20 group-hover/link:border-copper group-hover/link:bg-copper group-hover/link:text-ivory transition-all text-charcoal inline-flex items-center justify-center">
-                            <ArrowUpRight className="w-3.5 h-3.5 transition-transform group-hover/link:translate-x-0.5 group-hover/link:-translate-y-0.5" />
-                          </span>
-                        </a>
-                      ) : (
-                        <h3 className="font-display font-bold text-2xl text-charcoal group-hover:text-copper transition-colors">
+                  <div className="flex items-center gap-2 flex-wrap my-2">
+                    {exp.companyUrl ? (
+                      <a
+                        href={exp.companyUrl}
+                        target={exp.companyUrl.startsWith('http') ? '_blank' : undefined}
+                        rel={exp.companyUrl.startsWith('http') ? 'noopener noreferrer' : undefined}
+                        className="inline-flex items-center gap-1.5 group/link"
+                        title={`Visit ${exp.company} website`}
+                      >
+                        <h3 className="font-display font-bold text-2xl text-charcoal group-hover/link:text-copper transition-colors">
                           {exp.company}
                         </h3>
-                      )}
-                    </div>
+                        <span className="p-1 rounded-full border border-charcoal/20 group-hover/link:border-copper group-hover/link:bg-copper group-hover/link:text-ivory transition-all text-charcoal inline-flex items-center justify-center">
+                          <ArrowUpRight className="w-3.5 h-3.5 transition-transform group-hover/link:translate-x-0.5 group-hover/link:-translate-y-0.5" />
+                        </span>
+                      </a>
+                    ) : (
+                      <h3 className="font-display font-bold text-2xl text-charcoal group-hover:text-copper transition-colors">
+                        {exp.company}
+                      </h3>
+                    )}
                   </div>
                   <p className="text-xs font-sans uppercase tracking-wider text-charcoal-500">
                     {exp.location}
