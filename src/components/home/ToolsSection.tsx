@@ -119,6 +119,7 @@ export function ToolsSection({
     if (!category) return null;
     const CategoryIcon = getCategoryIcon(category.position);
     const tools = category.tools || [];
+    const isLateral = category.position === 'left' || category.position === 'right';
 
     const labelBadge = (
       <div
@@ -132,7 +133,11 @@ export function ToolsSection({
     );
 
     const iconGrid = (
-      <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-2.5 max-w-[420px]">
+      <div
+        className={`flex flex-wrap items-center justify-center gap-2 sm:gap-2.5 ${
+          isDesktopSpatial && isLateral ? 'max-w-[280px] xl:max-w-[320px]' : 'max-w-[460px]'
+        }`}
+      >
         {tools.map((tool, idx) => {
           const isSelected = activeTool?.id === tool.id;
 
@@ -192,7 +197,7 @@ export function ToolsSection({
     );
 
     return (
-      <div className={`flex flex-col items-center gap-3.5 ${isDesktopSpatial ? 'w-full max-w-[440px]' : ''}`}>
+      <div className={`flex flex-col items-center gap-3.5 ${isDesktopSpatial && isLateral ? 'w-full max-w-[320px]' : ''}`}>
         {isLabelAbove ? (
           <>
             {labelBadge}
@@ -222,12 +227,12 @@ export function ToolsSection({
         <div className="w-[650px] h-[650px] rounded-full bg-copper/15 blur-[130px]" />
       </div>
 
-      <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+      <div className="max-w-[1740px] mx-auto px-4 sm:px-6 lg:px-12 xl:px-16 relative z-10">
         
         {/* ========================================================================= */}
-        {/* DESKTOP SPATIAL ARRANGEMENT: Four Directional Composition Matching Reference */}
+        {/* DESKTOP SPATIAL ARRANGEMENT: Four Directional Composition with Wide Whitespace */}
         {/* ========================================================================= */}
-        <div className="hidden lg:block relative min-h-[660px] xl:min-h-[700px] w-full max-w-[1200px] mx-auto">
+        <div className="hidden lg:block relative min-h-[680px] xl:min-h-[720px] w-full max-w-[1560px] xl:max-w-[1660px] mx-auto">
           
           {/* 1. TOP GROUP — AI, Research & Productivity (Label ABOVE icons) */}
           <div className="absolute top-0 left-1/2 -translate-x-1/2 z-20">
@@ -237,25 +242,25 @@ export function ToolsSection({
           </div>
 
           {/* 2. LEFT GROUP — Design & Visual Creation (Label ABOVE icons) */}
-          <div className="absolute left-0 top-1/2 -translate-y-1/2 z-20 max-w-[340px] xl:max-w-[380px]">
+          <div className="absolute left-0 xl:left-2 2xl:left-6 top-1/2 -translate-y-1/2 z-20 max-w-[300px] xl:max-w-[340px]">
             <motion.div {...getFloatingVariant(-5, 6.4)}>
               {renderCategoryGroup(leftCategory, true, true)}
             </motion.div>
           </div>
 
-          {/* 3. CENTER HEADLINE & SUBTITLE (Space Grotesk + Manrope) */}
-          <div className="absolute inset-0 flex flex-col items-center justify-center text-center px-4 max-w-lg mx-auto pointer-events-none z-10">
+          {/* 3. CENTER HEADLINE & SUBTITLE with Generous Left & Right Whitespace */}
+          <div className="absolute inset-0 flex flex-col items-center justify-center text-center px-8 sm:px-14 xl:px-20 max-w-[560px] xl:max-w-[620px] mx-auto pointer-events-none z-10">
             <motion.div
               initial={shouldReduceMotion ? { opacity: 1 } : { opacity: 0, y: 15 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-              className="pointer-events-auto"
+              className="pointer-events-auto px-4 py-2"
             >
-              <h2 className="font-display font-bold text-4xl sm:text-5xl lg:text-[52px] tracking-tight text-charcoal dark:text-ivory mb-3 leading-[1.1]">
+              <h2 className="font-display font-black text-3xl sm:text-4xl xl:text-[48px] tracking-tight text-charcoal dark:text-ivory mb-3 leading-[1.15]">
                 {headline}
               </h2>
-              <p className="font-sans text-sm sm:text-base text-charcoal-600 dark:text-ivory/70 leading-relaxed font-normal max-w-md mx-auto">
+              <p className="font-sans text-xs sm:text-sm xl:text-base text-charcoal-600 dark:text-ivory/70 leading-relaxed font-normal max-w-[360px] xl:max-w-[420px] mx-auto">
                 {subheadline}
               </p>
 
@@ -289,7 +294,7 @@ export function ToolsSection({
           </div>
 
           {/* 4. RIGHT GROUP — UI/UX & Digital Product (Icons ABOVE label) */}
-          <div className="absolute right-0 top-1/2 -translate-y-1/2 z-20 max-w-[340px] xl:max-w-[380px]">
+          <div className="absolute right-0 xl:right-2 2xl:right-6 top-1/2 -translate-y-1/2 z-20 max-w-[300px] xl:max-w-[340px]">
             <motion.div {...getFloatingVariant(5, 5.8)}>
               {renderCategoryGroup(rightCategory, false, true)}
             </motion.div>
