@@ -33,7 +33,6 @@ export function AboutIntroSection({ settings }: AboutIntroSectionProps) {
   const photoUrl = settings.profilePhotoUrl || '/profile/abdul-ahad.jpg';
   const photoAlt = settings.profilePhotoAlt || 'Abdul Ahad J — Creative Designer';
   const resumeUrl = settings.resumeUrl || '/resume/abdul-ahad-resume.pdf';
-  const resumeLabel = settings.resumeLabel || 'PDF · Updated Resume';
   const resumeVisible = settings.resumeVisible !== false;
 
   return (
@@ -132,32 +131,27 @@ export function AboutIntroSection({ settings }: AboutIntroSectionProps) {
               initial={{ opacity: 0, y: 16 }}
               animate={isInView ? { opacity: 1, y: 0 } : {}}
               transition={{ duration: 0.8, delay: 0.45, ease: [0.16, 1, 0.3, 1] }}
-              className="flex flex-wrap items-center gap-6 pt-2"
+              className="flex flex-wrap items-center gap-7 sm:gap-9 pt-2"
             >
               {resumeVisible && (
-                <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-3">
-                  <a
-                    href={resumeUrl}
-                    download="Abdul-Ahad-Resume.pdf"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center gap-2.5 px-7 py-3.5 bg-charcoal text-ivory text-xs font-sans font-bold uppercase tracking-[0.16em] hover:bg-copper transition-colors duration-200"
-                  >
-                    <ArrowDown className="w-3.5 h-3.5" />
-                    <span>Download Resume</span>
-                  </a>
-                  <span className="text-[11px] font-mono text-charcoal-400 uppercase tracking-wider">
-                    {resumeLabel}
-                  </span>
-                </div>
+                <a
+                  href={resumeUrl}
+                  download="Abdul-Ahad-Resume.pdf"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2.5 px-7 py-3.5 bg-charcoal text-ivory text-xs font-sans font-bold uppercase tracking-[0.16em] hover:bg-copper transition-colors duration-200"
+                >
+                  <ArrowDown className="w-3.5 h-3.5" />
+                  <span>Download Resume</span>
+                </a>
               )}
 
               <Link
                 href="/about"
-                className="inline-flex items-center gap-2 text-xs font-sans font-bold uppercase tracking-[0.16em] text-copper hover:text-charcoal transition-colors py-3.5"
+                className="inline-flex items-center gap-2 text-xs font-sans font-bold uppercase tracking-[0.16em] text-copper hover:text-charcoal dark:hover:text-ivory transition-colors py-3.5 group"
               >
                 <span>Read Full Biography</span>
-                <ArrowUpRight className="w-4 h-4" />
+                <ArrowUpRight className="w-4 h-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
               </Link>
             </motion.div>
           </div>
