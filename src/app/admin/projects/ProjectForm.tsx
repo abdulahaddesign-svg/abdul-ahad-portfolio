@@ -87,6 +87,7 @@ export function ProjectForm({ initialData }: ProjectFormProps) {
     gallery: initialData?.gallery || ['/projects/reztro/reztro-cover.svg'],
     videoUrl: initialData?.videoUrl || '',
     liveWebsiteUrl: initialData?.liveWebsiteUrl || '',
+    behanceUrl: initialData?.behanceUrl || '',
     appStoreUrl: initialData?.appStoreUrl || '',
     playStoreUrl: initialData?.playStoreUrl || '',
     externalLinkLabel: initialData?.externalLinkLabel || '',
@@ -693,6 +694,14 @@ export function ProjectForm({ initialData }: ProjectFormProps) {
                 value={formData.liveWebsiteUrl || ''}
                 onChange={(e) => setFormData({ ...formData, liveWebsiteUrl: e.target.value })}
                 helperText="If provided, an external link arrow will appear on project cards."
+              />
+
+              <Input
+                label="Behance Case Study URL (Optional)"
+                placeholder="https://www.behance.net/gallery/..."
+                value={formData.behanceUrl || ''}
+                onChange={(e) => setFormData({ ...formData, behanceUrl: e.target.value })}
+                helperText="If provided, a prominent 'View Full Case Study in Behance' CTA button will appear. If left empty, it is hidden."
               />
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">

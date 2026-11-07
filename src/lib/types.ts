@@ -46,6 +46,7 @@ export interface Project {
   gallery: string[];
   videoUrl?: string;
   liveWebsiteUrl?: string;
+  behanceUrl?: string;
   appStoreUrl?: string;
   playStoreUrl?: string;
   externalLinkLabel?: string;
@@ -173,6 +174,17 @@ export interface Inquiry {
   details: string;
   status: 'new' | 'contacted' | 'archived';
   createdAt: string;
+}
+
+export interface StorageMetrics {
+  totalBytes: number;
+  totalMB: number;
+  totalQuotaMB: number;
+  usedPercent: number;
+  freeMB: number;
+  freePercent: number;
+  fileCount: number;
+  provider: string;
 }
 
 export interface HeroProfessionItem {

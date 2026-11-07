@@ -98,15 +98,15 @@ export function ProjectCard({ project, featured = false }: ProjectCardProps) {
             <span>&rarr;</span>
           </Link>
 
-          {(project.liveWebsiteUrl || project.appStoreUrl || project.playStoreUrl) && (
+          {(project.behanceUrl || project.liveWebsiteUrl || project.appStoreUrl || project.playStoreUrl) && (
             <a
-              href={project.liveWebsiteUrl || project.appStoreUrl || project.playStoreUrl}
+              href={project.behanceUrl || project.liveWebsiteUrl || project.appStoreUrl || project.playStoreUrl}
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center gap-1.5 px-3 py-1 bg-charcoal-800 border border-charcoal-700 text-[11px] font-sans font-semibold uppercase tracking-wider text-copper hover:bg-copper hover:text-ivory transition-colors"
-              title={project.externalLinkLabel || 'Live External Destination'}
+              title={project.behanceUrl ? 'View Full Case Study in Behance' : project.externalLinkLabel || 'Live External Destination'}
             >
-              <span>{project.liveWebsiteUrl ? 'Live Web' : project.appStoreUrl ? 'App Store' : 'Play Store'}</span>
+              <span>{project.behanceUrl ? 'Behance' : project.liveWebsiteUrl ? 'Live Web' : project.appStoreUrl ? 'App Store' : 'Play Store'}</span>
               <ArrowUpRight className="w-3.5 h-3.5" />
             </a>
           )}

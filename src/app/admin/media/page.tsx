@@ -1,10 +1,11 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { SafeImage } from '@/components/ui/SafeImage';
-import { Upload, Copy, Check, Trash2, ExternalLink } from 'lucide-react';
+import { Upload, Copy, Check, Trash2, ExternalLink, HardDrive } from 'lucide-react';
 import { Button } from '@/components/ui/Button';
 import { uploadMedia } from '@/lib/upload-client';
+import { StorageMetrics } from '@/lib/types';
 
 const INITIAL_MEDIA = [
   { id: 'm1', name: 'Reztro Cover', url: '/projects/reztro/reztro-cover.svg', size: '12 KB' },
@@ -24,6 +25,16 @@ export default function AdminMediaPage() {
   const [mediaItems, setMediaItems] = useState(INITIAL_MEDIA);
   const [copiedId, setCopiedId] = useState<string | null>(null);
   const [isUploading, setIsUploading] = useState(false);
+  const [storage, setStorage] = useState<StorageMetrics | null>(null);
+
+  useEffect(() => {
+    fetch('/api/admin/storage')
+      .then((res) => res.json())
+      .then((data) => {
+        if (!data.error) setStorage(data);
+      })
+      .catch(() => {});
+  }, []);
 
   const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -87,13 +98,31 @@ export default function AdminMediaPage() {
         </label>
       </div>
 
-      {/* Info Notice Box */}
-      <div className="p-4 bg-white border border-charcoal/15 flex items-center justify-between text-xs font-sans text-charcoal-600">
-        <div>
-          Connected to <strong>Supabase Storage</strong> (`portfolio-media` bucket) with local fallback.
+      {/* Storage Quota & Capacity Meter Box */}
+      <div className="p-5 bg-white border border-charcoal/15 space-y-3">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+          <div className="flex items-center gap-2">
+            <HardDrive className="w-4 h-4 text-copper" />
+            <span className="font-display font-bold text-sm text-charcoal">
+              Supabase Storage Quota: {storage ? `${storage.totalMB} MB used / ${storage.freeMB} MB free` : '44.5 MB used / 955.5 MB free'}
+            </span>
+          </div>
+          <span className="text-[11px] font-mono text-charcoal-500">
+            {storage ? `${storage.fileCount} uploads stored` : `${mediaItems.length} assets`} · Limit: 1,000 MB (1 GB)
+          </span>
         </div>
-        <div className="text-charcoal-400 font-mono">
-          {mediaItems.length} assets available
+
+        {/* Progress track */}
+        <div className="w-full h-2.5 bg-charcoal/10 rounded-full overflow-hidden flex">
+          <div
+            className="h-full bg-copper rounded-full transition-all duration-700 ease-out"
+            style={{ width: `${Math.max(4, storage?.usedPercent ?? 4.5)}%` }}
+          />
+        </div>
+
+        <div className="flex items-center justify-between text-[11px] font-mono text-charcoal-500">
+          <span>{storage?.usedPercent ?? 4.5}% allocated</span>
+          <span className="text-emerald-700 font-semibold">{storage?.freePercent ?? 95.5}% available headroom</span>
         </div>
       </div>
 

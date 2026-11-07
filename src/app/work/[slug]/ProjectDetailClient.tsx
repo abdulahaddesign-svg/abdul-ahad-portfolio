@@ -27,7 +27,7 @@ export function ProjectDetailClient({ project, nextProject }: ProjectDetailClien
 
   const approachText = project.approach || project.creativeProcess;
   const hasExternalLinks = Boolean(
-    project.liveWebsiteUrl || project.appStoreUrl || project.playStoreUrl
+    project.behanceUrl || project.liveWebsiteUrl || project.appStoreUrl || project.playStoreUrl
   );
 
   // Modular case study sections with custom editable headings + fallback
@@ -138,9 +138,25 @@ export function ProjectDetailClient({ project, nextProject }: ProjectDetailClien
               </div>
             </div>
 
-            {/* External Links (Live Website, App Store, Play Store) */}
+            {/* External Links (Behance, Live Website, App Store, Play Store) */}
             {hasExternalLinks && (
               <div className="flex flex-wrap items-center gap-3 shrink-0">
+                {project.behanceUrl && (
+                  <a
+                    href={project.behanceUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-2 px-5 py-2.5 bg-[#0057FF] hover:bg-[#0047D4] text-white text-xs font-sans font-bold uppercase tracking-[0.16em] transition-all shadow-sm group/behance"
+                    title="View Full Case Study in Behance"
+                  >
+                    <span className="font-extrabold text-sm tracking-tighter leading-none bg-white text-[#0057FF] px-1 py-0.5 rounded-xs">
+                      Bē
+                    </span>
+                    <span>View Full Case Study in Behance</span>
+                    <ArrowUpRight className="w-3.5 h-3.5 transition-transform group-hover/behance:translate-x-0.5 group-hover/behance:-translate-y-0.5" />
+                  </a>
+                )}
+
                 {project.liveWebsiteUrl && (
                   <a
                     href={project.liveWebsiteUrl}
@@ -327,6 +343,35 @@ export function ProjectDetailClient({ project, nextProject }: ProjectDetailClien
                 ))}
               </div>
             </div>
+          </section>
+        )}
+
+        {/* ========================================================= */}
+        {/* Behance Full Showcase Banner (Conditional)                 */}
+        {/* ========================================================= */}
+        {project.behanceUrl && (
+          <section className="my-16 sm:my-20 p-8 sm:p-12 bg-charcoal text-ivory border border-charcoal-800 flex flex-col md:flex-row md:items-center justify-between gap-6 relative overflow-hidden shadow-2xl">
+            <div className="space-y-2 max-w-xl">
+              <div className="flex items-center gap-2 text-xs font-mono uppercase tracking-widest text-copper">
+                <span className="font-extrabold text-xs bg-[#0057FF] text-white px-1.5 py-0.5 rounded-xs">Bē</span>
+                <span>Complete Project Showcase</span>
+              </div>
+              <h3 className="font-display font-bold text-2xl sm:text-3xl text-ivory tracking-tight">
+                Explore the full presentation on Behance.
+              </h3>
+              <p className="text-sm font-sans text-charcoal-400">
+                View high-fidelity typography, complete visual system dielines, and behind-the-scenes plates.
+              </p>
+            </div>
+            <a
+              href={project.behanceUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2.5 px-6 py-3.5 bg-[#0057FF] hover:bg-[#0047D4] text-white text-xs font-sans font-bold uppercase tracking-[0.18em] transition-all shadow-lg shrink-0 self-start md:self-auto group/bcta"
+            >
+              <span>View Full Case Study in Behance</span>
+              <ArrowUpRight className="w-4 h-4 transition-transform group-hover/bcta:translate-x-0.5 group-hover/bcta:-translate-y-0.5" />
+            </a>
           </section>
         )}
 

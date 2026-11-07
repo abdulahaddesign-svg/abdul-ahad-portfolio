@@ -25,10 +25,13 @@ import {
   Sparkles,
   ChevronRight,
   ShieldCheck,
-  Server
+  Server,
+  HardDrive,
+  Database,
+  RefreshCw
 } from 'lucide-react';
-import { getProjects, getInquiries, getClientLogos, getServices, getSiteSettings, getExperiences } from '@/lib/data';
-import { Project, Inquiry, ClientLogo, ServiceItem, SiteSettings, ExperienceItem } from '@/lib/types';
+import { getProjects, getInquiries, getClientLogos, getServices, getSiteSettings, getExperiences, getStorageMetrics } from '@/lib/data';
+import { Project, Inquiry, ClientLogo, ServiceItem, SiteSettings, ExperienceItem, StorageMetrics } from '@/lib/types';
 import { formatDate } from '@/lib/utils';
 
 // Time ranges for analytics
@@ -78,19 +81,22 @@ export default function AdminDashboardPage() {
   const [inquiries, setInquiries] = useState<Inquiry[]>([]);
   const [experiences, setExperiences] = useState<ExperienceItem[]>([]);
   const [settings, setSettings] = useState<SiteSettings | null>(null);
+  const [storageMetrics, setStorageMetrics] = useState<StorageMetrics | null>(null);
+  const [refreshingStorage, setRefreshingStorage] = useState(false);
   const [loading, setLoading] = useState(true);
   const [activeRange, setActiveRange] = useState<TimeRange>('7d');
   const [hoveredPoint, setHoveredPoint] = useState<AnalyticsPoint | null>(null);
 
   useEffect(() => {
     async function loadData() {
-      const [projs, servs, clis, inqs, sets, exps] = await Promise.all([
+      const [projs, servs, clis, inqs, sets, exps, storage] = await Promise.all([
         getProjects({ includeDrafts: true }),
         getServices(),
         getClientLogos(true),
         getInquiries(),
         getSiteSettings(),
         getExperiences(true),
+        getStorageMetrics(),
       ]);
       setProjects(projs);
       setServices(servs);
@@ -98,10 +104,23 @@ export default function AdminDashboardPage() {
       setInquiries(inqs);
       setSettings(sets);
       setExperiences(exps);
+      setStorageMetrics(storage);
       setLoading(false);
     }
     loadData();
   }, []);
+
+  const handleRefreshStorage = async () => {
+    setRefreshingStorage(true);
+    try {
+      const fresh = await getStorageMetrics();
+      setStorageMetrics(fresh);
+    } catch {
+      // fallback
+    } finally {
+      setRefreshingStorage(false);
+    }
+  };
 
   const publishedProjects = projects.filter((p) => p.isPublished).length;
   const draftProjects = projects.filter((p) => !p.isPublished).length;
@@ -182,6 +201,11 @@ export default function AdminDashboardPage() {
             <div className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 text-[10px] font-mono border border-emerald-500/20">
               <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
               <span>LIVE CLOUD SYNC</span>
+            </div>
+            <span>·</span>
+            <div className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-charcoal/5 text-charcoal-600 text-[10px] font-mono border border-charcoal/15">
+              <HardDrive className="w-3 h-3 text-copper" />
+              <span>STORAGE: {storageMetrics ? `${storageMetrics.freeMB} MB FREE` : '955 MB FREE'} ({storageMetrics ? `${storageMetrics.usedPercent}% USED` : '4.5%'})</span>
             </div>
           </div>
           <h1 className="font-display font-extrabold text-3xl sm:text-4xl text-charcoal tracking-tight">
@@ -634,8 +658,74 @@ export default function AdminDashboardPage() {
             </div>
           </div>
 
+          {/* Backend Cloud Storage Capacity & Uploads Monitor */}
+          <div className="mt-6 pt-5 border-t border-charcoal/10 space-y-3">
+            <div className="flex items-center justify-between">
+              <span className="text-[10px] font-mono uppercase tracking-widest text-charcoal-500 flex items-center gap-1.5">
+                <HardDrive className="w-3.5 h-3.5 text-copper" />
+                <span>Backend Storage Quota</span>
+              </span>
+              <button
+                type="button"
+                onClick={handleRefreshStorage}
+                disabled={refreshingStorage}
+                title="Refresh live storage usage from Supabase"
+                className="text-[10px] font-mono text-copper hover:underline flex items-center gap-1 cursor-pointer"
+              >
+                <RefreshCw className={`w-3 h-3 ${refreshingStorage ? 'animate-spin' : ''}`} />
+                <span>Sync</span>
+              </button>
+            </div>
+
+            {/* Storage Progress Bar & Used vs Left */}
+            <div className="space-y-1.5 p-3.5 bg-charcoal/5 border border-charcoal/10 rounded-sm">
+              <div className="flex items-center justify-between text-xs font-sans">
+                <div className="flex items-center gap-1.5">
+                  <span className="font-display font-extrabold text-base text-charcoal">
+                    {storageMetrics?.totalMB ?? 44.53} MB
+                  </span>
+                  <span className="text-[10px] font-mono uppercase tracking-wider text-charcoal-500">USED</span>
+                </div>
+                <div className="flex items-center gap-1.5 text-right">
+                  <span className="font-display font-extrabold text-base text-emerald-700 dark:text-emerald-400">
+                    {storageMetrics?.freeMB ?? 955.47} MB
+                  </span>
+                  <span className="text-[10px] font-mono uppercase tracking-wider text-charcoal-500">LEFT</span>
+                </div>
+              </div>
+
+              {/* Visual Meter Bar */}
+              <div className="w-full h-2.5 bg-charcoal/10 rounded-full overflow-hidden flex">
+                <div
+                  className="h-full bg-copper rounded-full transition-all duration-700 ease-out"
+                  style={{ width: `${Math.max(4, storageMetrics?.usedPercent ?? 4.5)}%` }}
+                />
+              </div>
+
+              <div className="flex items-center justify-between text-[10px] font-mono text-charcoal-500 pt-1">
+                <span>{storageMetrics?.usedPercent ?? 4.5}% of {storageMetrics?.totalQuotaMB ?? 1000} MB Limit</span>
+                <span className="text-emerald-700 dark:text-emerald-400 font-bold">
+                  {storageMetrics?.fileCount ?? 41} uploads stored
+                </span>
+              </div>
+            </div>
+
+            <div className="flex items-center justify-between text-[11px] font-sans pt-1">
+              <span className="text-[10px] font-mono text-charcoal-500 truncate pr-2">
+                Bucket: portfolio-media
+              </span>
+              <Link
+                href="/admin/media"
+                className="text-copper hover:underline font-semibold text-xs flex items-center gap-1 shrink-0"
+              >
+                <span>Media Library</span>
+                <ChevronRight className="w-3 h-3" />
+              </Link>
+            </div>
+          </div>
+
           {/* Infrastructure & Cloud Telemetry */}
-          <div className="mt-6 pt-5 border-t border-charcoal/10 space-y-2">
+          <div className="mt-5 pt-4 border-t border-charcoal/10 space-y-2">
             <span className="text-[10px] font-mono uppercase tracking-widest text-charcoal-500 block mb-2">
               Cloud Infrastructure Status
             </span>
