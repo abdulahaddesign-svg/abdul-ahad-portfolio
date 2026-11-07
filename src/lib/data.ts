@@ -834,7 +834,8 @@ export async function getExperiences(includeHidden = false): Promise<ExperienceI
           description: row.description || '',
           responsibilities: Array.isArray(row.responsibilities) ? row.responsibilities : [],
           achievements: Array.isArray(row.achievements) ? row.achievements : [],
-          companyLogo: row.company_logo || '',
+          companyLogo: row.company_logo || row.companyLogo || '',
+          companyUrl: row.company_url || row.companyUrl || row.website_url || row.url || '',
           sortOrder: row.sort_order ?? 0,
           isVisible: row.is_visible ?? true,
           createdAt: row.created_at,
@@ -916,6 +917,7 @@ export async function saveExperience(item: Partial<ExperienceItem> & { id?: stri
   if (item.responsibilities !== undefined) row.responsibilities = item.responsibilities;
   if (item.achievements !== undefined) row.achievements = item.achievements;
   if (item.companyLogo !== undefined) row.company_logo = item.companyLogo;
+  if (item.companyUrl !== undefined) row.company_url = item.companyUrl;
   if (item.sortOrder !== undefined) row.sort_order = item.sortOrder;
   if (item.isVisible !== undefined) row.is_visible = item.isVisible;
 
@@ -981,7 +983,8 @@ export async function saveExperience(item: Partial<ExperienceItem> & { id?: stri
           description: savedRow.description || '',
           responsibilities: savedRow.responsibilities || [],
           achievements: savedRow.achievements || [],
-          companyLogo: savedRow.company_logo || '',
+          companyLogo: savedRow.company_logo || savedRow.companyLogo || '',
+          companyUrl: savedRow.company_url || savedRow.companyUrl || '',
           sortOrder: savedRow.sort_order ?? 0,
           isVisible: savedRow.is_visible ?? true,
           createdAt: savedRow.created_at,
@@ -1011,6 +1014,7 @@ export async function saveExperience(item: Partial<ExperienceItem> & { id?: stri
     responsibilities: item.responsibilities || [],
     achievements: item.achievements || [],
     companyLogo: item.companyLogo || '',
+    companyUrl: item.companyUrl || '',
     sortOrder: item.sortOrder ?? localExperiences.length + 1,
     isVisible: item.isVisible ?? true,
     createdAt: now,

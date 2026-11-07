@@ -17,7 +17,9 @@ import {
   ArrowDown,
   Building,
   Calendar,
-  Award
+  Award,
+  Globe,
+  ArrowUpRight
 } from 'lucide-react';
 import { getExperiences, saveExperience, deleteExperience } from '@/lib/data';
 import { ExperienceItem } from '@/lib/types';
@@ -68,6 +70,7 @@ export default function AdminExperienceCMS() {
       responsibilities: [],
       achievements: [],
       companyLogo: '',
+      companyUrl: '',
       sortOrder: experiences.length + 1,
       isVisible: true,
     });
@@ -414,6 +417,22 @@ export default function AdminExperienceCMS() {
             </div>
           </div>
 
+          {/* Company Website URL */}
+          <div className="space-y-1">
+            <label className="text-xs font-sans font-bold uppercase tracking-wider text-charcoal flex items-center gap-1.5">
+              <Globe className="w-3.5 h-3.5 text-copper" />
+              <span>Company Website URL (Optional)</span>
+            </label>
+            <Input
+              value={editingItem.companyUrl || ''}
+              onChange={(e) => setEditingItem({ ...editingItem, companyUrl: e.target.value })}
+              placeholder="e.g. https://falconsquare.in or /work"
+            />
+            <p className="text-[11px] text-charcoal-500 font-sans">
+              Visitors can click the arrow button next to the company name on the About page to navigate to this website.
+            </p>
+          </div>
+
           {/* Description */}
           <div className="space-y-1">
             <label className="text-xs font-sans font-bold uppercase tracking-wider text-charcoal">
@@ -566,7 +585,20 @@ export default function AdminExperienceCMS() {
                   <div className="space-y-1 flex-1">
                     <div className="flex items-center gap-2 flex-wrap">
                       <span className="font-mono text-xs text-copper font-bold">0{idx + 1}</span>
-                      <h3 className="font-display font-bold text-lg text-charcoal">{exp.company}</h3>
+                      <div className="flex items-center gap-2">
+                        <h3 className="font-display font-bold text-lg text-charcoal">{exp.company}</h3>
+                        {exp.companyUrl && (
+                          <a
+                            href={exp.companyUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-copper hover:text-charcoal p-0.5 rounded transition-colors inline-flex items-center gap-0.5 text-xs font-mono"
+                            title={`Visit ${exp.company} website`}
+                          >
+                            <ArrowUpRight className="w-3.5 h-3.5" />
+                          </a>
+                        )}
+                      </div>
                       {exp.isCurrent && (
                         <span className="px-2 py-0.5 text-[10px] font-sans font-bold uppercase tracking-wider bg-sage/20 text-sage border border-sage/40">
                           Current

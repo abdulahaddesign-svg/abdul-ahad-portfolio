@@ -73,6 +73,7 @@ export interface ExperienceItem {
   responsibilities: string[];
   achievements?: string[];
   companyLogo?: string;
+  companyUrl?: string;
   sortOrder: number;
   isVisible?: boolean;
   createdAt?: string;

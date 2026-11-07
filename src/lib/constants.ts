@@ -690,6 +690,7 @@ export const EXPERIENCE_DATA: ExperienceItem[] = [
     location: "Coimbatore, India",
     description: "Leading visual design and digital creative campaigns for enterprise SaaS products.",
     companyLogo: "/clients/client-falcon.svg",
+    companyUrl: "https://falconsquare.in",
     isVisible: true,
     responsibilities: [
       "Create high-converting posters, banners, social media creatives, digital advertisements, and promotional materials for enterprise and SaaS clients.",
@@ -713,6 +714,7 @@ export const EXPERIENCE_DATA: ExperienceItem[] = [
     location: "India",
     description: "Campaign-ready visual design production for global enterprise brands with high typographic discipline.",
     companyLogo: "/clients/client-apex.svg",
+    companyUrl: "https://eclerx.com",
     isVisible: true,
     responsibilities: [
       "Produced campaign-ready visual assets for leading global enterprise clients across diverse industries.",
@@ -737,7 +739,8 @@ export const EXPERIENCE_DATA: ExperienceItem[] = [
     isCurrent: true,
     location: "Remote / Coimbatore",
     description: "Direct brand identity, digital product design and motion consultation for 50+ clients globally.",
-    companyLogo: "/clients/client-reztro.svg",
+    companyLogo: "/brand/creative-symbol.svg",
+    companyUrl: "/work",
     isVisible: true,
     responsibilities: [
       "Delivered end-to-end branding and graphic design solutions for 50+ clients across India and international markets.",
