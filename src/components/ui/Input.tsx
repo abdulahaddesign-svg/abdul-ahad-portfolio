@@ -9,13 +9,14 @@ interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
 export const Input = React.forwardRef<HTMLInputElement, InputProps>(
   ({ label, error, helperText, className = '', id, ...props }, ref) => {
     const inputId = id || props.name || Math.random().toString(36).substr(2, 9);
+    const bgClass = className.includes('bg-') ? '' : 'bg-white';
 
     return (
       <div className="w-full space-y-1.5">
         {label && (
           <label
             htmlFor={inputId}
-            className="block text-xs font-sans font-semibold uppercase tracking-wider text-charcoal/80"
+            className="block text-xs font-sans font-semibold uppercase tracking-wider text-charcoal/80 dark:text-ivory/80"
           >
             {label}
             {props.required && <span className="text-copper ml-1">*</span>}
@@ -24,10 +25,10 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
         <input
           ref={ref}
           id={inputId}
-          className={`w-full px-4 py-3 bg-white text-charcoal border text-sm font-sans placeholder:text-charcoal-400 focus:outline-none transition-colors duration-150 ${
+          className={`w-full px-4 py-3 ${bgClass} text-charcoal dark:text-ivory border text-sm font-sans placeholder:text-charcoal-400 dark:placeholder:text-charcoal-300 focus:outline-none transition-colors duration-150 ${
             error
               ? 'border-red-500 focus:border-red-600 focus:ring-1 focus:ring-red-500'
-              : 'border-charcoal/20 focus:border-copper focus:ring-1 focus:ring-copper'
+              : 'border-charcoal/20 dark:border-ivory/20 focus:border-copper focus:ring-1 focus:ring-copper'
           } ${className}`}
           {...props}
         />
@@ -50,13 +51,14 @@ interface TextareaProps extends React.TextareaHTMLAttributes<HTMLTextAreaElement
 export const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
   ({ label, error, helperText, className = '', id, rows = 4, ...props }, ref) => {
     const textareaId = id || props.name || Math.random().toString(36).substr(2, 9);
+    const bgClass = className.includes('bg-') ? '' : 'bg-white';
 
     return (
       <div className="w-full space-y-1.5">
         {label && (
           <label
             htmlFor={textareaId}
-            className="block text-xs font-sans font-semibold uppercase tracking-wider text-charcoal/80"
+            className="block text-xs font-sans font-semibold uppercase tracking-wider text-charcoal/80 dark:text-ivory/80"
           >
             {label}
             {props.required && <span className="text-copper ml-1">*</span>}
@@ -66,10 +68,10 @@ export const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
           ref={ref}
           id={textareaId}
           rows={rows}
-          className={`w-full px-4 py-3 bg-white text-charcoal border text-sm font-sans placeholder:text-charcoal-400 focus:outline-none transition-colors duration-150 resize-y ${
+          className={`w-full px-4 py-3 ${bgClass} text-charcoal dark:text-ivory border text-sm font-sans placeholder:text-charcoal-400 dark:placeholder:text-charcoal-300 focus:outline-none transition-colors duration-150 resize-y ${
             error
               ? 'border-red-500 focus:border-red-600 focus:ring-1 focus:ring-red-500'
-              : 'border-charcoal/20 focus:border-copper focus:ring-1 focus:ring-copper'
+              : 'border-charcoal/20 dark:border-ivory/20 focus:border-copper focus:ring-1 focus:ring-copper'
           } ${className}`}
           {...props}
         />
@@ -92,13 +94,14 @@ interface SelectProps extends React.SelectHTMLAttributes<HTMLSelectElement> {
 export const Select = React.forwardRef<HTMLSelectElement, SelectProps>(
   ({ label, error, options, className = '', id, ...props }, ref) => {
     const selectId = id || props.name || Math.random().toString(36).substr(2, 9);
+    const bgClass = className.includes('bg-') ? '' : 'bg-white';
 
     return (
       <div className="w-full space-y-1.5">
         {label && (
           <label
             htmlFor={selectId}
-            className="block text-xs font-sans font-semibold uppercase tracking-wider text-charcoal/80"
+            className="block text-xs font-sans font-semibold uppercase tracking-wider text-charcoal/80 dark:text-ivory/80"
           >
             {label}
             {props.required && <span className="text-copper ml-1">*</span>}
@@ -107,15 +110,15 @@ export const Select = React.forwardRef<HTMLSelectElement, SelectProps>(
         <select
           ref={ref}
           id={selectId}
-          className={`w-full px-4 py-3 bg-white text-charcoal border text-sm font-sans focus:outline-none transition-colors duration-150 ${
+          className={`w-full px-4 py-3 ${bgClass} text-charcoal dark:text-ivory border text-sm font-sans focus:outline-none transition-colors duration-150 ${
             error
               ? 'border-red-500 focus:border-red-600 focus:ring-1 focus:ring-red-500'
-              : 'border-charcoal/20 focus:border-copper focus:ring-1 focus:ring-copper'
+              : 'border-charcoal/20 dark:border-ivory/20 focus:border-copper focus:ring-1 focus:ring-copper'
           } ${className}`}
           {...props}
         >
           {options.map((opt) => (
-            <option key={opt.value} value={opt.value}>
+            <option key={opt.value} value={opt.value} className="bg-ivory dark:bg-charcoal text-charcoal dark:text-ivory">
               {opt.label}
             </option>
           ))}

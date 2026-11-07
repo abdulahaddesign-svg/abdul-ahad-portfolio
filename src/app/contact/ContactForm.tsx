@@ -26,6 +26,9 @@ const BUDGET_OPTIONS = [
   { value: '₹1,00,000+', label: '₹1,00,000+ (Comprehensive Brand/Product)' },
 ];
 
+const fieldInputClass =
+  "bg-[#ECE5D8] hover:bg-[#E8DFD0] focus:bg-[#FAF7F2] dark:bg-[#201F1A] dark:hover:bg-[#262520] dark:focus:bg-[#1A1915] border-charcoal/20 dark:border-ivory/20 text-charcoal dark:text-ivory placeholder:text-charcoal-400 dark:placeholder:text-charcoal-400 transition-colors";
+
 export function ContactForm() {
   const [formData, setFormData] = useState({
     name: '',
@@ -110,6 +113,7 @@ export function ContactForm() {
           name="name"
           placeholder="e.g. Rahul Sharma"
           required
+          className={fieldInputClass}
           value={formData.name}
           onChange={(e) => setFormData({ ...formData, name: e.target.value })}
         />
@@ -120,6 +124,7 @@ export function ContactForm() {
           type="email"
           placeholder="e.g. rahul@company.com"
           required
+          className={fieldInputClass}
           value={formData.email}
           onChange={(e) => setFormData({ ...formData, email: e.target.value })}
         />
@@ -130,6 +135,7 @@ export function ContactForm() {
           label="Company or Brand (Optional)"
           name="company"
           placeholder="e.g. Acme Tech Studio"
+          className={fieldInputClass}
           value={formData.company}
           onChange={(e) => setFormData({ ...formData, company: e.target.value })}
         />
@@ -138,6 +144,7 @@ export function ContactForm() {
           label="Service Required"
           name="serviceRequired"
           options={SERVICE_OPTIONS}
+          className={fieldInputClass}
           value={formData.serviceRequired}
           onChange={(e) => setFormData({ ...formData, serviceRequired: e.target.value })}
         />
@@ -147,6 +154,7 @@ export function ContactForm() {
         label="Target Budget Range"
         name="budgetRange"
         options={BUDGET_OPTIONS}
+        className={fieldInputClass}
         value={formData.budgetRange}
         onChange={(e) => setFormData({ ...formData, budgetRange: e.target.value })}
       />
@@ -157,6 +165,7 @@ export function ContactForm() {
         placeholder="Briefly describe your brand, deliverables required, target audience, and preferred deadline..."
         required
         rows={5}
+        className={fieldInputClass}
         value={formData.details}
         onChange={(e) => setFormData({ ...formData, details: e.target.value })}
       />
