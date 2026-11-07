@@ -6,6 +6,7 @@ import { motion, AnimatePresence, useReducedMotion, useInView } from 'framer-mot
 import { ArrowDown, ArrowUpRight } from 'lucide-react';
 import { SiteSettings, HeroProfessionItem } from '@/lib/types';
 import { DEFAULT_HERO_PROFESSIONS } from '@/lib/constants';
+import { HeroAtmosphere } from './HeroAtmosphere';
 
 interface HeroSectionProps {
   settings?: SiteSettings;
@@ -72,92 +73,9 @@ export function HeroSection({ settings }: HeroSectionProps) {
       className="relative min-h-screen min-h-[100dvh] w-full flex flex-col justify-center items-center text-center px-4 sm:px-6 md:px-8 pt-24 pb-12 sm:pt-28 sm:pb-16 bg-ivory dark:bg-charcoal text-charcoal dark:text-ivory border-b border-charcoal/15 dark:border-ivory/15 select-none transition-colors duration-500 overflow-hidden"
     >
       {/* ========================================================================= */}
-      {/* ATMOSPHERIC BACKGROUND: Animated Blur Orbs, Grain Noise & Dimensional Glow */}
+      {/* ATMOSPHERIC BACKGROUND: Interactive Parallax, Fluid Auras & Silk Glow    */}
       {/* ========================================================================= */}
-
-      {/* 1. Tactile Fine Film Grain / Paper Noise Texture */}
-      <div
-        className="pointer-events-none absolute inset-0 z-0 opacity-[0.038] dark:opacity-[0.052] mix-blend-overlay select-none"
-        aria-hidden="true"
-      >
-        <svg className="w-full h-full" xmlns="http://www.w3.org/2000/svg">
-          <filter id="hero-film-grain">
-            <feTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="3" stitchTiles="stitch" />
-            <feColorMatrix type="saturate" values="0" />
-          </filter>
-          <rect width="100%" height="100%" filter="url(#hero-film-grain)" />
-        </svg>
-      </div>
-
-      {/* 2. Soft Ambient Radial Depth Vignette */}
-      <div
-        className="pointer-events-none absolute inset-0 z-0 bg-[radial-gradient(ellipse_at_center,transparent_35%,rgba(37,36,31,0.04)_100%)] dark:bg-[radial-gradient(ellipse_at_center,transparent_25%,rgba(0,0,0,0.38)_100%)]"
-        aria-hidden="true"
-      />
-
-      {/* 3. Floating Animated Glowing Orbs with Generous Blur */}
-      <div className="pointer-events-none absolute inset-0 z-0 overflow-hidden" aria-hidden="true">
-        {/* Orb 1: Primary Warm Burnt Copper Orb (Top-Left / Center Drift) */}
-        <motion.div
-          animate={
-            animationEnabled
-              ? {
-                  x: [0, 45, -30, 0],
-                  y: [0, -35, 25, 0],
-                  scale: [1, 1.12, 0.95, 1],
-                  opacity: [0.2, 0.3, 0.22, 0.2],
-                }
-              : {}
-          }
-          transition={{
-            duration: 18,
-            repeat: Infinity,
-            repeatType: 'reverse',
-            ease: 'easeInOut',
-          }}
-          className="absolute -top-20 sm:-top-32 left-1/4 -translate-x-1/2 w-[380px] h-[380px] sm:w-[580px] sm:h-[580px] rounded-full bg-gradient-to-br from-copper via-[#D49366] to-transparent blur-[90px] sm:blur-[135px] opacity-20 dark:opacity-28 will-change-transform"
-        />
-
-        {/* Orb 2: Secondary Earth Amber Glow (Bottom-Right / Drift) */}
-        <motion.div
-          animate={
-            animationEnabled
-              ? {
-                  x: [0, -40, 35, 0],
-                  y: [0, 30, -30, 0],
-                  scale: [1, 0.92, 1.1, 1],
-                  opacity: [0.15, 0.25, 0.18, 0.15],
-                }
-              : {}
-          }
-          transition={{
-            duration: 22,
-            repeat: Infinity,
-            repeatType: 'reverse',
-            ease: 'easeInOut',
-          }}
-          className="absolute -bottom-16 sm:-bottom-24 right-1/4 translate-x-1/2 w-[340px] h-[340px] sm:w-[520px] sm:h-[520px] rounded-full bg-gradient-to-tl from-[#7C5C3E] via-copper to-transparent blur-[85px] sm:blur-[125px] opacity-15 dark:opacity-22 will-change-transform"
-        />
-
-        {/* Orb 3: Central Core Luminescence (Breathing softly behind typography) */}
-        <motion.div
-          animate={
-            animationEnabled
-              ? {
-                  scale: [0.94, 1.08, 0.94],
-                  opacity: [0.22, 0.38, 0.22],
-                }
-              : {}
-          }
-          transition={{
-            duration: 9,
-            repeat: Infinity,
-            repeatType: 'reverse',
-            ease: 'easeInOut',
-          }}
-          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[300px] h-[220px] sm:w-[520px] sm:h-[340px] rounded-full bg-copper/25 dark:bg-copper/25 blur-[80px] sm:blur-[115px] will-change-transform"
-        />
-      </div>
+      <HeroAtmosphere isInView={isInView} />
 
       {/* ========================================================================= */}
       {/* FOREGROUND HERO CONTENT                                                   */}
