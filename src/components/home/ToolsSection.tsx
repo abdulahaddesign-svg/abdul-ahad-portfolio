@@ -217,50 +217,50 @@ export function ToolsSection({
     <section
       id="tools"
       aria-label="Creative Software & Capabilities Arsenal"
-      className={`relative py-24 sm:py-32 md:py-40 bg-ivory text-charcoal dark:bg-charcoal dark:text-ivory border-b border-charcoal/15 dark:border-ivory/15 overflow-hidden transition-colors duration-300 ${className}`}
+      className={`relative py-20 sm:py-28 md:py-32 bg-ivory text-charcoal dark:bg-charcoal dark:text-ivory border-b border-charcoal/15 dark:border-ivory/15 overflow-hidden transition-colors duration-300 ${className}`}
     >
       {/* Subtle Depth Glow using Burnt Copper brand accent */}
       <div
         className="pointer-events-none absolute inset-0 flex items-center justify-center opacity-25 dark:opacity-15"
         aria-hidden="true"
       >
-        <div className="w-[650px] h-[650px] rounded-full bg-copper/15 blur-[130px]" />
+        <div className="w-[600px] h-[600px] rounded-full bg-copper/15 blur-[120px]" />
       </div>
 
-      <div className="max-w-[1740px] mx-auto px-4 sm:px-6 lg:px-12 xl:px-16 relative z-10">
+      <div className="max-w-[1520px] mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         
         {/* ========================================================================= */}
-        {/* DESKTOP SPATIAL ARRANGEMENT: Four Directional Composition with Wide Whitespace */}
+        {/* DESKTOP SPATIAL ARRANGEMENT: Balanced, Symmetrical Orbital Composition */}
         {/* ========================================================================= */}
-        <div className="hidden lg:block relative min-h-[680px] xl:min-h-[720px] w-full max-w-[1560px] xl:max-w-[1660px] mx-auto">
+        <div className="hidden lg:block relative min-h-[560px] xl:min-h-[590px] w-full max-w-[1360px] xl:max-w-[1420px] mx-auto">
           
           {/* 1. TOP GROUP — AI, Research & Productivity (Label ABOVE icons) */}
           <div className="absolute top-0 left-1/2 -translate-x-1/2 z-20">
-            <motion.div {...getFloatingVariant(-6, 6)}>
+            <motion.div {...getFloatingVariant(-5, 6)}>
               {renderCategoryGroup(topCategory, true, true)}
             </motion.div>
           </div>
 
           {/* 2. LEFT GROUP — Design & Visual Creation (Label ABOVE icons) */}
-          <div className="absolute left-0 xl:left-2 2xl:left-6 top-1/2 -translate-y-1/2 z-20 max-w-[300px] xl:max-w-[340px]">
-            <motion.div {...getFloatingVariant(-5, 6.4)}>
+          <div className="absolute left-4 xl:left-8 top-1/2 -translate-y-1/2 z-20 max-w-[280px] xl:max-w-[310px]">
+            <motion.div {...getFloatingVariant(-4, 6.4)}>
               {renderCategoryGroup(leftCategory, true, true)}
             </motion.div>
           </div>
 
-          {/* 3. CENTER HEADLINE & SUBTITLE with Generous Left & Right Whitespace */}
-          <div className="absolute inset-0 flex flex-col items-center justify-center text-center px-8 sm:px-14 xl:px-20 max-w-[560px] xl:max-w-[620px] mx-auto pointer-events-none z-10">
+          {/* 3. CENTER HEADLINE & SUBTITLE with Balanced Four-Directional Whitespace */}
+          <div className="absolute inset-0 flex flex-col items-center justify-center text-center px-4 max-w-[480px] xl:max-w-[520px] mx-auto pointer-events-none z-10">
             <motion.div
               initial={shouldReduceMotion ? { opacity: 1 } : { opacity: 0, y: 15 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-              className="pointer-events-auto px-4 py-2"
+              className="pointer-events-auto px-2 py-2"
             >
-              <h2 className="font-display font-black text-3xl sm:text-4xl xl:text-[48px] tracking-tight text-charcoal dark:text-ivory mb-3 leading-[1.15]">
+              <h2 className="font-display font-black text-3xl sm:text-4xl xl:text-[45px] tracking-tight text-charcoal dark:text-ivory mb-3 leading-[1.15]">
                 {headline}
               </h2>
-              <p className="font-sans text-xs sm:text-sm xl:text-base text-charcoal-600 dark:text-ivory/70 leading-relaxed font-normal max-w-[360px] xl:max-w-[420px] mx-auto">
+              <p className="font-sans text-xs sm:text-sm xl:text-[15px] text-charcoal-600 dark:text-ivory/70 leading-relaxed font-normal max-w-[360px] xl:max-w-[400px] mx-auto">
                 {subheadline}
               </p>
 
@@ -269,7 +269,7 @@ export function ToolsSection({
                 <motion.div
                   initial={{ opacity: 0, y: 6 }}
                   animate={{ opacity: 1, y: 0 }}
-                  className="mt-5 inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white dark:bg-[#1E1D19] border border-copper/30 shadow-sm text-xs font-sans text-charcoal dark:text-ivory"
+                  className="mt-4 inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white dark:bg-[#1E1D19] border border-copper/30 shadow-sm text-xs font-sans text-charcoal dark:text-ivory"
                 >
                   <span className="w-2 h-2 rounded-full bg-copper" />
                   <span className="font-bold">{activeTool.name}</span>
@@ -294,15 +294,15 @@ export function ToolsSection({
           </div>
 
           {/* 4. RIGHT GROUP — UI/UX & Digital Product (Icons ABOVE label) */}
-          <div className="absolute right-0 xl:right-2 2xl:right-6 top-1/2 -translate-y-1/2 z-20 max-w-[300px] xl:max-w-[340px]">
-            <motion.div {...getFloatingVariant(5, 5.8)}>
+          <div className="absolute right-4 xl:right-8 top-1/2 -translate-y-1/2 z-20 max-w-[280px] xl:max-w-[310px]">
+            <motion.div {...getFloatingVariant(4, 5.8)}>
               {renderCategoryGroup(rightCategory, false, true)}
             </motion.div>
           </div>
 
           {/* 5. BOTTOM GROUP — Motion & Video Production (Icons ABOVE label) */}
           <div className="absolute bottom-0 left-1/2 -translate-x-1/2 z-20">
-            <motion.div {...getFloatingVariant(6, 6.2)}>
+            <motion.div {...getFloatingVariant(5, 6.2)}>
               {renderCategoryGroup(bottomCategory, false, true)}
             </motion.div>
           </div>
