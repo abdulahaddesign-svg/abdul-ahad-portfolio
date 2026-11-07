@@ -14,26 +14,22 @@ interface FeaturedMotionSectionProps {
 
 function ProjectStripCard({
   project,
-  widthClass,
-  aspectRatio,
 }: {
   project: Project;
-  widthClass: string;
-  aspectRatio: string;
 }) {
   return (
     <Link
       href={`/work/${project.slug}`}
-      className={`group relative shrink-0 ${widthClass} block overflow-hidden focus:outline-none focus-visible:ring-2 focus-visible:ring-copper`}
+      className="group relative shrink-0 w-[360px] sm:w-[460px] md:w-[500px] block overflow-hidden focus:outline-none focus-visible:ring-2 focus-visible:ring-copper"
     >
       <div
-        className={`relative ${aspectRatio} w-full bg-charcoal-900 border border-charcoal/20 dark:border-ivory/20 overflow-hidden shadow-2xl transition-all duration-700 ease-out group-hover:border-copper`}
+        className="relative aspect-[16/10] w-full bg-charcoal-900 border border-charcoal/20 dark:border-ivory/20 overflow-hidden shadow-2xl transition-all duration-700 ease-out group-hover:border-copper"
       >
         <SafeImage
           src={project.coverImage}
           alt={project.title}
           fill
-          sizes="(max-width: 768px) 100vw, 600px"
+          sizes="(max-width: 768px) 100vw, 500px"
           fallback="/projects/freelance/branding-cover.svg"
           className="object-cover transition-transform duration-700 ease-out group-hover:scale-105"
         />
@@ -152,26 +148,12 @@ export function FeaturedMotionSection({ projects }: FeaturedMotionSectionProps) 
         <div className="w-full overflow-hidden">
           <motion.div
             style={shouldReduceMotion ? {} : { x: xRow1 }}
-            className="flex gap-6 sm:gap-10 w-max will-change-transform"
+            className="flex gap-6 sm:gap-8 md:gap-10 w-max will-change-transform"
           >
             {row1Items.map((project, idx) => (
               <ProjectStripCard
                 key={`r1-${project.id}-${idx}`}
                 project={project}
-                widthClass={
-                  idx % 3 === 0
-                    ? 'w-[420px] sm:w-[540px]'
-                    : idx % 3 === 1
-                    ? 'w-[360px] sm:w-[460px]'
-                    : 'w-[480px] sm:w-[600px]'
-                }
-                aspectRatio={
-                  idx % 3 === 0
-                    ? 'aspect-[16/10]'
-                    : idx % 3 === 1
-                    ? 'aspect-[4/3]'
-                    : 'aspect-[21/9]'
-                }
               />
             ))}
           </motion.div>
@@ -181,26 +163,12 @@ export function FeaturedMotionSection({ projects }: FeaturedMotionSectionProps) 
         <div className="w-full overflow-hidden">
           <motion.div
             style={shouldReduceMotion ? {} : { x: xRow2 }}
-            className="flex gap-6 sm:gap-10 w-max will-change-transform"
+            className="flex gap-6 sm:gap-8 md:gap-10 w-max will-change-transform"
           >
             {row2Items.map((project, idx) => (
               <ProjectStripCard
                 key={`r2-${project.id}-${idx}`}
                 project={project}
-                widthClass={
-                  idx % 3 === 0
-                    ? 'w-[460px] sm:w-[580px]'
-                    : idx % 3 === 1
-                    ? 'w-[400px] sm:w-[500px]'
-                    : 'w-[360px] sm:w-[440px]'
-                }
-                aspectRatio={
-                  idx % 3 === 0
-                    ? 'aspect-[4/3]'
-                    : idx % 3 === 1
-                    ? 'aspect-[16/10]'
-                    : 'aspect-[3/2]'
-                }
               />
             ))}
           </motion.div>

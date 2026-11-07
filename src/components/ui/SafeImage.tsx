@@ -18,10 +18,22 @@ export function SafeImage({
 }: SafeImageProps) {
   const actualFallback = fallbackSrc || fallback;
   const [currentSrc, setCurrentSrc] = useState<string>(src || actualFallback);
+  const [hasFailed, setHasFailed] = useState(false);
 
   useEffect(() => {
     setCurrentSrc(src || actualFallback);
+    setHasFailed(false);
   }, [src, actualFallback]);
+
+  if (hasFailed) {
+    return (
+      <div className={`w-full h-full bg-charcoal-900 flex items-center justify-center p-4 ${props.className || ''}`}>
+        <span className="text-xs font-mono uppercase tracking-widest text-charcoal-400 text-center select-none">
+          {alt || 'Visual Project'}
+        </span>
+      </div>
+    );
+  }
 
   const isDirectLoad =
     typeof currentSrc === 'string' &&
@@ -39,6 +51,8 @@ export function SafeImage({
       onError={() => {
         if (currentSrc !== actualFallback) {
           setCurrentSrc(actualFallback);
+        } else {
+          setHasFailed(true);
         }
       }}
     />
