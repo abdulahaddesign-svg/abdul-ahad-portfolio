@@ -59,7 +59,7 @@ export function ClientShowcaseSection({ clients }: ClientShowcaseSectionProps) {
       id="clients"
       ref={containerRef}
       aria-label="Clients & Brand Collaborations"
-      className="py-8 sm:py-12 bg-ivory text-charcoal dark:bg-charcoal dark:text-ivory overflow-hidden select-none transition-colors duration-300"
+      className="pt-2 sm:pt-4 pb-12 sm:pb-16 bg-ivory text-charcoal dark:bg-charcoal dark:text-ivory border-b border-charcoal/15 dark:border-ivory/15 overflow-hidden select-none transition-colors duration-300"
     >
       {shouldReduceMotion ? (
         /* Reduced Motion Fallback: Clean, borderless wrapped grid */
