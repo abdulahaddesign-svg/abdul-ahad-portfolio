@@ -349,6 +349,87 @@ export default function AdminHeaderFooterCMS() {
           </h2>
         </div>
 
+        {/* Footer Logos (Dark & Light Variants) */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 p-4 border border-charcoal/10 bg-charcoal-50/50">
+          <div className="space-y-2">
+            <label className="text-xs font-sans font-bold uppercase tracking-wider text-charcoal block">
+              Footer Logo Dark Variant (High-Quality SVG / PNG)
+            </label>
+            <div className="flex gap-2">
+              <Input
+                value={settings.footerLogoDarkUrl || ''}
+                onChange={(e) => setSettings({ ...settings, footerLogoDarkUrl: e.target.value })}
+                placeholder="/brand/logo-wordmark-clean-dark.png"
+                className="flex-1"
+              />
+              <label className="px-3 py-2 bg-charcoal text-ivory text-xs font-sans font-bold uppercase tracking-wider cursor-pointer hover:bg-copper transition-colors flex items-center gap-1.5 shrink-0">
+                <Upload className="w-3.5 h-3.5" />
+                <span>{uploadingField === 'footerLogoDarkUrl' ? '...' : 'Upload SVG'}</span>
+                <input
+                  type="file"
+                  accept="image/*,.svg"
+                  onChange={(e) => {
+                    const file = e.target.files?.[0];
+                    if (file) handleFileUpload(file, 'footerLogoDarkUrl');
+                  }}
+                  className="hidden"
+                  disabled={uploadingField === 'footerLogoDarkUrl'}
+                />
+              </label>
+            </div>
+            {settings.footerLogoDarkUrl && (
+              <div className="h-12 p-2 bg-charcoal rounded flex items-center justify-center">
+                <SafeImage
+                  src={settings.footerLogoDarkUrl}
+                  alt="Footer Dark Logo Preview"
+                  width={200}
+                  height={40}
+                  className="max-h-8 w-auto object-contain"
+                />
+              </div>
+            )}
+          </div>
+
+          <div className="space-y-2">
+            <label className="text-xs font-sans font-bold uppercase tracking-wider text-charcoal block">
+              Footer Logo Light Variant (High-Quality SVG / PNG)
+            </label>
+            <div className="flex gap-2">
+              <Input
+                value={settings.footerLogoLightUrl || ''}
+                onChange={(e) => setSettings({ ...settings, footerLogoLightUrl: e.target.value })}
+                placeholder="/brand/logo-wordmark-clean-light.png"
+                className="flex-1"
+              />
+              <label className="px-3 py-2 bg-charcoal text-ivory text-xs font-sans font-bold uppercase tracking-wider cursor-pointer hover:bg-copper transition-colors flex items-center gap-1.5 shrink-0">
+                <Upload className="w-3.5 h-3.5" />
+                <span>{uploadingField === 'footerLogoLightUrl' ? '...' : 'Upload SVG'}</span>
+                <input
+                  type="file"
+                  accept="image/*,.svg"
+                  onChange={(e) => {
+                    const file = e.target.files?.[0];
+                    if (file) handleFileUpload(file, 'footerLogoLightUrl');
+                  }}
+                  className="hidden"
+                  disabled={uploadingField === 'footerLogoLightUrl'}
+                />
+              </label>
+            </div>
+            {settings.footerLogoLightUrl && (
+              <div className="h-12 p-2 bg-ivory border border-charcoal/10 rounded flex items-center justify-center">
+                <SafeImage
+                  src={settings.footerLogoLightUrl}
+                  alt="Footer Light Logo Preview"
+                  width={200}
+                  height={40}
+                  className="max-h-8 w-auto object-contain"
+                />
+              </div>
+            )}
+          </div>
+        </div>
+
         <div className="space-y-1">
           <label className="text-xs font-sans font-bold uppercase tracking-wider text-charcoal">
             Footer Bio Description

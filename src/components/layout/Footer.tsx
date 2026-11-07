@@ -238,7 +238,7 @@ export function Footer({ settings = SITE_SETTINGS }: FooterProps) {
           ========================================================================= */}
       <div className="w-full overflow-hidden select-none pointer-events-none mt-4 sm:mt-8 -mb-2 sm:-mb-4">
         <div className="max-w-[1820px] mx-auto px-4 sm:px-8 lg:px-12">
-          <div className="relative w-full aspect-[1024/167] opacity-85 transition-opacity duration-300">
+          <div className="relative w-full aspect-[1024/167] opacity-10 transition-opacity duration-300">
             <SafeImage
               src={logoUrl}
               fallback="/brand/logo-wordmark-clean-dark.png"
