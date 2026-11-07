@@ -4,6 +4,7 @@ import './globals.css';
 import { Navbar } from '@/components/layout/Navbar';
 import { Footer } from '@/components/layout/Footer';
 import { ThemeProvider } from '@/components/theme/ThemeProvider';
+import { FluidMouseFollower } from '@/components/ui/FluidMouseFollower';
 import { SITE_SETTINGS } from '@/lib/constants';
 import { getSiteSettings } from '@/lib/data';
 
@@ -171,6 +172,7 @@ export default async function RootLayout({
       </head>
       <body className="flex flex-col min-h-screen bg-ivory text-charcoal dark:bg-charcoal dark:text-ivory transition-colors duration-300">
         <ThemeProvider allowDarkTheme={Boolean(settings.allowDarkTheme)}>
+          <FluidMouseFollower />
           <Navbar settings={settings} />
           <main className="flex-1">{children}</main>
           <Footer settings={settings} />
