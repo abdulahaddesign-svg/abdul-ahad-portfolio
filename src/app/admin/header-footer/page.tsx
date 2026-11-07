@@ -540,16 +540,16 @@ export default function AdminHeaderFooterCMS() {
           <label className="flex items-center gap-3 cursor-pointer select-none">
             <input
               type="checkbox"
-              checked={settings.footerOversizedLogoVisible || false}
+              checked={settings.footerOversizedLogoVisible !== false}
               onChange={(e) => setSettings({ ...settings, footerOversizedLogoVisible: e.target.checked })}
               className="w-4 h-4 text-copper rounded border-charcoal/30 focus:ring-copper"
             />
             <span className="text-xs font-sans font-bold uppercase tracking-wider text-charcoal">
-              Display Oversized Bottom Brand Wordmark
+              Display Oversized Bottom Brand Wordmark (Cropped Half-Bleed)
             </span>
           </label>
           <p className="text-[11px] text-charcoal-500 font-sans mt-1 ml-7">
-            When unchecked (default), the footer ends cleanly right after the copyright and location line.
+            Displays the large brand wordmark cropped at 50% height along the bottom edge of the footer.
           </p>
         </div>
       </div>

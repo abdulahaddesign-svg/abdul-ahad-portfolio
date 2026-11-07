@@ -38,13 +38,15 @@ export function Footer({ settings = SITE_SETTINGS }: FooterProps) {
   const instagram = settings.instagramUrl;
   const dribbble = settings.dribbbleUrl;
   const showNav = settings.footerNavVisible !== false;
-  const showOversizedLogo = settings.footerOversizedLogoVisible === true;
+  const showOversizedLogo = settings.footerOversizedLogoVisible !== false;
   const copyright = settings.footerCopyright || 'Abdul Ahad J. All rights reserved.';
   const locationText = settings.footerLocation || settings.location || 'Coimbatore, Tamil Nadu, India';
 
   return (
     <footer
-      className={`relative pt-16 sm:pt-24 pb-8 sm:pb-12 overflow-hidden select-none transition-colors duration-300 ${
+      className={`relative pt-16 sm:pt-24 ${
+        showOversizedLogo ? 'pb-0' : 'pb-8 sm:pb-12'
+      } overflow-hidden select-none transition-colors duration-300 ${
         isDarkMode
           ? 'bg-charcoal text-ivory border-t border-charcoal-800'
           : 'bg-ivory text-charcoal border-t border-charcoal/15'
@@ -222,7 +224,7 @@ export function Footer({ settings = SITE_SETTINGS }: FooterProps) {
             3. FOOTER BOTTOM: Small Copyright & Location Spec
             ========================================================================= */}
         <div
-          className={`pt-6 pb-6 sm:pb-8 flex flex-col sm:flex-row items-baseline justify-between gap-4 text-xs font-sans uppercase tracking-widest ${
+          className={`pt-6 pb-2 sm:pb-4 flex flex-col sm:flex-row items-baseline justify-between gap-4 text-xs font-sans uppercase tracking-widest ${
             isDarkMode ? 'text-charcoal-500' : 'text-charcoal-400'
           }`}
         >
@@ -232,21 +234,32 @@ export function Footer({ settings = SITE_SETTINGS }: FooterProps) {
       </div>
 
       {/* =========================================================================
-          4. OVERSIZED BRAND LOGO STATEMENT (Optional, Controlled via CMS)
+          4. OVERSIZED BRAND LOGO STATEMENT (Cropped Half-Bleed: Shows Top 50% of Letters)
+          - Bleeds intentionally to the bottom edge
+          - Displays uploaded logo wordmark (Dark or Light variant)
+          - Cropped at exactly 50% height across all devices
           ========================================================================= */}
       {showOversizedLogo && (
-        <div className="w-full overflow-hidden select-none pointer-events-none mt-4 sm:mt-8 -mb-2 sm:-mb-4">
+        <div className="w-full overflow-hidden select-none pointer-events-none mt-6 sm:mt-10">
           <div className="max-w-[1820px] mx-auto px-4 sm:px-8 lg:px-12">
-            <div className="relative w-full aspect-[1024/167] opacity-10 transition-opacity duration-300">
-              <SafeImage
-                src={logoUrl}
-                fallback="/brand/logo-wordmark-clean-dark.png"
-                alt={settings.name}
-                fill
-                sizes="(max-width: 1400px) 100vw, 1400px"
-                className="object-contain object-bottom select-none"
-                priority
-              />
+            <div
+              style={{ aspectRatio: '1024 / 84' }}
+              className="relative w-full overflow-hidden opacity-15 dark:opacity-20 transition-opacity duration-300"
+            >
+              <div
+                style={{ aspectRatio: '1024 / 167' }}
+                className="relative w-full"
+              >
+                <SafeImage
+                  src={logoUrl}
+                  fallback="/brand/logo-wordmark-clean-dark.png"
+                  alt={settings.name}
+                  fill
+                  sizes="(max-width: 1400px) 100vw, 1400px"
+                  className="object-contain object-top select-none"
+                  priority
+                />
+              </div>
             </div>
           </div>
         </div>

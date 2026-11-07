@@ -1209,7 +1209,7 @@ export async function getSiteSettings(): Promise<SiteSettings> {
           footerLogoDarkUrl: data.footer_logo_dark_url ?? meta.footerLogoDarkUrl ?? localSettings.footerLogoDarkUrl,
           footerDescription: data.footer_description ?? meta.footerDescription ?? localSettings.footerDescription,
           footerBrandStatement: data.footer_brand_statement ?? meta.footerBrandStatement ?? localSettings.footerBrandStatement,
-          footerOversizedLogoVisible: data.footer_oversized_logo_visible ?? meta.footerOversizedLogoVisible ?? localSettings.footerOversizedLogoVisible ?? false,
+          footerOversizedLogoVisible: data.footer_oversized_logo_visible ?? meta.footerOversizedLogoVisible ?? localSettings.footerOversizedLogoVisible ?? true,
           footerNavVisible: data.footer_nav_visible ?? meta.footerNavVisible ?? localSettings.footerNavVisible,
           footerCopyright: data.footer_copyright ?? meta.footerCopyright ?? localSettings.footerCopyright,
           footerLocation: data.footer_location ?? meta.footerLocation ?? localSettings.footerLocation,
