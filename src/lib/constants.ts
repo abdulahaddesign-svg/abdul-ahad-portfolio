@@ -1,4 +1,14 @@
-import { ExperienceItem, ServiceItem, SkillCategory, Award, SiteSettings, Project, ClientLogo, ToolItem, CapabilityCategory, CapabilityTool } from './types';
+import { ExperienceItem, ServiceItem, SkillCategory, Award, SiteSettings, Project, ClientLogo, ToolItem, CapabilityCategory, CapabilityTool, HeroProfessionItem } from './types';
+
+export const DEFAULT_HERO_PROFESSIONS: HeroProfessionItem[] = [
+  { id: '1', text: 'Graphic Designer', enabled: true },
+  { id: '2', text: 'UI/UX Designer', enabled: true },
+  { id: '3', text: 'Brand Designer', enabled: true },
+  { id: '4', text: 'Vibe Coder', enabled: true },
+  { id: '5', text: 'Motion Designer', enabled: true },
+  { id: '6', text: 'Video Editor', enabled: true },
+  { id: '7', text: 'Visual Designer', enabled: true },
+];
 
 export const DEFAULT_CAPABILITY_CATEGORIES: CapabilityCategory[] = [
   {
@@ -576,21 +586,26 @@ export const SITE_SETTINGS: SiteSettings = {
   locationTimeText: "Coimbatore, IN",
 
   // Homepage Hero CMS
-  heroHeadline: "ABDUL AHAD",
+  heroIntroduction: "Hi, I'm",
+  heroName: "Abdul Ahad",
+  heroProfessions: DEFAULT_HERO_PROFESSIONS,
+  heroAnimationInterval: 1200,
+  heroTransitionDuration: 0.45,
+  heroHeadline: "Abdul Ahad",
   heroHeadlineLine2: "",
   heroHighlightedWords: "",
-  heroTitle: "CREATIVE DESIGNER & DIGITAL CREATIVE PARTNER",
+  heroTitle: "Graphic Designer",
   heroSubtitle: "Design that makes businesses stand out.",
-  heroSupportingCopy: "I create thoughtful visual identities, digital experiences, and motion-led content for brands that want to stand out.",
-  heroIntroSecondary: "Combining visual design, typography, and human-centered design thinking to deliver precise creative solutions that command attention and build credibility.",
+  heroSupportingCopy: "I create thoughtful visual identities, digital experiences and creative solutions that help ambitious brands stand out.",
+  heroIntroSecondary: "",
   heroLocationLabel: "Coimbatore, Tamil Nadu, India",
-  heroPrimaryCtaText: "Initiate Brief",
-  heroPrimaryCtaHref: "/contact",
-  heroSecondaryCtaText: "View Selected Work",
-  heroSecondaryCtaHref: "/work",
+  heroPrimaryCtaText: "Explore My Work",
+  heroPrimaryCtaHref: "#selected-works",
+  heroSecondaryCtaText: "Start a Project",
+  heroSecondaryCtaHref: "/contact",
   heroBgImage: "",
   heroProfileImage: "",
-  heroMonogramVisible: true,
+  heroMonogramVisible: false,
   heroMonogramUrl: "/brand/logo-monogram-light.png",
   heroAnimationEnabled: true,
 

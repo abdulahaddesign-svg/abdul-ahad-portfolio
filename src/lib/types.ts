@@ -174,6 +174,12 @@ export interface Inquiry {
   createdAt: string;
 }
 
+export interface HeroProfessionItem {
+  id: string;
+  text: string;
+  enabled: boolean;
+}
+
 export interface SiteSettings {
   name: string;
   title: string;
@@ -199,6 +205,11 @@ export interface SiteSettings {
   locationTimeText?: string;
 
   // Homepage Hero CMS
+  heroIntroduction?: string;
+  heroName?: string;
+  heroProfessions?: HeroProfessionItem[];
+  heroAnimationInterval?: number;
+  heroTransitionDuration?: number;
   heroHeadline: string;
   heroHeadlineLine2?: string;
   heroHighlightedWords?: string;

@@ -20,8 +20,8 @@ import {
   Image as ImageIcon
 } from 'lucide-react';
 import { getSiteSettings, updateSiteSettings } from '@/lib/data';
-import { SiteSettings, ToolItem } from '@/lib/types';
-import { DEFAULT_TOOLS, DEFAULT_HOMEPAGE_ORDER } from '@/lib/constants';
+import { SiteSettings, ToolItem, HeroProfessionItem } from '@/lib/types';
+import { DEFAULT_TOOLS, DEFAULT_HOMEPAGE_ORDER, DEFAULT_HERO_PROFESSIONS } from '@/lib/constants';
 import { Input, Textarea } from '@/components/ui/Input';
 import { Button } from '@/components/ui/Button';
 import { SafeImage } from '@/components/ui/SafeImage';
@@ -80,7 +80,7 @@ export default function AdminHomepageCMS() {
   };
 
   const sectionMeta: Record<string, { label: string; desc: string }> = {
-    hero: { label: 'Hero (Opening)', desc: 'Large headline, professional title & primary CTA buttons' },
+    hero: { label: 'Hero (Opening)', desc: 'Minimal centered typography, animated profession sequence & CTAs' },
     clients: { label: 'Our Clients', desc: '3 kinetic scroll-linked rows of client logos' },
     about: { label: 'About Me', desc: 'Editorial portrait, biography & resume download' },
     tools: { label: 'Tools I Use', desc: 'Software arsenal (Photoshop, Illustrator, Figma, etc.)' },
@@ -100,6 +100,47 @@ export default function AdminHomepageCMS() {
     settings && Array.isArray(settings.toolsList) && settings.toolsList.length > 0
       ? settings.toolsList
       : DEFAULT_TOOLS;
+
+  const currentProfessions =
+    settings && Array.isArray(settings.heroProfessions) && settings.heroProfessions.length > 0
+      ? settings.heroProfessions
+      : DEFAULT_HERO_PROFESSIONS;
+
+  const handleAddProfession = () => {
+    if (!settings) return;
+    const newProf: HeroProfessionItem = {
+      id: `prof-${Date.now()}`,
+      text: 'New Profession',
+      enabled: true,
+    };
+    setSettings({
+      ...settings,
+      heroProfessions: [...currentProfessions, newProf],
+    });
+  };
+
+  const handleUpdateProfession = (index: number, field: keyof HeroProfessionItem, value: any) => {
+    if (!settings) return;
+    const updated = [...currentProfessions];
+    updated[index] = { ...updated[index], [field]: value };
+    setSettings({ ...settings, heroProfessions: updated });
+  };
+
+  const handleMoveProfession = (index: number, direction: 'up' | 'down') => {
+    if (!settings) return;
+    const target = direction === 'up' ? index - 1 : index + 1;
+    if (target < 0 || target >= currentProfessions.length) return;
+    const list = [...currentProfessions];
+    const [moved] = list.splice(index, 1);
+    list.splice(target, 0, moved);
+    setSettings({ ...settings, heroProfessions: list });
+  };
+
+  const handleRemoveProfession = (index: number) => {
+    if (!settings) return;
+    const list = currentProfessions.filter((_, i) => i !== index);
+    setSettings({ ...settings, heroProfessions: list });
+  };
 
   const handleMoveSection = (index: number, direction: 'up' | 'down') => {
     if (!settings) return;
@@ -190,106 +231,207 @@ export default function AdminHomepageCMS() {
         </div>
       </div>
 
-      {/* 1. Primary Typography & Headlines */}
+      {/* 1. Typography & Opening Identity */}
       <div className="p-6 bg-white border border-charcoal/15 space-y-6">
         <h2 className="font-display font-bold text-lg text-charcoal pb-3 border-b border-charcoal/10 flex items-center gap-2">
           <Sparkles className="w-4 h-4 text-copper" />
-          Primary Typography &amp; Headlines
+          Minimal Typography-Led Hero Identity
         </h2>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
           <Input
-            label="Main Headline (Line 1)"
-            value={settings.heroHeadline || ''}
-            onChange={(e) => setSettings({ ...settings, heroHeadline: e.target.value })}
-            placeholder="Designer that makes businesses stand out."
-            helperText="Displays in giant oversized Space Grotesk font."
+            label="Introduction Label"
+            value={settings.heroIntroduction ?? "Hi, I'm"}
+            onChange={(e) => setSettings({ ...settings, heroIntroduction: e.target.value })}
+            placeholder="Hi, I'm"
+            helperText="Renders above the main name in 18–20px Manrope font."
           />
           <Input
-            label="Headline Line 2 (Optional Accent Line)"
-            value={settings.heroHeadlineLine2 || ''}
-            onChange={(e) => setSettings({ ...settings, heroHeadlineLine2: e.target.value })}
-            placeholder="e.g. DESIGN STUDIO"
-            helperText="Renders in burnt copper accent directly below Line 1."
+            label="Main Name"
+            value={settings.heroName ?? settings.heroHeadline ?? 'Abdul Ahad'}
+            onChange={(e) => setSettings({ ...settings, heroName: e.target.value, heroHeadline: e.target.value })}
+            placeholder="Abdul Ahad"
+            helperText="Displays in oversized Space Grotesk font (strongest element of first viewport)."
           />
         </div>
-
-        <Input
-          label="Professional Title / Capability Subtitle"
-          value={settings.heroSubtitle || settings.heroTitle || ''}
-          onChange={(e) => setSettings({ ...settings, heroSubtitle: e.target.value, heroTitle: e.target.value })}
-          placeholder="CREATIVE DESIGNER & DIGITAL CREATIVE PARTNER"
-        />
-
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-          <Input
-            label="Location Label"
-            value={settings.heroLocationLabel || settings.location || ''}
-            onChange={(e) => setSettings({ ...settings, heroLocationLabel: e.target.value })}
-            placeholder="Coimbatore, Tamil Nadu, India"
-          />
-          <Input
-            label="Highlighted Keywords"
-            value={settings.heroHighlightedWords || ''}
-            onChange={(e) => setSettings({ ...settings, heroHighlightedWords: e.target.value })}
-            placeholder="Branding, UI/UX, Motion"
-          />
-        </div>
-      </div>
-
-      {/* 2. Narrative Introduction */}
-      <div className="p-6 bg-white border border-charcoal/15 space-y-6">
-        <h2 className="font-display font-bold text-lg text-charcoal pb-3 border-b border-charcoal/10">
-          Hero Narrative Introduction
-        </h2>
 
         <Textarea
-          label="Primary Introduction Paragraph"
+          label="Supporting Description"
           rows={3}
-          value={settings.heroSupportingCopy || ''}
+          value={settings.heroSupportingCopy ?? 'I create thoughtful visual identities, digital experiences and creative solutions that help ambitious brands stand out.'}
           onChange={(e) => setSettings({ ...settings, heroSupportingCopy: e.target.value })}
-          helperText="High contrast, prominent leading text (22px)."
-        />
-
-        <Textarea
-          label="Secondary Introduction Narrative"
-          rows={3}
-          value={settings.heroIntroSecondary || ''}
-          onChange={(e) => setSettings({ ...settings, heroIntroSecondary: e.target.value })}
-          helperText="Supporting explanatory paragraph (15px)."
+          placeholder="I create thoughtful visual identities, digital experiences and creative solutions that help ambitious brands stand out."
+          helperText="Centered editorial paragraph with comfortable line length (max-width ~650px)."
         />
       </div>
 
-      {/* 3. Call-To-Action Destinations */}
+      {/* 2. Animated Rotating Professions Sequence */}
+      <div className="p-6 bg-white border border-charcoal/15 space-y-6">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-charcoal/10">
+          <div>
+            <h2 className="font-display font-bold text-lg text-charcoal flex items-center gap-2">
+              <Sliders className="w-4 h-4 text-copper" />
+              Animated Profession Sequence
+            </h2>
+            <p className="text-xs text-charcoal-600 mt-0.5">
+              Sequence of titles cycling below the name in Burnt Copper (#C4855A). One title displayed at a time with smooth vertical text-mask slide.
+            </p>
+          </div>
+          <Button
+            type="button"
+            variant="outline"
+            size="sm"
+            onClick={handleAddProfession}
+            icon={<Plus className="w-3.5 h-3.5 text-copper" />}
+          >
+            Add Profession
+          </Button>
+        </div>
+
+        {/* List of Professions */}
+        <div className="space-y-2.5">
+          {currentProfessions.map((prof, index) => (
+            <div
+              key={prof.id || index}
+              className={`flex flex-col sm:flex-row sm:items-center gap-3 p-3 border transition-colors ${
+                prof.enabled !== false
+                  ? 'bg-ivory/50 border-charcoal/15'
+                  : 'bg-charcoal/5 border-charcoal/10 opacity-60'
+              }`}
+            >
+              <div className="flex items-center gap-2">
+                <span className="w-6 h-6 flex items-center justify-center bg-charcoal text-ivory text-xs font-mono font-bold">
+                  {index + 1}
+                </span>
+                <label className="flex items-center gap-2 cursor-pointer select-none text-xs font-medium text-charcoal">
+                  <input
+                    type="checkbox"
+                    checked={prof.enabled !== false}
+                    onChange={(e) => handleUpdateProfession(index, 'enabled', e.target.checked)}
+                    className="rounded border-charcoal/30 text-copper focus:ring-copper"
+                  />
+                  <span>Active</span>
+                </label>
+              </div>
+
+              <div className="flex-1">
+                <input
+                  type="text"
+                  value={prof.text}
+                  onChange={(e) => handleUpdateProfession(index, 'text', e.target.value)}
+                  placeholder="e.g. Graphic Designer"
+                  className="w-full px-3 py-1.5 text-sm font-sans bg-white border border-charcoal/20 focus:border-copper focus:outline-none transition-colors"
+                />
+              </div>
+
+              <div className="flex items-center gap-1 self-end sm:self-auto">
+                <button
+                  type="button"
+                  disabled={index === 0}
+                  onClick={() => handleMoveProfession(index, 'up')}
+                  className="p-1.5 text-charcoal-500 hover:text-charcoal hover:bg-white disabled:opacity-30 disabled:pointer-events-none transition-colors"
+                  title="Move Up"
+                  aria-label="Move Up"
+                >
+                  <ArrowUp className="w-3.5 h-3.5" />
+                </button>
+                <button
+                  type="button"
+                  disabled={index === currentProfessions.length - 1}
+                  onClick={() => handleMoveProfession(index, 'down')}
+                  className="p-1.5 text-charcoal-500 hover:text-charcoal hover:bg-white disabled:opacity-30 disabled:pointer-events-none transition-colors"
+                  title="Move Down"
+                  aria-label="Move Down"
+                >
+                  <ArrowDown className="w-3.5 h-3.5" />
+                </button>
+                <button
+                  type="button"
+                  disabled={currentProfessions.length <= 1}
+                  onClick={() => handleRemoveProfession(index)}
+                  className="p-1.5 text-charcoal-400 hover:text-red-600 hover:bg-white disabled:opacity-30 disabled:pointer-events-none transition-colors"
+                  title="Delete"
+                  aria-label="Delete"
+                >
+                  <Trash2 className="w-3.5 h-3.5" />
+                </button>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {/* Animation Timing & Controls */}
+        <div className="pt-4 border-t border-charcoal/10 grid grid-cols-1 sm:grid-cols-3 gap-4">
+          <Input
+            label="Display Hold Interval (ms)"
+            type="number"
+            value={settings.heroAnimationInterval ?? 1200}
+            onChange={(e) => setSettings({ ...settings, heroAnimationInterval: parseInt(e.target.value) || 1200 })}
+            helperText="Default: 1200ms (~1 sec hold per title)."
+          />
+          <Input
+            label="Transition Duration (sec)"
+            type="number"
+            step="0.05"
+            value={settings.heroTransitionDuration ?? 0.45}
+            onChange={(e) => setSettings({ ...settings, heroTransitionDuration: parseFloat(e.target.value) || 0.45 })}
+            helperText="Default: 0.45s smooth vertical mask reveal."
+          />
+          <div className="flex flex-col justify-center pt-2">
+            <label className="flex items-center gap-3 cursor-pointer select-none">
+              <input
+                type="checkbox"
+                checked={settings.heroAnimationEnabled !== false}
+                onChange={(e) => setSettings({ ...settings, heroAnimationEnabled: e.target.checked })}
+                className="rounded border-charcoal/30 text-copper focus:ring-copper"
+              />
+              <div>
+                <span className="text-xs font-sans font-bold text-charcoal block">
+                  Enable Profession Cycling
+                </span>
+                <span className="text-[11px] text-charcoal-500 block">
+                  Continuous loop across enabled titles.
+                </span>
+              </div>
+            </label>
+          </div>
+        </div>
+      </div>
+
+      {/* 3. Call-To-Action Buttons */}
       <div className="p-6 bg-white border border-charcoal/15 space-y-6">
         <h2 className="font-display font-bold text-lg text-charcoal pb-3 border-b border-charcoal/10 flex items-center gap-2">
           <ArrowUpRight className="w-4 h-4 text-copper" />
-          Call-To-Action Destinations
+          Hero Call-To-Action Destinations
         </h2>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
           <Input
-            label="Primary CTA Button Label"
-            value={settings.heroPrimaryCtaText || 'Initiate Brief'}
+            label="Primary CTA Label"
+            value={settings.heroPrimaryCtaText ?? 'Explore My Work'}
             onChange={(e) => setSettings({ ...settings, heroPrimaryCtaText: e.target.value })}
+            placeholder="Explore My Work"
           />
           <Input
             label="Primary CTA Destination Link"
-            value={settings.heroPrimaryCtaHref || '/contact'}
+            value={settings.heroPrimaryCtaHref ?? '#selected-works'}
             onChange={(e) => setSettings({ ...settings, heroPrimaryCtaHref: e.target.value })}
+            placeholder="#selected-works or /work"
           />
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
           <Input
-            label="Secondary CTA Button Label"
-            value={settings.heroSecondaryCtaText || 'View Selected Work'}
+            label="Secondary CTA Label"
+            value={settings.heroSecondaryCtaText ?? 'Start a Project'}
             onChange={(e) => setSettings({ ...settings, heroSecondaryCtaText: e.target.value })}
+            placeholder="Start a Project"
           />
           <Input
             label="Secondary CTA Destination Link"
-            value={settings.heroSecondaryCtaHref || '/work'}
+            value={settings.heroSecondaryCtaHref ?? '/contact'}
             onChange={(e) => setSettings({ ...settings, heroSecondaryCtaHref: e.target.value })}
+            placeholder="/contact or #contact"
           />
         </div>
       </div>

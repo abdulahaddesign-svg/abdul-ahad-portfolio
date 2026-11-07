@@ -1,152 +1,158 @@
 'use client';
 
-import React from 'react';
+import React, { useState, useEffect, useRef, useMemo } from 'react';
 import Link from 'next/link';
-import { motion, useScroll, useTransform, useReducedMotion } from 'framer-motion';
+import { motion, AnimatePresence, useReducedMotion, useInView } from 'framer-motion';
 import { ArrowDown, ArrowUpRight } from 'lucide-react';
-import { SiteSettings } from '@/lib/types';
-import { SafeImage } from '@/components/ui/SafeImage';
+import { SiteSettings, HeroProfessionItem } from '@/lib/types';
+import { DEFAULT_HERO_PROFESSIONS } from '@/lib/constants';
 
 interface HeroSectionProps {
   settings?: SiteSettings;
 }
 
 export function HeroSection({ settings }: HeroSectionProps) {
-  const { scrollY } = useScroll();
+  const containerRef = useRef<HTMLElement>(null);
+  const isInView = useInView(containerRef, { margin: '0px 0px -20% 0px' });
   const shouldReduceMotion = useReducedMotion();
-  const monogramY = useTransform(scrollY, [0, 500], [0, 40]);
 
-  const headline = settings?.heroHeadline || 'ABDUL AHAD';
-  const headlineLine2 = settings?.heroHeadlineLine2 || '';
-  const title = settings?.heroTitle || settings?.title || 'CREATIVE DESIGNER & DIGITAL CREATIVE PARTNER';
-  const locationLabel = settings?.heroLocationLabel || settings?.location || 'Coimbatore, Tamil Nadu, India';
-  const intro = settings?.heroSupportingCopy || 'I create thoughtful visual identities, digital experiences, and motion-led content for brands that want to stand out.';
-  const introSecondary = settings?.heroIntroSecondary || 'Combining visual design, typography, and human-centered design thinking to deliver precise creative solutions that command attention and build credibility.';
-  
+  // Content configuration with strict defaults
+  const introduction = settings?.heroIntroduction || "Hi, I'm";
+  const name = settings?.heroName || settings?.heroHeadline || settings?.name || 'Abdul Ahad';
+  const description =
+    settings?.heroSupportingCopy ||
+    'I create thoughtful visual identities, digital experiences and creative solutions that help ambitious brands stand out.';
+
   const primaryCtaText = settings?.heroPrimaryCtaText || 'Explore My Work';
-  const primaryCtaHref = settings?.heroPrimaryCtaHref || '#portfolio-strip';
+  const primaryCtaHref = settings?.heroPrimaryCtaHref || '#selected-works';
   const secondaryCtaText = settings?.heroSecondaryCtaText || 'Start a Project';
   const secondaryCtaHref = settings?.heroSecondaryCtaHref || '/contact';
 
-  const showMonogram = settings?.heroMonogramVisible !== false;
-  const monogramUrl = settings?.heroMonogramUrl || '/brand/logo-monogram-light.png';
   const animationEnabled = settings?.heroAnimationEnabled !== false && !shouldReduceMotion;
+  const intervalMs = settings?.heroAnimationInterval && settings.heroAnimationInterval >= 600
+    ? settings.heroAnimationInterval
+    : 1200; // Hold ~1s + transition
+  const transitionDuration = settings?.heroTransitionDuration && settings.heroTransitionDuration > 0
+    ? settings.heroTransitionDuration
+    : 0.42;
+
+  // Active enabled professions sequence
+  const activeProfessions: string[] = useMemo(() => {
+    const rawList = settings?.heroProfessions;
+    if (Array.isArray(rawList) && rawList.length > 0) {
+      const enabledOnly = rawList.filter((p: HeroProfessionItem) => p.enabled !== false).map((p) => p.text.trim());
+      if (enabledOnly.length > 0) return enabledOnly;
+    }
+    return DEFAULT_HERO_PROFESSIONS.map((p) => p.text);
+  }, [settings?.heroProfessions]);
+
+  const [currentIndex, setCurrentIndex] = useState(0);
+
+  // Rotating animation ticker
+  useEffect(() => {
+    if (!animationEnabled || activeProfessions.length <= 1 || !isInView) return;
+
+    const timer = setInterval(() => {
+      // Pause ticker if window is backgrounded
+      if (typeof document !== 'undefined' && document.hidden) return;
+
+      setCurrentIndex((prev) => (prev + 1) % activeProfessions.length);
+    }, intervalMs);
+
+    return () => clearInterval(timer);
+  }, [animationEnabled, activeProfessions.length, intervalMs, isInView]);
+
+  const currentProfession = activeProfessions[currentIndex] || activeProfessions[0] || 'Graphic Designer';
 
   return (
-    <section className="relative pt-32 sm:pt-40 pb-16 sm:pb-20 bg-ivory text-charcoal border-b border-charcoal/15 overflow-hidden">
-      {/* Optional Background Image */}
-      {settings?.heroBgImage && (
-        <div className="absolute inset-0 z-0 opacity-15 pointer-events-none select-none">
-          <SafeImage
-            src={settings.heroBgImage}
-            alt=""
-            fill
-            className="object-cover"
-          />
-        </div>
-      )}
-
-      {/* Background Subtle Monogram Watermark (Positioned in Upper Right Negative Space) */}
-      {showMonogram && (
-        <motion.div
-          style={animationEnabled ? { y: monogramY } : {}}
-          className="absolute right-4 sm:right-12 lg:right-20 top-24 sm:top-28 w-56 sm:w-80 lg:w-[420px] aspect-[1024/754] pointer-events-none opacity-[0.05] select-none"
-          aria-hidden="true"
+    <section
+      ref={containerRef}
+      id="hero"
+      aria-label="Introduction & Professional Overview"
+      className="relative min-h-[88vh] sm:min-h-[92vh] flex flex-col justify-center items-center text-center px-4 sm:px-6 md:px-8 pt-32 pb-20 sm:pt-40 sm:pb-28 lg:pt-44 lg:pb-32 bg-ivory dark:bg-charcoal text-charcoal dark:text-ivory border-b border-charcoal/15 dark:border-ivory/15 select-none transition-colors duration-300 overflow-hidden"
+    >
+      <div className="max-w-4xl mx-auto flex flex-col items-center justify-center relative z-10 w-full">
+        {/* 1. Small Introduction ("Hi, I'm") */}
+        <motion.p
+          initial={animationEnabled ? { opacity: 0, y: 12 } : false}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+          className="text-lg md:text-xl font-sans font-medium text-[#7C5C3E] dark:text-[#D0C5B8] tracking-tight mb-2 sm:mb-3"
         >
-          <SafeImage
-            src={monogramUrl}
-            alt=""
-            fill
-            priority
-            className="object-contain"
-          />
-        </motion.div>
-      )}
+          {introduction}
+        </motion.p>
 
-      <div className="max-w-[1820px] mx-auto px-4 sm:px-8 lg:px-12 relative z-10 w-full space-y-12 sm:space-y-16">
-        {/* Top Alignment Edge: Location and Professional Label */}
-        <div className="flex flex-wrap items-center justify-between gap-4 pb-6 border-b border-charcoal/10 text-xs font-sans uppercase tracking-[0.2em] text-charcoal-500">
-          <div className="flex items-center gap-3">
-            <span className="w-2 h-2 rounded-full bg-copper" />
-            <span className="font-semibold text-charcoal">
-              {locationLabel}
+        {/* 2. Main Name ("Abdul Ahad") — Strongest Element of First Viewport */}
+        <motion.h1
+          initial={animationEnabled ? { opacity: 0, y: 22 } : false}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.75, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
+          className="font-display font-bold text-[clamp(48px,12.5vw,76px)] sm:text-[clamp(64px,9vw,132px)] tracking-tighter leading-[0.95] text-charcoal dark:text-ivory"
+        >
+          {name}
+        </motion.h1>
+
+        {/* 3. Animated Professional Title Sequence (Highlighted in Burnt Copper #C4855A) */}
+        <div
+          className="relative h-[clamp(44px,7vw,76px)] flex items-center justify-center overflow-hidden w-full my-2 sm:my-3"
+          aria-live="polite"
+          aria-atomic="true"
+        >
+          {animationEnabled ? (
+            <AnimatePresence mode="popLayout" initial={false}>
+              <motion.span
+                key={currentProfession}
+                initial={{ y: '100%', opacity: 0 }}
+                animate={{ y: '0%', opacity: 1 }}
+                exit={{ y: '-100%', opacity: 0 }}
+                transition={{ duration: transitionDuration, ease: [0.16, 1, 0.3, 1] }}
+                className="font-display font-bold text-[clamp(27px,6.8vw,42px)] sm:text-[clamp(32px,5vw,64px)] text-copper tracking-tight leading-none whitespace-nowrap block"
+              >
+                {currentProfession}
+              </motion.span>
+            </AnimatePresence>
+          ) : (
+            <span className="font-display font-bold text-[clamp(27px,6.8vw,42px)] sm:text-[clamp(32px,5vw,64px)] text-copper tracking-tight leading-none whitespace-nowrap block">
+              {activeProfessions[0] || 'Graphic Designer'}
             </span>
-          </div>
-          <div className="hidden sm:flex items-center gap-6">
-            <span>Independent Design Practice</span>
-            <span>&copy; {new Date().getFullYear()}</span>
-          </div>
+          )}
         </div>
 
-        {/* Main Headline & Professional Title (Strict Left Alignment) */}
-        <div className="space-y-4 sm:space-y-6">
-          <motion.div
-            initial={animationEnabled ? { opacity: 0, y: 24 } : false}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+        {/* 4. Supporting Description (Max width ~650px) */}
+        <motion.p
+          initial={animationEnabled ? { opacity: 0, y: 16 } : false}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.7, delay: 0.25, ease: [0.16, 1, 0.3, 1] }}
+          className="font-sans text-base sm:text-lg md:text-xl font-normal leading-relaxed text-[#7C5C3E] dark:text-[#D0C5B8] max-w-[650px] mx-auto mt-3 sm:mt-4 mb-8 sm:mb-10 px-2"
+        >
+          {description}
+        </motion.p>
+
+        {/* 5. Minimal CTA Buttons */}
+        <motion.div
+          initial={animationEnabled ? { opacity: 0, y: 16 } : false}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.7, delay: 0.35, ease: [0.16, 1, 0.3, 1] }}
+          className="flex flex-wrap items-center justify-center gap-3.5 sm:gap-5 w-full"
+        >
+          {/* Primary CTA */}
+          <Link
+            href={primaryCtaHref}
+            className="group inline-flex items-center justify-center gap-2.5 px-7 py-3.5 sm:px-8 sm:py-4 bg-charcoal text-ivory dark:bg-ivory dark:text-charcoal border border-charcoal dark:border-ivory font-sans text-xs sm:text-[13px] font-bold uppercase tracking-[0.16em] hover:bg-copper hover:border-copper dark:hover:bg-copper dark:hover:border-copper dark:hover:text-ivory transition-all duration-300 shadow-sm"
           >
-            <h1 className="font-display font-extrabold text-5xl sm:text-7xl md:text-8xl lg:text-[7.2rem] xl:text-[8rem] tracking-tighter leading-[0.92] text-charcoal">
-              {headline}
-              {headlineLine2 && <span className="block text-copper">{headlineLine2}</span>}
-            </h1>
-          </motion.div>
+            <span>{primaryCtaText}</span>
+            <ArrowDown className="w-3.5 h-3.5 transition-transform group-hover:translate-y-0.5" />
+          </Link>
 
-          <motion.div
-            initial={animationEnabled ? { opacity: 0, y: 18 } : false}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
+          {/* Secondary CTA */}
+          <Link
+            href={secondaryCtaHref}
+            className="group inline-flex items-center justify-center gap-2.5 px-7 py-3.5 sm:px-8 sm:py-4 border border-charcoal/30 dark:border-ivory/30 text-charcoal dark:text-ivory font-sans text-xs sm:text-[13px] font-bold uppercase tracking-[0.16em] hover:border-copper hover:text-copper dark:hover:border-copper dark:hover:text-copper transition-all duration-300"
           >
-            <h2 className="font-display font-bold text-xl sm:text-2xl md:text-3xl lg:text-4xl text-copper tracking-tight uppercase leading-snug">
-              {title}
-            </h2>
-          </motion.div>
-        </div>
-
-        {/* Balanced Two-Column Composition (Aligned along the Same Left Edge) */}
-        <div className="pt-8 border-t border-charcoal/15 grid grid-cols-1 md:grid-cols-12 gap-8 lg:gap-14 items-start">
-          {/* Left Column: Short Professional Introduction with Comfortable Line Length */}
-          <div className="md:col-span-6 lg:col-span-7 space-y-4">
-            <p className="text-xl sm:text-2xl md:text-[26px] font-sans text-charcoal font-light leading-relaxed">
-              {intro}
-            </p>
-            {introSecondary && (
-              <p className="text-base sm:text-[18px] font-sans text-charcoal-600 font-light leading-relaxed max-w-xl">
-                {introSecondary}
-              </p>
-            )}
-          </div>
-
-          {/* Right Column: Service Capabilities & Primary Actions */}
-          <div className="md:col-span-6 lg:col-span-5 space-y-6 md:border-l md:border-charcoal/15 md:pl-8 lg:pl-10">
-            <div>
-              <span className="text-[11px] font-sans font-bold uppercase tracking-[0.2em] text-charcoal-400 block mb-2">
-                Core Capabilities
-              </span>
-              <p className="text-xs sm:text-sm md:text-base font-sans font-medium uppercase tracking-[0.16em] text-charcoal-700 leading-relaxed">
-                Graphic Design / UI/UX / Motion Graphics / Video Editing / Web &amp; App
-              </p>
-            </div>
-
-            {/* Primary & Secondary Action CTAs */}
-            <div className="flex flex-wrap items-center gap-4 pt-2">
-              <Link
-                href={primaryCtaHref}
-                className="inline-flex items-center gap-2 px-6 py-3.5 bg-charcoal text-ivory text-xs sm:text-[13px] font-sans font-bold uppercase tracking-[0.16em] hover:bg-copper transition-colors duration-200"
-              >
-                <span>{primaryCtaText}</span>
-                <ArrowDown className="w-3.5 h-3.5" />
-              </Link>
-
-              <Link
-                href={secondaryCtaHref}
-                className="inline-flex items-center gap-2 px-6 py-3.5 border border-charcoal/30 text-charcoal text-xs sm:text-[13px] font-sans font-bold uppercase tracking-[0.16em] hover:border-charcoal hover:bg-charcoal/5 transition-colors duration-200"
-              >
-                <span>{secondaryCtaText}</span>
-                <ArrowUpRight className="w-3.5 h-3.5 text-copper" />
-              </Link>
-            </div>
-          </div>
-        </div>
+            <span>{secondaryCtaText}</span>
+            <ArrowUpRight className="w-3.5 h-3.5 text-copper transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+          </Link>
+        </motion.div>
       </div>
     </section>
   );

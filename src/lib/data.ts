@@ -1155,6 +1155,11 @@ export async function getSiteSettings(): Promise<SiteSettings> {
           locationTimeText: data.location_time_text ?? meta.locationTimeText ?? localSettings.locationTimeText,
 
           // Hero
+          heroIntroduction: meta.heroIntroduction ?? localSettings.heroIntroduction ?? "Hi, I'm",
+          heroName: meta.heroName ?? (data.hero_headline || data.name || localSettings.heroName || "Abdul Ahad"),
+          heroProfessions: Array.isArray(meta.heroProfessions) && meta.heroProfessions.length > 0 ? meta.heroProfessions : localSettings.heroProfessions,
+          heroAnimationInterval: meta.heroAnimationInterval ?? localSettings.heroAnimationInterval ?? 1200,
+          heroTransitionDuration: meta.heroTransitionDuration ?? localSettings.heroTransitionDuration ?? 0.45,
           heroHeadline: data.hero_headline ?? meta.heroHeadline ?? localSettings.heroHeadline,
           heroHeadlineLine2: data.hero_headline_line2 ?? meta.heroHeadlineLine2 ?? localSettings.heroHeadlineLine2,
           heroHighlightedWords: data.hero_highlighted_words ?? meta.heroHighlightedWords ?? localSettings.heroHighlightedWords,
@@ -1278,6 +1283,10 @@ export async function updateSiteSettings(newSettings: Partial<SiteSettings>): Pr
   };
 
   if (newSettings.name !== undefined) dbPayload.name = newSettings.name;
+  if (newSettings.heroName !== undefined) {
+    dbPayload.name = newSettings.heroName;
+    dbPayload.hero_headline = newSettings.heroName;
+  }
   if (newSettings.title !== undefined) dbPayload.title = newSettings.title;
   if (newSettings.heroTitle !== undefined && !newSettings.title) dbPayload.title = newSettings.heroTitle;
   if (newSettings.heroSubtitle !== undefined && !newSettings.title && !newSettings.heroTitle) dbPayload.title = newSettings.heroSubtitle;
