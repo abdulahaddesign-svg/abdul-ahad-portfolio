@@ -79,9 +79,14 @@ export const metadata: Metadata = {
     images: ['/projects/reztro/reztro-cover.svg'],
   },
   icons: {
-    icon: '/favicon.png',
+    icon: [
+      { url: '/favicon.svg', type: 'image/svg+xml' },
+      { url: '/favicon-32x32.png', sizes: '32x32', type: 'image/png' },
+      { url: '/favicon-16x16.png', sizes: '16x16', type: 'image/png' },
+      { url: '/favicon.png', sizes: '512x512', type: 'image/png' },
+    ],
     shortcut: '/favicon.png',
-    apple: '/favicon.png',
+    apple: '/apple-icon.png',
   },
   robots: {
     index: true,
