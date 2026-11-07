@@ -30,14 +30,14 @@ export function ClientShowcaseSection({ clients }: ClientShowcaseSectionProps) {
     else row3Pool.push(client);
   });
 
-  // Ensure each row has at least 8 items for continuous scroll coverage
+  // Ensure each row has plenty of items for seamless wide-screen & 4K coverage without empty gaps
   const padRow = (items: ClientLogo[]) => {
     const source = items.length > 0 ? items : basePool;
     const result: ClientLogo[] = [];
-    while (result.length < 8) {
+    while (result.length < 18) {
       result.push(...source);
     }
-    return result.slice(0, 10);
+    return result.slice(0, 18);
   };
 
   const row1Items = padRow(row1Pool);
