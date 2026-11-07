@@ -7,31 +7,24 @@ import {
   Save, 
   CheckCircle2, 
   Sparkles, 
-  Upload, 
-  Eye, 
   ArrowUpRight, 
   ArrowDown, 
   ArrowUp,
   Sliders,
   Layers,
   Plus,
-  Trash2,
-  Image as ImageIcon
+  Trash2
 } from 'lucide-react';
 import { getSiteSettings, updateSiteSettings } from '@/lib/data';
 import { SiteSettings, HeroProfessionItem } from '@/lib/types';
 import { DEFAULT_HOMEPAGE_ORDER, DEFAULT_HERO_PROFESSIONS } from '@/lib/constants';
 import { Input, Textarea } from '@/components/ui/Input';
 import { Button } from '@/components/ui/Button';
-import { SafeImage } from '@/components/ui/SafeImage';
-import { uploadMedia } from '@/lib/upload-client';
 
 export default function AdminHomepageCMS() {
   const [settings, setSettings] = useState<SiteSettings | null>(null);
   const [isSaving, setIsSaving] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
-  const [uploadingBg, setUploadingBg] = useState(false);
-  const [uploadingProfile, setUploadingProfile] = useState(false);
 
   useEffect(() => {
     async function load() {
@@ -40,24 +33,6 @@ export default function AdminHomepageCMS() {
     }
     load();
   }, []);
-
-  const handleFileUpload = async (file: File, field: 'heroBgImage' | 'heroProfileImage' | 'heroMonogramUrl') => {
-    if (!file || !settings) return;
-    if (field === 'heroBgImage') setUploadingBg(true);
-    else setUploadingProfile(true);
-
-    try {
-      const data = await uploadMedia(file);
-      if (data.url) {
-        setSettings({ ...settings, [field]: data.url });
-      }
-    } catch (err: any) {
-      alert(err.message || 'Upload failed. Please check file format.');
-    } finally {
-      setUploadingBg(false);
-      setUploadingProfile(false);
-    }
-  };
 
   const handleSave = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -175,7 +150,7 @@ export default function AdminHomepageCMS() {
             Homepage Management
           </h1>
           <p className="text-xs text-charcoal-600 mt-1">
-            Manage your opening headline, subtitle, section sequence, and background assets.
+            Manage your opening headline, animated professions, supporting narrative, and section sequence.
           </p>
         </div>
 
@@ -403,59 +378,7 @@ export default function AdminHomepageCMS() {
         </div>
       </div>
 
-      {/* 4. Visual Backgrounds & Animation */}
-      <div className="p-6 bg-white border border-charcoal/15 space-y-6">
-        <h2 className="font-display font-bold text-lg text-charcoal pb-3 border-b border-charcoal/10 flex items-center gap-2">
-          <ImageIcon className="w-4 h-4 text-copper" />
-          Visual Backgrounds &amp; Monogram
-        </h2>
-
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-          {/* Monogram settings */}
-          <div className="space-y-4">
-            <label className="flex items-center gap-3 cursor-pointer">
-              <input
-                type="checkbox"
-                checked={settings.heroMonogramVisible !== false}
-                onChange={(e) => setSettings({ ...settings, heroMonogramVisible: e.target.checked })}
-                className="rounded border-charcoal/30 text-copper focus:ring-copper"
-              />
-              <span className="text-xs font-sans font-bold text-charcoal">
-                Display Oversized Background Monogram (&quot;a&quot;)
-              </span>
-            </label>
-
-            <Input
-              label="Monogram Asset URL"
-              value={settings.heroMonogramUrl || '/brand/logo-monogram-light.png'}
-              onChange={(e) => setSettings({ ...settings, heroMonogramUrl: e.target.value })}
-              placeholder="/brand/logo-monogram-light.png"
-            />
-          </div>
-
-          {/* Staggered animation toggle */}
-          <div className="space-y-4">
-            <label className="flex items-center gap-3 cursor-pointer">
-              <input
-                type="checkbox"
-                checked={settings.heroAnimationEnabled !== false}
-                onChange={(e) => setSettings({ ...settings, heroAnimationEnabled: e.target.checked })}
-                className="rounded border-charcoal/30 text-copper focus:ring-copper"
-              />
-              <div>
-                <span className="text-xs font-sans font-bold text-charcoal block">
-                  Enable Opening Staggered Animations
-                </span>
-                <span className="text-[11px] text-charcoal-500 block">
-                  Smooth typography entrance &amp; parallax scroll transforms on large displays.
-                </span>
-              </div>
-            </label>
-          </div>
-        </div>
-      </div>
-
-      {/* 5. HOMEPAGE SECTION SEQUENCE & ORDER CONTROL */}
+      {/* 4. HOMEPAGE SECTION SEQUENCE & ORDER CONTROL */}
       <div className="p-6 bg-white border border-charcoal/15 space-y-6">
         <div className="flex items-center justify-between pb-3 border-b border-charcoal/10">
           <div className="flex items-center gap-2">

@@ -223,7 +223,7 @@ export default function AdminDashboardPage() {
               Homepage Hero
             </h3>
             <p className="mt-1 text-xs text-charcoal-600 font-sans">
-              Edit headline text, professional subtitle, narrative introduction, CTAs and monogram watermark.
+              Edit headline text, animated professions, narrative introduction, CTAs and section order.
             </p>
           </Link>
 
