@@ -32,7 +32,7 @@ export function CreativeProcessSection() {
       id="process"
       className="py-24 sm:py-36 bg-ivory text-charcoal dark:bg-charcoal dark:text-ivory border-b border-charcoal/15 dark:border-ivory/15 select-none transition-colors duration-300"
     >
-      <div className="max-w-[1600px] mx-auto px-6 sm:px-12">
+      <div className="max-w-[1820px] mx-auto px-4 sm:px-8 lg:px-12">
         {/* Header */}
         <div className="max-w-3xl mb-16 sm:mb-24">
           <span className="text-xs font-sans font-bold uppercase tracking-[0.25em] text-copper block mb-3">

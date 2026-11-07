@@ -61,7 +61,7 @@ export function ClientShowcaseSection({ clients }: ClientShowcaseSectionProps) {
       aria-label="Clients & Brand Collaborations"
       className="py-6 sm:py-10 bg-ivory text-charcoal dark:bg-charcoal dark:text-ivory overflow-hidden select-none transition-colors duration-300"
     >
-      <div className="max-w-[1600px] mx-auto px-6 sm:px-12">
+      <div className="max-w-[1820px] mx-auto px-4 sm:px-8 lg:px-12">
         {shouldReduceMotion ? (
           /* Reduced Motion Fallback: Clean, borderless wrapped grid */
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-6 sm:gap-8 items-center">

@@ -18,7 +18,7 @@ export function FeaturedEditorialStorySection({ projects }: FeaturedEditorialSto
 
   return (
     <section className="py-24 sm:py-36 bg-ivory text-charcoal border-b border-charcoal/15">
-      <div className="max-w-[1600px] mx-auto px-6 sm:px-12">
+      <div className="max-w-[1820px] mx-auto px-4 sm:px-8 lg:px-12">
         {/* Header */}
         <div className="max-w-2xl pb-16 sm:pb-24">
           <span className="text-xs font-sans font-bold uppercase tracking-[0.25em] text-copper block mb-3">

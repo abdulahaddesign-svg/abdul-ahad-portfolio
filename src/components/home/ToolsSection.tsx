@@ -227,7 +227,7 @@ export function ToolsSection({
         <div className="w-[600px] h-[600px] rounded-full bg-copper/15 blur-[120px]" />
       </div>
 
-      <div className="max-w-[1600px] mx-auto px-6 sm:px-12 relative z-10">
+      <div className="max-w-[1820px] mx-auto px-4 sm:px-8 lg:px-12 relative z-10">
         
         {/* ========================================================================= */}
         {/* DESKTOP SPATIAL ARRANGEMENT: Balanced, Symmetrical Orbital Composition */}
