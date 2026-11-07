@@ -69,7 +69,7 @@ export function HeroSection({ settings }: HeroSectionProps) {
       ref={containerRef}
       id="hero"
       aria-label="Introduction & Professional Overview"
-      className="relative min-h-[88vh] sm:min-h-[92vh] flex flex-col justify-center items-center text-center px-4 sm:px-6 md:px-8 pt-32 pb-20 sm:pt-40 sm:pb-28 lg:pt-44 lg:pb-32 bg-ivory dark:bg-charcoal text-charcoal dark:text-ivory border-b border-charcoal/15 dark:border-ivory/15 select-none transition-colors duration-500 overflow-hidden"
+      className="relative min-h-screen min-h-[100dvh] w-full flex flex-col justify-center items-center text-center px-4 sm:px-6 md:px-8 pt-24 pb-12 sm:pt-28 sm:pb-16 bg-ivory dark:bg-charcoal text-charcoal dark:text-ivory border-b border-charcoal/15 dark:border-ivory/15 select-none transition-colors duration-500 overflow-hidden"
     >
       {/* ========================================================================= */}
       {/* ATMOSPHERIC BACKGROUND: Animated Blur Orbs, Grain Noise & Dimensional Glow */}
