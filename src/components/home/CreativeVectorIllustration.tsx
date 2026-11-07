@@ -9,288 +9,52 @@ interface CreativeVectorIllustrationProps {
 
 export function CreativeVectorIllustration({ className = '' }: CreativeVectorIllustrationProps) {
   return (
-    <div className={`relative w-full aspect-[600/500] max-w-[620px] mx-auto select-none pointer-events-none ${className}`}>
-      <svg
-        viewBox="0 0 600 500"
-        fill="none"
-        xmlns="http://www.w3.org/2000/svg"
-        className="w-full h-full overflow-visible"
+    <div className={`relative w-full max-w-[260px] sm:max-w-[320px] md:max-w-[360px] aspect-square mx-auto flex items-center justify-center select-none ${className}`}>
+      {/* Subtle Ambient Copper Glow behind the emblem */}
+      <div
+        className="pointer-events-none absolute inset-0 flex items-center justify-center opacity-30 dark:opacity-20"
         aria-hidden="true"
       >
-        <defs>
-          {/* Copper Gradient for Wedge */}
-          <linearGradient id="copperWedge" x1="270" y1="210" x2="350" y2="290" gradientUnits="userSpaceOnUse">
-            <stop offset="0%" stopColor="#C4855A" />
-            <stop offset="100%" stopColor="#9E6138" />
-          </linearGradient>
+        <div className="w-[240px] h-[240px] rounded-full bg-copper/25 blur-[70px]" />
+      </div>
 
-          {/* Luxury Copper Gradient for Pen Nib */}
-          <linearGradient id="nibMetallic" x1="0" y1="0" x2="1" y2="1">
-            <stop offset="0%" stopColor="#E2A77E" />
-            <stop offset="35%" stopColor="#C4855A" />
-            <stop offset="70%" stopColor="#8A4E29" />
-            <stop offset="100%" stopColor="#C4855A" />
-          </linearGradient>
-
-          {/* Pen Barrel Shading */}
-          <linearGradient id="penBarrel" x1="0" y1="0" x2="1" y2="1">
-            <stop offset="0%" stopColor="#3A3833" />
-            <stop offset="40%" stopColor="#1E1D19" />
-            <stop offset="80%" stopColor="#12110E" />
-            <stop offset="100%" stopColor="#2A2824" />
-          </linearGradient>
-
-          {/* Soft Glow */}
-          <filter id="softGlow" x="-20%" y="-20%" width="140%" height="140%">
-            <feGaussianBlur stdDeviation="4" result="blur" />
-            <feComposite in="SourceGraphic" in2="blur" operator="over" />
-          </filter>
-        </defs>
-
-        {/* =========================================================================
-            1. SACRED GEOMETRY & COMPASS CONSTRUCTION RINGS
-            ========================================================================= */}
-        {/* Large Golden Circle */}
-        <motion.circle
-          cx="270"
-          cy="260"
-          r="165"
-          stroke="currentColor"
-          strokeWidth="0.8"
-          strokeOpacity="0.16"
+      <motion.div
+        initial={{ opacity: 0, scale: 0.88, rotate: -2 }}
+        whileInView={{ opacity: 1, scale: 1, rotate: 0 }}
+        viewport={{ once: true, margin: '-40px' }}
+        transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+        whileHover={{ scale: 1.04, rotate: 1, transition: { duration: 0.3 } }}
+        className="relative w-full h-full flex items-center justify-center filter drop-shadow-md dark:drop-shadow-[0_8px_30px_rgba(196,133,90,0.22)]"
+      >
+        <svg
+          viewBox="0 0 150 150"
           fill="none"
-          initial={{ scale: 0.9, opacity: 0 }}
-          whileInView={{ scale: 1, opacity: 1 }}
-          viewport={{ once: true }}
-          transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
-        />
-
-        {/* Medium Concentric Circle */}
-        <motion.circle
-          cx="270"
-          cy="260"
-          r="115"
-          stroke="currentColor"
-          strokeWidth="0.6"
-          strokeOpacity="0.12"
-          strokeDasharray="3 3"
-          fill="none"
-          initial={{ rotate: -30, opacity: 0 }}
-          whileInView={{ rotate: 0, opacity: 1 }}
-          viewport={{ once: true }}
-          transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
-        />
-
-        {/* Fine Construction Lines */}
-        <line
-          x1="325"
-          y1="80"
-          x2="325"
-          y2="460"
-          stroke="currentColor"
-          strokeWidth="0.75"
-          strokeOpacity="0.12"
-        />
-        <line
-          x1="120"
-          y1="260"
-          x2="520"
-          y2="260"
-          stroke="currentColor"
-          strokeWidth="0.75"
-          strokeOpacity="0.12"
-        />
-        <line
-          x1="450"
-          y1="90"
-          x2="450"
-          y2="460"
-          stroke="currentColor"
-          strokeWidth="0.75"
-          strokeOpacity="0.12"
-        />
-
-        {/* =========================================================================
-            2. SOLID BURNT COPPER QUADRANT / GEOMETRIC SECTOR
-            ========================================================================= */}
-        <motion.path
-          d="M 290 215 L 290 295 L 370 295 A 80 80 0 0 0 290 215 Z"
-          fill="url(#copperWedge)"
-          initial={{ scale: 0.8, opacity: 0 }}
-          whileInView={{ scale: 1, opacity: 0.95 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.8, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
-        />
-
-        {/* =========================================================================
-            3. ELEGANT 4-POINT STAR SPARKLES
-            ========================================================================= */}
-        {/* Top-Left Diamond Sparkle */}
-        <motion.g
-          initial={{ scale: 0, rotate: -45, opacity: 0 }}
-          whileInView={{ scale: 1, rotate: 0, opacity: 1 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.7, delay: 0.3, ease: [0.16, 1, 0.3, 1] }}
+          xmlns="http://www.w3.org/2000/svg"
+          className="w-full h-full select-none"
+          aria-label="Abdul Ahad Typography Emblem"
         >
+          {/* White / Charcoal Handle Insets */}
           <path
-            d="M 235 170 Q 235 155 235 145 Q 235 155 245 170 Q 235 170 235 185 Q 235 170 225 170 Q 235 170 235 155"
-            fill="#C4855A"
+            d="M132 17h9v1h-9Z M132 18h9v1h-9Z M132 19h9v1h-9Z M132 20h9v1h-9Z M132 21h9v1h-9Z M132 22h9v1h-9Z M132 23h9v1h-9Z M132 24h9v1h-9Z M132 25h9v1h-9Z M17 132h9v1h-9Z M17 133h9v1h-9Z M17 134h9v1h-9Z M17 135h9v1h-9Z M17 136h9v1h-9Z M17 137h9v1h-9Z M17 138h9v1h-9Z M17 139h9v1h-9Z M17 140h9v1h-9Z"
+            fill="#FFFFFF"
+            className="fill-[#FFFFFF] dark:fill-[#25241F] transition-colors duration-300"
           />
+
+          {/* Letter A (Charcoal in Light mode, Warm Ivory in Dark mode) */}
           <path
-            d="M 235 140 Q 235 170 205 170 Q 235 170 235 200 Q 235 170 265 170 Q 235 170 235 140 Z"
-            fill="#C4855A"
-            opacity="0.9"
+            d="M56 52h18v1h-18Z M56 53h19v1h-19Z M56 54h19v1h-19Z M56 55h19v1h-19Z M55 56h20v1h-20Z M55 57h21v1h-21Z M55 58h21v1h-21Z M54 59h11v1h-11Z M66 59h10v1h-10Z M54 60h10v1h-10Z M66 60h9v1h-9Z M54 61h10v1h-10Z M66 61h8v1h-8Z M54 62h10v1h-10Z M67 62h6v1h-6Z M53 63h11v1h-11Z M67 63h5v1h-5Z M53 64h10v1h-10Z M67 64h4v1h-4Z M53 65h10v1h-10Z M67 65h4v1h-4Z M53 66h10v1h-10Z M68 66h2v1h-2Z M52 67h11v1h-11Z M68 67h2v1h-2Z M52 68h10v1h-10Z M68 68h1v1h-1Z M52 69h10v1h-10Z M52 70h10v1h-10Z M69 70h1v1h-1Z M51 71h11v1h-11Z M69 71h4v1h-4Z M51 72h10v1h-10Z M69 72h6v1h-6Z M51 73h10v1h-10Z M69 73h9v1h-9Z M51 74h10v1h-10Z M70 74h10v1h-10Z M50 75h11v1h-11Z M70 75h10v1h-10Z M50 76h10v1h-10Z M70 76h9v1h-9Z M50 77h10v1h-10Z M70 77h6v1h-6Z M49 78h11v1h-11Z M71 78h3v1h-3Z M49 79h11v1h-11Z M71 79h1v1h-1Z M49 80h10v1h-10Z M49 81h10v1h-10Z M48 82h11v1h-11Z M48 83h11v1h-11Z M48 84h20v1h-20Z M48 85h20v1h-20Z M47 86h20v1h-20Z M47 87h20v1h-20Z M47 88h20v1h-20Z M47 89h20v1h-20Z M46 90h21v1h-21Z M46 91h21v1h-21Z M46 92h21v1h-21Z M46 93h10v1h-10Z M45 94h11v1h-11Z M45 95h11v1h-11Z M45 96h10v1h-10Z M44 97h11v1h-11Z M44 98h11v1h-11Z M44 99h11v1h-11Z M44 100h10v1h-10Z M43 101h11v1h-11Z M43 102h11v1h-11Z M43 103h11v1h-11Z M43 104h10v1h-10Z"
+            fill="#25241F"
+            className="fill-[#25241F] dark:fill-[#F4EFE6] transition-colors duration-300"
           />
-        </motion.g>
 
-        {/* Bottom-Right Small Diamond Sparkle */}
-        <motion.g
-          initial={{ scale: 0, rotate: 45, opacity: 0 }}
-          whileInView={{ scale: 1, rotate: 0, opacity: 1 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.7, delay: 0.5, ease: [0.16, 1, 0.3, 1] }}
-        >
+          {/* Letter a, Stars, Handles, and Outer Frame (Brand Burnt Copper) */}
           <path
-            d="M 465 410 Q 465 425 450 425 Q 465 425 465 440 Q 465 425 480 425 Q 465 425 465 410 Z"
+            d="M21 1h1v1h-1Z M21 2h1v1h-1Z M21 3h1v1h-1Z M20 4h2v1h-2Z M20 5h2v1h-2Z M20 6h3v1h-3Z M19 7h4v1h-4Z M19 8h4v1h-4Z M18 9h6v1h-6Z M18 10h6v1h-6Z M17 11h8v1h-8Z M17 12h9v1h-9Z M16 13h11v1h-11Z M15 14h12v1h-12Z M14 15h14v1h-14Z M130 15h12v1h-12Z M13 16h17v1h-17Z M130 16h12v1h-12Z M12 17h19v1h-19Z M130 17h2v1h-2Z M141 17h1v1h-1Z M10 18h23v1h-23Z M130 18h2v1h-2Z M141 18h1v1h-1Z M8 19h27v1h-27Z M130 19h2v1h-2Z M141 19h1v1h-1Z M4 20h36v1h-36Z M130 20h2v1h-2Z M141 20h1v1h-1Z M1 21h131v1h-131Z M141 21h1v1h-1Z M6 22h30v1h-30Z M130 22h2v1h-2Z M141 22h1v1h-1Z M9 23h24v1h-24Z M130 23h2v1h-2Z M141 23h1v1h-1Z M11 24h21v1h-21Z M130 24h2v1h-2Z M141 24h1v1h-1Z M12 25h18v1h-18Z M130 25h2v1h-2Z M141 25h1v1h-1Z M14 26h15v1h-15Z M130 26h12v1h-12Z M15 27h13v1h-13Z M135 27h2v1h-2Z M16 28h11v1h-11Z M135 28h2v1h-2Z M16 29h10v1h-10Z M135 29h2v1h-2Z M17 30h8v1h-8Z M135 30h2v1h-2Z M18 31h7v1h-7Z M135 31h2v1h-2Z M18 32h6v1h-6Z M135 32h2v1h-2Z M19 33h5v1h-5Z M135 33h2v1h-2Z M19 34h4v1h-4Z M135 34h2v1h-2Z M20 35h3v1h-3Z M135 35h2v1h-2Z M20 36h2v1h-2Z M135 36h2v1h-2Z M20 37h2v1h-2Z M135 37h2v1h-2Z M20 38h2v1h-2Z M135 38h2v1h-2Z M20 39h2v1h-2Z M135 39h2v1h-2Z M21 40h1v1h-1Z M135 40h2v1h-2Z M21 41h1v1h-1Z M135 41h2v1h-2Z M21 42h1v1h-1Z M135 42h2v1h-2Z M21 43h1v1h-1Z M135 43h2v1h-2Z M21 44h1v1h-1Z M135 44h2v1h-2Z M21 45h1v1h-1Z M135 45h2v1h-2Z M21 46h1v1h-1Z M135 46h2v1h-2Z M21 47h1v1h-1Z M135 47h2v1h-2Z M21 48h1v1h-1Z M135 48h2v1h-2Z M21 49h1v1h-1Z M135 49h2v1h-2Z M21 50h1v1h-1Z M135 50h2v1h-2Z M21 51h1v1h-1Z M135 51h2v1h-2Z M21 52h1v1h-1Z M135 52h2v1h-2Z M21 53h1v1h-1Z M135 53h2v1h-2Z M21 54h1v1h-1Z M135 54h2v1h-2Z M21 55h1v1h-1Z M135 55h2v1h-2Z M21 56h1v1h-1Z M135 56h2v1h-2Z M21 57h1v1h-1Z M82 57h13v1h-13Z M135 57h2v1h-2Z M21 58h1v1h-1Z M79 58h19v1h-19Z M135 58h2v1h-2Z M21 59h1v1h-1Z M77 59h23v1h-23Z M135 59h2v1h-2Z M21 60h1v1h-1Z M76 60h26v1h-26Z M135 60h2v1h-2Z M21 61h1v1h-1Z M75 61h28v1h-28Z M135 61h2v1h-2Z M21 62h1v1h-1Z M73 62h31v1h-31Z M135 62h2v1h-2Z M21 63h1v1h-1Z M72 63h33v1h-33Z M135 63h2v1h-2Z M21 64h1v1h-1Z M72 64h34v1h-34Z M135 64h2v1h-2Z M21 65h1v1h-1Z M71 65h35v1h-35Z M135 65h2v1h-2Z M21 66h1v1h-1Z M70 66h37v1h-37Z M135 66h2v1h-2Z M21 67h1v1h-1Z M70 67h14v1h-14Z M93 67h14v1h-14Z M135 67h2v1h-2Z M21 68h1v1h-1Z M70 68h12v1h-12Z M94 68h14v1h-14Z M135 68h2v1h-2Z M21 69h1v1h-1Z M69 69h13v1h-13Z M95 69h13v1h-13Z M135 69h2v1h-2Z M21 70h1v1h-1Z M71 70h10v1h-10Z M96 70h12v1h-12Z M135 70h2v1h-2Z M21 71h1v1h-1Z M74 71h6v1h-6Z M96 71h12v1h-12Z M135 71h2v1h-2Z M21 72h1v1h-1Z M77 72h3v1h-3Z M96 72h12v1h-12Z M135 72h2v1h-2Z M21 73h1v1h-1Z M97 73h11v1h-11Z M135 73h2v1h-2Z M21 74h1v1h-1Z M97 74h11v1h-11Z M135 74h2v1h-2Z M21 75h1v1h-1Z M97 75h11v1h-11Z M135 75h2v1h-2Z M21 76h1v1h-1Z M80 76h28v1h-28Z M135 76h2v1h-2Z M21 77h1v1h-1Z M77 77h31v1h-31Z M135 77h2v1h-2Z M21 78h1v1h-1Z M74 78h34v1h-34Z M135 78h2v1h-2Z M21 79h1v1h-1Z M73 79h35v1h-35Z M135 79h2v1h-2Z M21 80h1v1h-1Z M71 80h37v1h-37Z M135 80h2v1h-2Z M21 81h1v1h-1Z M70 81h38v1h-38Z M135 81h2v1h-2Z M21 82h1v1h-1Z M69 82h39v1h-39Z M135 82h2v1h-2Z M21 83h1v1h-1Z M68 83h40v1h-40Z M135 83h2v1h-2Z M21 84h1v1h-1Z M68 84h40v1h-40Z M135 84h2v1h-2Z M21 85h1v1h-1Z M68 85h15v1h-15Z M97 85h11v1h-11Z M135 85h2v1h-2Z M21 86h1v1h-1Z M68 86h12v1h-12Z M97 86h11v1h-11Z M135 86h2v1h-2Z M21 87h1v1h-1Z M67 87h12v1h-12Z M96 87h12v1h-12Z M135 87h2v1h-2Z M21 88h1v1h-1Z M67 88h12v1h-12Z M96 88h12v1h-12Z M135 88h2v1h-2Z M21 89h1v1h-1Z M67 89h12v1h-12Z M96 89h12v1h-12Z M135 89h2v1h-2Z M21 90h1v1h-1Z M67 90h12v1h-12Z M95 90h13v1h-13Z M135 90h2v1h-2Z M21 91h1v1h-1Z M67 91h12v1h-12Z M95 91h13v1h-13Z M135 91h2v1h-2Z M21 92h1v1h-1Z M67 92h12v1h-12Z M94 92h15v1h-15Z M135 92h2v1h-2Z M21 93h1v1h-1Z M67 93h13v1h-13Z M92 93h18v1h-18Z M135 93h2v1h-2Z M21 94h1v1h-1Z M67 94h14v1h-14Z M91 94h24v1h-24Z M135 94h2v1h-2Z M21 95h1v1h-1Z M67 95h48v1h-48Z M135 95h2v1h-2Z M21 96h1v1h-1Z M68 96h47v1h-47Z M135 96h2v1h-2Z M21 97h1v1h-1Z M68 97h47v1h-47Z M135 97h2v1h-2Z M21 98h1v1h-1Z M69 98h28v1h-28Z M99 98h16v1h-16Z M135 98h2v1h-2Z M21 99h1v1h-1Z M70 99h26v1h-26Z M99 99h16v1h-16Z M135 99h2v1h-2Z M21 100h1v1h-1Z M71 100h25v1h-25Z M100 100h15v1h-15Z M135 100h2v1h-2Z M21 101h1v1h-1Z M72 101h23v1h-23Z M100 101h15v1h-15Z M135 101h2v1h-2Z M21 102h1v1h-1Z M73 102h21v1h-21Z M101 102h14v1h-14Z M135 102h2v1h-2Z M21 103h1v1h-1Z M75 103h17v1h-17Z M103 103h12v1h-12Z M135 103h2v1h-2Z M21 104h1v1h-1Z M79 104h11v1h-11Z M135 104h2v1h-2Z M21 105h1v1h-1Z M135 105h2v1h-2Z M21 106h1v1h-1Z M135 106h2v1h-2Z M21 107h1v1h-1Z M135 107h2v1h-2Z M21 108h1v1h-1Z M135 108h2v1h-2Z M21 109h1v1h-1Z M135 109h2v1h-2Z M21 110h1v1h-1Z M135 110h2v1h-2Z M21 111h1v1h-1Z M135 111h2v1h-2Z M21 112h1v1h-1Z M135 112h2v1h-2Z M21 113h1v1h-1Z M135 113h2v1h-2Z M21 114h1v1h-1Z M135 114h2v1h-2Z M21 115h1v1h-1Z M135 115h2v1h-2Z M21 116h1v1h-1Z M135 116h2v1h-2Z M21 117h1v1h-1Z M135 117h2v1h-2Z M21 118h1v1h-1Z M135 118h2v1h-2Z M21 119h1v1h-1Z M135 119h2v1h-2Z M21 120h1v1h-1Z M135 120h2v1h-2Z M21 121h1v1h-1Z M135 121h2v1h-2Z M21 122h1v1h-1Z M135 122h2v1h-2Z M21 123h1v1h-1Z M135 123h2v1h-2Z M21 124h1v1h-1Z M135 124h2v1h-2Z M21 125h1v1h-1Z M135 125h2v1h-2Z M21 126h1v1h-1Z M135 126h2v1h-2Z M21 127h1v1h-1Z M135 127h2v1h-2Z M21 128h1v1h-1Z M134 128h4v1h-4Z M21 129h1v1h-1Z M134 129h4v1h-4Z M15 130h12v1h-12Z M133 130h6v1h-6Z M15 131h12v1h-12Z M132 131h8v1h-8Z M15 132h2v1h-2Z M26 132h1v1h-1Z M131 132h10v1h-10Z M15 133h2v1h-2Z M26 133h1v1h-1Z M130 133h12v1h-12Z M15 134h2v1h-2Z M26 134h1v1h-1Z M128 134h16v1h-16Z M15 135h2v1h-2Z M26 135h121v1h-121Z M15 136h2v1h-2Z M26 136h123v1h-123Z M15 137h2v1h-2Z M26 137h1v1h-1Z M127 137h18v1h-18Z M15 138h2v1h-2Z M26 138h1v1h-1Z M129 138h14v1h-14Z M15 139h2v1h-2Z M26 139h1v1h-1Z M131 139h11v1h-11Z M15 140h2v1h-2Z M26 140h1v1h-1Z M132 140h8v1h-8Z M15 141h12v1h-12Z M133 141h6v1h-6Z M134 142h5v1h-5Z M134 143h4v1h-4Z M135 144h3v1h-3Z M135 145h2v1h-2Z M135 146h2v1h-2Z M136 147h1v1h-1Z M136 148h1v1h-1Z"
             fill="#C4855A"
-            opacity="0.8"
+            className="fill-[#C4855A]"
           />
-        </motion.g>
-
-        {/* =========================================================================
-            4. VECTOR TYPOGRAPHY BOUNDING BOX WITH CORNER CONTROL HANDLES
-            ========================================================================= */}
-        <motion.g
-          initial={{ opacity: 0, y: 15 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.8, delay: 0.35, ease: [0.16, 1, 0.3, 1] }}
-        >
-          {/* Bounding Box Frame */}
-          <rect
-            x="440"
-            y="310"
-            width="80"
-            height="80"
-            fill="none"
-            stroke="#C4855A"
-            strokeWidth="0.85"
-            strokeOpacity="0.45"
-          />
-
-          {/* 4 Vector Corner Anchor Handles */}
-          <rect x="437.5" y="307.5" width="5" height="5" fill="#F4EFE6" stroke="#C4855A" strokeWidth="1" />
-          <rect x="517.5" y="307.5" width="5" height="5" fill="#F4EFE6" stroke="#C4855A" strokeWidth="1" />
-          <rect x="437.5" y="387.5" width="5" height="5" fill="#F4EFE6" stroke="#C4855A" strokeWidth="1" />
-          <rect x="517.5" y="387.5" width="5" height="5" fill="#F4EFE6" stroke="#C4855A" strokeWidth="1" />
-
-          {/* Typographic "Aa" Serif Glyph */}
-          <text
-            x="480"
-            y="363"
-            textAnchor="middle"
-            fontFamily="Georgia, 'Playfair Display', serif"
-            fontSize="40"
-            fontWeight="500"
-            fill="currentColor"
-            fillOpacity="0.7"
-            className="tracking-tight"
-          >
-            Aa
-          </text>
-        </motion.g>
-
-        {/* =========================================================================
-            5. FLUID INK STROKE DRAWN BY THE FOUNTAIN PEN NIB
-            ========================================================================= */}
-        <motion.path
-          d="M 488 262 C 484 275 460 290 415 315 C 330 360 215 425 155 425 C 105 425 80 395 105 365 C 135 330 240 280 380 235 C 475 205 520 220 488 262 Z"
-          stroke="currentColor"
-          strokeWidth="1.2"
-          strokeOpacity="0.75"
-          fill="none"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          initial={{ pathLength: 0, opacity: 0 }}
-          whileInView={{ pathLength: 1, opacity: 1 }}
-          viewport={{ once: true }}
-          transition={{ duration: 1.6, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
-        />
-
-        {/* =========================================================================
-            6. SCULPTED LUXURY FOUNTAIN PEN NIB (Pointing at Calligraphic Path)
-            ========================================================================= */}
-        <motion.g
-          initial={{ x: 30, y: -30, opacity: 0 }}
-          whileInView={{ x: 0, y: 0, opacity: 1 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.9, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
-          transform="translate(0, 0)"
-        >
-          {/* Transform group rotated ~-45 deg pointing down-left at (488, 262) */}
-          <g transform="translate(488, 262) rotate(-135)">
-            {/* Nib Tip Contact Highlight */}
-            <circle cx="0" cy="0" r="1.5" fill="#C4855A" />
-
-            {/* Fountain Pen Metallic Nib */}
-            <path
-              d="M 0 0 L 14 36 L 20 65 L -20 65 L -14 36 Z"
-              fill="url(#nibMetallic)"
-              stroke="#25241F"
-              strokeWidth="0.75"
-            />
-
-            {/* Inner Nib Detailing & Engraving */}
-            <path
-              d="M 0 0 L 0 38"
-              stroke="#25241F"
-              strokeWidth="0.8"
-            />
-            {/* Breather Hole */}
-            <circle cx="0" cy="38" r="3" fill="#25241F" />
-
-            {/* Ornamental Curved Nib Inscription */}
-            <path
-              d="M -9 42 Q 0 46 9 42"
-              stroke="#25241F"
-              strokeWidth="0.75"
-              fill="none"
-              opacity="0.6"
-            />
-
-            {/* Polished Copper Collar / Ferrule Ring */}
-            <rect
-              x="-21"
-              y="65"
-              width="42"
-              height="8"
-              fill="#C4855A"
-              stroke="#25241F"
-              strokeWidth="0.75"
-            />
-            <line x1="-21" y1="69" x2="21" y2="69" stroke="#E2A77E" strokeWidth="0.75" opacity="0.8" />
-
-            {/* Black Lacquer Pen Barrel Body */}
-            <path
-              d="M -20 73 L -24 200 L 24 200 L 20 73 Z"
-              fill="url(#penBarrel)"
-              stroke="#25241F"
-              strokeWidth="1"
-            />
-
-            {/* Pen Barrel Specular Light Sheen */}
-            <line
-              x1="-8"
-              y1="75"
-              x2="-10"
-              y2="195"
-              stroke="#FFFFFF"
-              strokeWidth="1"
-              opacity="0.18"
-            />
-          </g>
-        </motion.g>
-      </svg>
+        </svg>
+      </motion.div>
     </div>
   );
 }
