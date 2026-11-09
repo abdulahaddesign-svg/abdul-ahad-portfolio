@@ -22,11 +22,25 @@ const CATEGORIES = [
 
 interface WorkArchiveClientProps {
   initialProjects: Project[];
+  initialCategories?: string[];
 }
 
-export function WorkArchiveClient({ initialProjects }: WorkArchiveClientProps) {
+export function WorkArchiveClient({ initialProjects, initialCategories }: WorkArchiveClientProps) {
   const [projects, setProjects] = useState<Project[]>(initialProjects);
   const [selectedCategory, setSelectedCategory] = useState('All');
+  const [categories, setCategories] = useState<string[]>(() => {
+    const list = initialCategories && initialCategories.length > 0 ? initialCategories : [
+      'Branding',
+      'Graphic Design',
+      'Social Media',
+      'UI/UX',
+      'Motion Graphics',
+      'Video Editing',
+      'Web & App',
+      'Packaging & Print',
+    ];
+    return ['All', ...list.filter(c => c !== 'All')];
+  });
 
   // Real-time listener for instant portfolio updates
   useEffect(() => {
@@ -84,7 +98,7 @@ export function WorkArchiveClient({ initialProjects }: WorkArchiveClientProps) {
 
         {/* Category Filter Bar */}
         <div className="py-6 sm:py-7 border-b border-charcoal/15 flex flex-wrap items-center gap-x-6 sm:gap-x-8 md:gap-x-9 gap-y-3 text-[13px] sm:text-[14px] md:text-[15px] font-sans font-semibold uppercase tracking-[0.14em]">
-          {CATEGORIES.map((category) => (
+          {categories.map((category) => (
             <button
               key={category}
               onClick={() => setSelectedCategory(category)}

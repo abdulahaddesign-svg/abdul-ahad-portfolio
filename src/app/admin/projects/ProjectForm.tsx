@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { SafeImage } from '@/components/ui/SafeImage';
 import { 
@@ -12,7 +12,9 @@ import {
   ExternalLink,
   Eye, 
   Sparkles,
-  AlertCircle
+  AlertCircle,
+  Tag,
+  Tags
 } from 'lucide-react';
 import { Project, ProjectCategory, ProjectCaseStudySection } from '@/lib/types';
 import { saveProject } from '@/lib/data';
@@ -20,6 +22,7 @@ import { slugify } from '@/lib/utils';
 import { Input, Textarea, Select } from '@/components/ui/Input';
 import { Button } from '@/components/ui/Button';
 import { uploadMedia } from '@/lib/upload-client';
+import { CategoryManagerModal } from '@/components/admin/CategoryManagerModal';
 
 const CATEGORIES = [
   { value: 'Branding', label: 'Branding' },
@@ -61,6 +64,29 @@ interface ProjectFormProps {
 
 export function ProjectForm({ initialData }: ProjectFormProps) {
   const router = useRouter();
+
+  const [categoryList, setCategoryList] = useState<string[]>([
+    'Branding',
+    'Graphic Design',
+    'Social Media',
+    'UI/UX',
+    'Motion Graphics',
+    'Video Editing',
+    'Web & App',
+    'Packaging & Print',
+  ]);
+  const [isCategoryModalOpen, setIsCategoryModalOpen] = useState(false);
+
+  useEffect(() => {
+    fetch('/api/categories')
+      .then((res) => res.json())
+      .then((data) => {
+        if (Array.isArray(data.categories) && data.categories.length > 0) {
+          setCategoryList(data.categories);
+        }
+      })
+      .catch(() => {});
+  }, []);
 
   const [sections, setSections] = useState<ProjectCaseStudySection[]>(() =>
     getInitialSections(initialData)
@@ -334,17 +360,38 @@ export function ProjectForm({ initialData }: ProjectFormProps) {
                   helperText="Unique URL path: /work/[slug]"
                 />
 
-                <Select
-                  label="Primary Category"
-                  options={CATEGORIES}
-                  value={formData.category}
-                  onChange={(e) =>
-                    setFormData({
-                      ...formData,
-                      category: e.target.value as ProjectCategory,
-                    })
-                  }
-                />
+                <div>
+                  <div className="flex items-center justify-between mb-1.5">
+                    <label className="block text-xs font-sans font-bold uppercase tracking-wider text-charcoal-700">
+                      Primary Category
+                    </label>
+                    <button
+                      type="button"
+                      onClick={() => setIsCategoryModalOpen(true)}
+                      className="text-[11px] font-mono text-copper hover:underline flex items-center gap-1 font-semibold cursor-pointer"
+                    >
+                      <Tag className="w-3 h-3" />
+                      <span>+ Manage Categories</span>
+                    </button>
+                  </div>
+                  <select
+                    value={formData.category}
+                    onChange={(e) =>
+                      setFormData({
+                        ...formData,
+                        category: e.target.value as ProjectCategory,
+                        categorySlug: slugify(e.target.value),
+                      })
+                    }
+                    className="w-full px-3.5 py-2.5 bg-white border border-charcoal/20 text-charcoal text-sm font-sans focus:outline-none focus:border-copper rounded-none transition-colors"
+                  >
+                    {categoryList.map((cat) => (
+                      <option key={cat} value={cat}>
+                        {cat}
+                      </option>
+                    ))}
+                  </select>
+                </div>
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
@@ -824,6 +871,18 @@ export function ProjectForm({ initialData }: ProjectFormProps) {
           </div>
         </div>
       </div>
+
+      {/* Category Management Modal */}
+      <CategoryManagerModal
+        isOpen={isCategoryModalOpen}
+        onClose={() => setIsCategoryModalOpen(false)}
+        onCategoriesChange={(cats) => {
+          setCategoryList(cats);
+          if (formData.category && !cats.includes(formData.category)) {
+            setFormData((prev) => ({ ...prev, category: cats[0] || 'Graphic Design' }));
+          }
+        }}
+      />
     </form>
   );
 }

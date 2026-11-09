@@ -1,6 +1,6 @@
 import React from 'react';
 import type { Metadata } from 'next';
-import { getProjects } from '@/lib/data';
+import { getProjects, getProjectCategories } from '@/lib/data';
 import { WorkArchiveClient } from './WorkArchiveClient';
 
 export const metadata: Metadata = {
@@ -13,7 +13,10 @@ export const dynamic = 'force-dynamic';
 export const revalidate = 0;
 
 export default async function WorkPage() {
-  const projects = await getProjects({ includeDrafts: false });
+  const [projects, categories] = await Promise.all([
+    getProjects({ includeDrafts: false }),
+    getProjectCategories(),
+  ]);
 
-  return <WorkArchiveClient initialProjects={projects} />;
+  return <WorkArchiveClient initialProjects={projects} initialCategories={categories} />;
 }

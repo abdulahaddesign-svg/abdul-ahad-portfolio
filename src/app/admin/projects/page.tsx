@@ -12,18 +12,21 @@ import {
   Check, 
   X, 
   Star,
-  Search
+  Search,
+  Tags
 } from 'lucide-react';
 import { getProjects, deleteProject, duplicateProject } from '@/lib/data';
 import { Project } from '@/lib/types';
 import { createClient } from '@/lib/supabase/client';
 import { Button } from '@/components/ui/Button';
 import { Badge } from '@/components/ui/Badge';
+import { CategoryManagerModal } from '@/components/admin/CategoryManagerModal';
 
 export default function AdminProjectsListPage() {
   const [projects, setProjects] = useState<Project[]>([]);
   const [search, setSearch] = useState('');
   const [loading, setLoading] = useState(true);
+  const [isCategoryModalOpen, setIsCategoryModalOpen] = useState(false);
 
   const fetchProjects = async () => {
     setLoading(true);
@@ -90,14 +93,25 @@ export default function AdminProjectsListPage() {
           </h1>
         </div>
 
-        <Button
-          href="/admin/projects/new"
-          variant="primary"
-          size="md"
-          icon={<PlusCircle className="w-4 h-4" />}
-        >
-          Add New Project
-        </Button>
+        <div className="flex flex-wrap items-center gap-3">
+          <Button
+            variant="outline"
+            size="md"
+            icon={<Tags className="w-4 h-4 text-copper" />}
+            onClick={() => setIsCategoryModalOpen(true)}
+          >
+            Manage Categories
+          </Button>
+
+          <Button
+            href="/admin/projects/new"
+            variant="primary"
+            size="md"
+            icon={<PlusCircle className="w-4 h-4" />}
+          >
+            Add New Project
+          </Button>
+        </div>
       </div>
 
       {/* Filter and Search Bar */}
@@ -244,6 +258,17 @@ export default function AdminProjectsListPage() {
           </tbody>
         </table>
       </div>
+
+      {/* Category Manager Modal */}
+      <CategoryManagerModal
+        isOpen={isCategoryModalOpen}
+        onClose={() => setIsCategoryModalOpen(false)}
+        onCategoriesChange={() => fetchProjects()}
+        projectCounts={projects.reduce<Record<string, number>>((acc, p) => {
+          if (p.category) acc[p.category] = (acc[p.category] || 0) + 1;
+          return acc;
+        }, {})}
+      />
     </div>
   );
 }

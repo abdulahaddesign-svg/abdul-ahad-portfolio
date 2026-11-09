@@ -6,7 +6,8 @@ export type ProjectCategory =
   | 'Motion Graphics'
   | 'Video Editing'
   | 'Web & App'
-  | 'Packaging & Print';
+  | 'Packaging & Print'
+  | (string & {});
 
 export interface ProjectMedia {
   id: string;
@@ -291,6 +292,9 @@ export interface SiteSettings {
   toolsSubheadline?: string;
   capabilityCategories?: CapabilityCategory[];
   capabilityTools?: CapabilityTool[];
+
+  // Project Categories CMS
+  projectCategories?: string[];
 
   // Homepage Dynamic Section Order
   homepageSectionOrder?: string[];

@@ -18,8 +18,10 @@ import {
   EXPERIENCE_DATA,
   INITIAL_CLIENTS,
   DEFAULT_CAPABILITY_CATEGORIES,
-  DEFAULT_CAPABILITY_TOOLS
+  DEFAULT_CAPABILITY_TOOLS,
+  DEFAULT_PROJECT_CATEGORIES
 } from './constants';
+import { slugify } from './utils';
 
 // In-memory runtime store for development/fallback when Supabase credentials are not yet entered
 let localProjects: Project[] = [...INITIAL_PROJECTS];
@@ -1234,6 +1236,11 @@ export async function getSiteSettings(): Promise<SiteSettings> {
           capabilityCategories: Array.isArray(meta.capabilityCategories) && meta.capabilityCategories.length > 0 ? meta.capabilityCategories : localSettings.capabilityCategories,
           capabilityTools: Array.isArray(meta.capabilityTools) && meta.capabilityTools.length > 0 ? meta.capabilityTools : localSettings.capabilityTools,
           homepageSectionOrder: Array.isArray(meta.homepageSectionOrder) && meta.homepageSectionOrder.length > 0 ? meta.homepageSectionOrder : localSettings.homepageSectionOrder,
+          projectCategories: Array.isArray(meta.projectCategories) && meta.projectCategories.length > 0 
+            ? meta.projectCategories 
+            : (Array.isArray(localSettings.projectCategories) && localSettings.projectCategories.length > 0 
+                ? localSettings.projectCategories 
+                : DEFAULT_PROJECT_CATEGORIES),
         };
       }
     } catch {
@@ -1897,5 +1904,53 @@ export async function getStorageMetrics(): Promise<StorageMetrics> {
     fileCount,
     provider: 'Supabase Cloud (portfolio-media)',
   };
+}
+
+export async function getProjectCategories(): Promise<string[]> {
+  const settings = await getSiteSettings();
+  if (Array.isArray(settings.projectCategories) && settings.projectCategories.length > 0) {
+    return settings.projectCategories;
+  }
+  return DEFAULT_PROJECT_CATEGORIES;
+}
+
+export async function saveProjectCategories(categories: string[]): Promise<string[]> {
+  const clean = Array.from(new Set(categories.map((c) => c.trim()).filter(Boolean)));
+  await updateSiteSettings({ projectCategories: clean });
+  return clean;
+}
+
+export async function renameProjectCategory(oldName: string, newName: string): Promise<boolean> {
+  const trimmedNew = newName.trim();
+  if (!trimmedNew || trimmedNew === oldName) return false;
+
+  const current = await getProjectCategories();
+  const updated = current.map((c) => (c === oldName ? trimmedNew : c));
+  await saveProjectCategories(updated);
+
+  // Cascade to existing projects that used the old category name
+  try {
+    const projects = await getProjects({ includeDrafts: true });
+    for (const p of projects) {
+      if (p.category === oldName) {
+        await saveProject({
+          ...p,
+          category: trimmedNew,
+          categorySlug: slugify(trimmedNew),
+        });
+      }
+    }
+  } catch (err) {
+    console.error('Failed to cascade category rename to projects:', err);
+  }
+
+  return true;
+}
+
+export async function deleteProjectCategory(categoryName: string): Promise<boolean> {
+  const current = await getProjectCategories();
+  const updated = current.filter((c) => c !== categoryName);
+  await saveProjectCategories(updated);
+  return true;
 }
 

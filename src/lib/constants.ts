@@ -558,6 +558,17 @@ export const INITIAL_CLIENTS: ClientLogo[] = [
   },
 ];
 
+export const DEFAULT_PROJECT_CATEGORIES: string[] = [
+  'Branding',
+  'Graphic Design',
+  'Social Media',
+  'UI/UX',
+  'Motion Graphics',
+  'Video Editing',
+  'Web & App',
+  'Packaging & Print',
+];
+
 export const SITE_SETTINGS: SiteSettings = {
   name: "Abdul Ahad J",
   title: "Graphic Designer | Visual Branding Specialist | Creative Designer",
@@ -568,6 +579,7 @@ export const SITE_SETTINGS: SiteSettings = {
   location: "Coimbatore, Tamil Nadu, India",
   behanceUrl: "https://www.behance.net/abdulahad438",
   linkedinUrl: "https://www.linkedin.com/in/abdulahadj",
+  projectCategories: DEFAULT_PROJECT_CATEGORIES,
 
   // Header & Navigation CMS
   headerLogoLightUrl: "/brand/logo-wordmark-clean-light.png",
